@@ -3,7 +3,6 @@ using BusinessLayer.User.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTO.User.Request;
-using Shared.DTO.User.Response;
 
 namespace OunoRentApi.Controllers;
 

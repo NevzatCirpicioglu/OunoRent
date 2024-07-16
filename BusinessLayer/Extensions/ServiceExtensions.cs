@@ -2,6 +2,7 @@ using System.Text;
 using AutoMapper.Extensions.ExpressionMapping;
 using BusinessLayer.Category.Query;
 using BusinessLayer.Mapper;
+using BusinessLayer.Services.Authhentication;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.Concrete.Repository;
 using MediatR;
@@ -20,6 +21,8 @@ public static class ServiceExtensions
     {
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ITokenService, TokenService>();
     }
 
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
