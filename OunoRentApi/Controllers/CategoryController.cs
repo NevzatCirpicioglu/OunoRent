@@ -27,7 +27,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("{categoryId}")]
-    public async Task<IActionResult> GetCategory(int categoryId)
+    public async Task<IActionResult> GetCategory(Guid categoryId)
     {
         var category = await _mediator.Send(new GetCategoryQuery(categoryId));
         return Ok(category);

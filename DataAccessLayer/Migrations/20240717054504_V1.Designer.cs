@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240716103812_V3")]
-    partial class V3
+    [Migration("20240717054504_V1")]
+    partial class V1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,24 +27,20 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedDateTime")
+                    b.Property<DateTime?>("CreatedDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifiedDateTime")
+                    b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
@@ -71,6 +67,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("CategoryId1")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Model")
                         .IsRequired()
                         .HasColumnType("text");
@@ -80,7 +79,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId1");
 
                     b.ToTable("Products");
                 });
@@ -91,22 +90,19 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("AccountStatus")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<bool?>("AccountStatus")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("BirthDate")
+                    b.Property<DateTime?>("BirthDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedDateTime")
+                    b.Property<DateTime?>("CreatedDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
@@ -114,18 +110,15 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifiedDateTime")
+                    b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("PasswordHash")
@@ -133,15 +126,12 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Surname")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("TC")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -153,7 +143,7 @@ namespace DataAccessLayer.Migrations
                 {
                     b.HasOne("EntityLayer.Entities.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("CategoryId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

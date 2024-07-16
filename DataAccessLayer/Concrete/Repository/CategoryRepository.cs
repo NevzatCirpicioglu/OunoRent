@@ -25,7 +25,7 @@ public class CategoryRepository : ICategoryRepository
         return categories;
     }
 
-    public async Task<GetCategoryResponse> GetCategory(int categoryId)
+    public async Task<GetCategoryResponse> GetCategory(Guid categoryId)
     {
         var category = await _applicationDbContext.Categories
         .Where(x => x.Id == categoryId)
@@ -43,10 +43,6 @@ public class CategoryRepository : ICategoryRepository
         var category = new Category
         {
             Name = categoryName,
-            CreatedDateTime = DateTime.UtcNow,
-            ModifiedDateTime = DateTime.UtcNow,
-            CreatedBy = "System",
-            ModifiedBy = "System"
         };
 
         _applicationDbContext.Categories.Add(category);

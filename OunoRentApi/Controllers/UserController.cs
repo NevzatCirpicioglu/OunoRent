@@ -24,8 +24,8 @@ public class UserController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("users/{userId}")]
-    public async Task<IActionResult> GetUserById(Guid userId)
+    [HttpGet("users/{userId:guid}")]
+    public async Task<IActionResult> GetUserById(Guid userId )
     {
         var result = await _mediator.Send(new GetUserQuery(userId));
         return Ok(result);
@@ -35,6 +35,20 @@ public class UserController : ControllerBase
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
         var result = await _mediator.Send(new CreateUserCommand(request));
+        return Ok(result);
+    }
+
+    [HttpPut("users/{userId:guid}")]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
+    {
+        var result = await _mediator.Send(new UpdateUserCommand(request));
+        return Ok(result);
+    }
+
+    [HttpDelete("users/{userId:guid}")]
+    public async Task<IActionResult> DeleteUser(Guid userId)
+    {
+        var result = await _mediator.Send(new DeleteUserCommand(userId));
         return Ok(result);
     }
 }

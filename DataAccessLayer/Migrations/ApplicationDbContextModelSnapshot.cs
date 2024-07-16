@@ -24,24 +24,20 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedDateTime")
+                    b.Property<DateTime?>("CreatedDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifiedDateTime")
+                    b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
@@ -68,6 +64,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("CategoryId1")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Model")
                         .IsRequired()
                         .HasColumnType("text");
@@ -77,7 +76,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId1");
 
                     b.ToTable("Products");
                 });
@@ -88,20 +87,19 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("AccountStatus")
-                        .HasColumnType("text");
+                    b.Property<bool?>("AccountStatus")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("BirthDate")
+                    b.Property<DateTime?>("BirthDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedDateTime")
+                    b.Property<DateTime?>("CreatedDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
@@ -112,10 +110,9 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifiedDateTime")
+                    b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
@@ -143,7 +140,7 @@ namespace DataAccessLayer.Migrations
                 {
                     b.HasOne("EntityLayer.Entities.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("CategoryId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

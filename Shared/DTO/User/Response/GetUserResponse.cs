@@ -13,7 +13,7 @@ public class GetUserResponse
 
     public string TC { get; set; }
 
-    public DateTime BirthDate { get; set; }
+    public DateTime? BirthDate { get; set; }
 
     public string Gender { get; set; }
 

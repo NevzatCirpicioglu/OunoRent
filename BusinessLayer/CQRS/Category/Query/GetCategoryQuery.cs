@@ -4,7 +4,7 @@ using Shared.Interface;
 
 namespace BusinessLayer.Category.Query;
 
-public sealed record GetCategoryQuery(int CategoryId) : IRequest<GetCategoryResponse>
+public sealed record GetCategoryQuery(Guid CategoryId) : IRequest<GetCategoryResponse>
 {
     internal class GetCategoryQueryHandler : IRequestHandler<GetCategoryQuery, GetCategoryResponse>
     {

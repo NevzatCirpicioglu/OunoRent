@@ -10,11 +10,11 @@ namespace DataAccessLayer.Concrete.Repository;
 public class UserRepository : IUserRepository
 {
 
-    private readonly ApplicationDbContext _applicatiıonDbContext;
+    private readonly ApplicationDbContext _applicationDbContext;
 
     public UserRepository(ApplicationDbContext applicatiıonDbContext)
     {
-        _applicatiıonDbContext = applicatiıonDbContext;
+        _applicationDbContext = applicatiıonDbContext;
     }
 
     public async Task<UserResponse> CreateUser(CreateUserRequest request)
@@ -22,17 +22,14 @@ public class UserRepository : IUserRepository
         var user = new User
         {
             Email = request.Email,
+            AccountStatus = true,
             PasswordHash = request.PasswordHash,
-            CreatedDateTime = DateTime.UtcNow,
-            ModifiedDateTime = DateTime.UtcNow,
-            AccountStatus = "Active",
-            CreatedBy = "System",
-            ModifiedBy = "System"
+            //ToDo : Account Status bool olucak
         };
 
-        _applicatiıonDbContext.Users.Add(user);
+        _applicationDbContext.Users.Add(user);
 
-        await _applicatiıonDbContext.SaveChangesAsync();
+        await _applicationDbContext.SaveChangesAsync();
 
         return new UserResponse
         {
@@ -41,9 +38,27 @@ public class UserRepository : IUserRepository
         };
     }
 
+    public async Task<UserResponse> DeleteUser(Guid userId)
+    {
+        var deletedUser = _applicationDbContext.Users
+        .Where(x => x.Id == userId)
+        .FirstOrDefault()
+        ?? throw new Exception("User not found");
+
+        _applicationDbContext.Users.Remove(deletedUser);
+
+        await _applicationDbContext.SaveChangesAsync();
+
+        return new UserResponse
+        {
+            Id = deletedUser.Id,
+            ModifiedDateTime = deletedUser.ModifiedDateTime
+        };
+    }
+
     public async Task<GetUserResponse> GetUserById(Guid userId)
     {
-        var user = await _applicatiıonDbContext.Users
+        var user = await _applicationDbContext.Users
         .Where(x => x.Id == userId)
         .Select(x => new GetUserResponse
         {
@@ -62,35 +77,16 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<List<GetUsersResponse>> GetUsers()
-    {
-        var users = await _applicatiıonDbContext.Users
-        .AsNoTracking()
-        .Select(x => new GetUsersResponse
-        {
-            Id = x.Id,
-            Name = x.Name,
-            Surname = x.Surname,
-            Email = x.Email,
-            PhoneNumber = x.PhoneNumber,
-            TC = x.TC,
-            BirthDate = x.BirthDate,
-            Gender = x.Gender,
-            Address = x.Address
-        }).ToListAsync();
-
-        return users;
-    }
-
     public async Task<bool> IsExistAsync(string email)
     {
-        var isExist = await _applicatiıonDbContext.Users.AsNoTracking().AnyAsync(u => u.Email == email);
+        var isExist = await _applicationDbContext.Users.AsNoTracking().AnyAsync(u => u.Email == email);
         return isExist;
+
     }
 
     public async Task<UserDetailsResponse> GetUserByEmail(string email)
     {
-        var user = await _applicatiıonDbContext.Users
+        var user = await _applicationDbContext.Users
             .AsNoTracking()
             .Select(x => new UserDetailsResponse
             {
@@ -109,5 +105,49 @@ public class UserRepository : IUserRepository
             ?? throw new Exception("User not found");
 
         return user;
+    }
+
+
+    public async Task<List<GetUsersResponse>> GetUsers()
+    {
+        var users = await _applicationDbContext.Users
+        .AsNoTracking()
+        .Select(x => new GetUsersResponse
+        {
+            Id = x.Id,
+            Name = x.Name,
+            Surname = x.Surname,
+            Email = x.Email,
+            PhoneNumber = x.PhoneNumber,
+            TC = x.TC,
+            BirthDate = x.BirthDate,
+            Gender = x.Gender,
+            Address = x.Address
+        }).ToListAsync();
+
+        return users;
+    }
+
+    public async Task<UserResponse> UpdateUser(UpdateUserRequest request)
+    {
+        var userEntity = await _applicationDbContext.Users
+        .FirstOrDefaultAsync(x => x.Id == request.Id)
+        ?? throw new Exception("User not found");
+
+        userEntity.Name = request.Name;
+        userEntity.Surname = request.Surname;
+        userEntity.Email = request.Email;
+        userEntity.PhoneNumber = request.PhoneNumber;
+        userEntity.Address = request.Address;
+
+        _applicationDbContext.Update(userEntity);
+
+        await _applicationDbContext.SaveChangesAsync();
+
+        return new UserResponse
+        {
+            Id = userEntity.Id,
+            ModifiedDateTime = userEntity.ModifiedDateTime
+        };
     }
 }

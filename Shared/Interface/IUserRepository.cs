@@ -15,4 +15,8 @@ public interface IUserRepository
     Task<bool> IsExistAsync(string email);
 
     Task<UserDetailsResponse> GetUserByEmail(string email);
+
+    Task<UserResponse> UpdateUser(UpdateUserRequest request);
+
+    Task<UserResponse> DeleteUser(Guid userId);
 }
