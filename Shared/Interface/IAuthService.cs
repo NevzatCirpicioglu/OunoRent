@@ -6,5 +6,5 @@ namespace Shared.Interface;
 public interface IAuthService
 {
     Task<string> Register(CreateUserRequest createUserRequest);
-    Task<string> Login(LoginRequest loginUserRequest);
+    Task<string> Login(LoginRequest loginRequest);
 }
