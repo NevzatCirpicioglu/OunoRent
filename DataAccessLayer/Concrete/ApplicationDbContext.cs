@@ -35,12 +35,12 @@ public class ApplicationDbContext : DbContext
             if (entry.State == EntityState.Added)
             {
                 baseEntity.CreatedDateTime = DateTime.UtcNow;
-                baseEntity.CreatedBy = "currentUser";
+                baseEntity.CreatedBy = "System";
             }
             else if (entry.State == EntityState.Modified)
             {
                 baseEntity.ModifiedDateTime = DateTime.UtcNow;
-                baseEntity.ModifiedBy = "currentUser";
+                baseEntity.ModifiedBy = "System";
             }
         }
     }
