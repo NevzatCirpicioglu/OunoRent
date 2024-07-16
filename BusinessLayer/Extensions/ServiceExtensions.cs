@@ -16,6 +16,7 @@ public static class ServiceExtensions
     public static void ConfigureDI(this IServiceCollection services)
     {
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 
     public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
