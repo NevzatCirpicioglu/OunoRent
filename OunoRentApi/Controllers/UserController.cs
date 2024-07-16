@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BusinessLayer.User.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Shared.DTO.User.Response;
 
 namespace OunoRentApi.Controllers;
 
