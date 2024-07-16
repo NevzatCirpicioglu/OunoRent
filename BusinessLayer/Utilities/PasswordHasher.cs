@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace BusinessLayer.Services.Authhentication;
+namespace BusinessLayer.Utilities;
 
 public class PasswordHasher
 {

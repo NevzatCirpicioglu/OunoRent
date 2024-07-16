@@ -1,5 +1,6 @@
 using EntityLayer.Entities;
 using Microsoft.EntityFrameworkCore;
+using Shared.DTO.Login.Response;
 using Shared.DTO.User.Request;
 using Shared.DTO.User.Response;
 using Shared.Interface;
@@ -20,18 +21,11 @@ public class UserRepository : IUserRepository
     {
         var user = new User
         {
-            Name = request.Name,
-            Surname = request.Surname,
             Email = request.Email,
-            PhoneNumber = request.PhoneNumber,
-            TC = request.TC,
-            BirthDate = request.BirthDate,
-            Gender = request.Gender,
-            Address = request.Address,
+            PasswordHash = request.PasswordHash,
             CreatedDateTime = DateTime.UtcNow,
             ModifiedDateTime = DateTime.UtcNow,
             AccountStatus = "Active",
-            PasswordHash = request.PasswordHash,
             CreatedBy = "System",
             ModifiedBy = "System"
         };
@@ -86,5 +80,34 @@ public class UserRepository : IUserRepository
         }).ToListAsync();
 
         return users;
+    }
+
+    public async Task<bool> IsExistAsync(string email)
+    {
+        var isExist = await _applicatiıonDbContext.Users.AsNoTracking().AnyAsync(u => u.Email == email);
+        return isExist;
+    }
+
+    public async Task<UserDetailsResponse> GetUserByEmail(string email)
+    {
+        var user = await _applicatiıonDbContext.Users
+            .AsNoTracking()
+            .Select(x => new UserDetailsResponse
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Surname = x.Surname,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                TC = x.TC,
+                BirthDate = x.BirthDate,
+                Gender = x.Gender,
+                Address = x.Address,
+                AccountStatus = x.AccountStatus,
+                PasswordHash = x.PasswordHash
+            }).FirstOrDefaultAsync()
+            ?? throw new Exception("User not found");
+
+        return user;
     }
 }
