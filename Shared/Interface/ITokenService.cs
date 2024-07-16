@@ -1,3 +1,5 @@
+using Shared.DTO.User.Response;
+
 namespace Shared.Interface;
 
 public interface ITokenService

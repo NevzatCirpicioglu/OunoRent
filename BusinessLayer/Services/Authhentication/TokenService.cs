@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Shared.DTO.User.Response;
 using Shared.Interface;
 
 namespace BusinessLayer.Services.Authhentication;
@@ -18,7 +19,7 @@ public class TokenService : ITokenService
 
     public async Task<string> GenerateToken(UserResponse userResponse)
     {
-        var signingCredentials = GetSigningCredentials(userResponse);
+        var signingCredentials = GetSigningCredentials();
         var claims = await GetClaims(userResponse);
         var tokenOptions = GetTokenOptions(signingCredentials, claims);
 
