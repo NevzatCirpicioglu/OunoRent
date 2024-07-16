@@ -1,7 +1,7 @@
 using Shared.DTO.Category.Response;
 using Shared.Interface;
 using Microsoft.EntityFrameworkCore;
-using EntityLayer.EntityLayer.Entities;
+using EntityLayer.Entities;
 
 namespace DataAccessLayer.Concrete.Repository;
 
