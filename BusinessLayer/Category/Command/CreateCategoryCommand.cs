@@ -1,34 +1,30 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using Shared.DTO.Category.Request;
 using Shared.DTO.Category.Response;
 using Shared.Interface;
 using AutoMapper;
 
-namespace BusinessLayer.Category.Command
+namespace BusinessLayer.Category.Command;
+
+public sealed record CreateCategoryCommand(CreateCategoryRequest Category) : IRequest<CategoryResponse>;
+
+public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CategoryResponse>
 {
-    public sealed record CreateCategoryCommand(CreateCategoryRequest Category) : IRequest<CategoryResponse>;
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly IMapper _mapper;
 
-    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CategoryResponse>
+    public CreateCategoryCommandHandler(ICategoryRepository categoryRepository, IMapper mapper)
     {
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IMapper _mapper;
+        _categoryRepository = categoryRepository;
+        _mapper = mapper;
+    }
 
-        public CreateCategoryCommandHandler(ICategoryRepository categoryRepository, IMapper mapper)
-        {
-            _categoryRepository = categoryRepository;
-            _mapper = mapper;
-        }
+    public async Task<CategoryResponse> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    {
+        var category = await _categoryRepository.CreateCategory(request.Category.CategoryName);
 
-        public async Task<CategoryResponse> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
-        {
-            var category = await _categoryRepository.CreateCategory(request.Category.CategoryName);
+        var categoryResponse = _mapper.Map<CategoryResponse>(category);
 
-            var categoryResponse = _mapper.Map<CategoryResponse>(category);
-
-            return categoryResponse;
-        }
+        return categoryResponse;
     }
 }
