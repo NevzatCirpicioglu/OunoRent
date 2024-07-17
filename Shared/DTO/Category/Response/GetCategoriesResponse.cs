@@ -1,6 +1,6 @@
 namespace Shared.DTO.Category.Response;
 
-public class GetCategoriesResponse
+public class GetCategoriesResponse : GenericResponse
 {
     public Guid CategoryId { get; set; }
 

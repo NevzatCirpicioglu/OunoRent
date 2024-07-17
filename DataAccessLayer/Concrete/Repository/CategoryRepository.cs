@@ -21,7 +21,11 @@ public class CategoryRepository : ICategoryRepository
         .Select(x => new GetCategoriesResponse
         {
             CategoryId = x.Id,
-            CategoryName = x.Name
+            CategoryName = x.Name,
+            CreatedDateTime = x.CreatedDateTime,
+            CreatedBy = x.CreatedBy,
+            ModifiedDateTime = x.ModifiedDateTime,
+            ModifiedBy = x.ModifiedBy
         }).ToListAsync();
 
         return categories;
@@ -35,7 +39,11 @@ public class CategoryRepository : ICategoryRepository
         .Select(x => new GetCategoryResponse
         {
             CategoryId = x.Id,
-            CategoryName = x.Name
+            CategoryName = x.Name,
+            CreatedDateTime = x.CreatedDateTime,
+            CreatedBy = x.CreatedBy,
+            ModifiedDateTime = x.ModifiedDateTime,
+            ModifiedBy = x.ModifiedBy
         }).FirstOrDefaultAsync()
         ?? throw new KeyNotFoundException("Category not found");
 

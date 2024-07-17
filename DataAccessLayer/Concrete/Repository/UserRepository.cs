@@ -34,7 +34,7 @@ public class UserRepository : IUserRepository
         return new UserResponse
         {
             Id = user.Id,
-            CreatedDateTime = user.CreatedDateTime
+            CreatedDateTime = DateTime.UtcNow
         };
     }
 
@@ -52,7 +52,6 @@ public class UserRepository : IUserRepository
         return new UserResponse
         {
             Id = deletedUser.Id,
-            ModifiedDateTime = deletedUser.ModifiedDateTime
         };
     }
 
@@ -71,7 +70,9 @@ public class UserRepository : IUserRepository
             TC = x.TC,
             BirthDate = x.BirthDate,
             Gender = x.Gender,
-            Address = x.Address
+            Address = x.Address,
+            CreatedDateTime = x.CreatedDateTime,
+            ModifiedDateTime = x.ModifiedDateTime
         }).FirstOrDefaultAsync()
         ?? throw new KeyNotFoundException("User not found");
 
@@ -125,7 +126,9 @@ public class UserRepository : IUserRepository
             TC = x.TC,
             BirthDate = x.BirthDate,
             Gender = x.Gender,
-            Address = x.Address
+            Address = x.Address,
+            CreatedDateTime = x.CreatedDateTime,
+            ModifiedDateTime = x.ModifiedDateTime
         }).ToListAsync();
 
         return users;
@@ -150,7 +153,8 @@ public class UserRepository : IUserRepository
         return new UserResponse
         {
             Id = userEntity.Id,
-            ModifiedDateTime = userEntity.ModifiedDateTime
+            CreatedDateTime = userEntity.CreatedDateTime,
+            ModifiedDateTime = DateTime.UtcNow
         };
     }
 }

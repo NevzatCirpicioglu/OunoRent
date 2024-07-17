@@ -1,6 +1,6 @@
 namespace Shared.DTO.User.Response;
 
-public class GetUsersResponse
+public class GetUsersResponse : GenericResponse
 {
     public Guid Id { get; set; }
     public string? Name { get; set; }
