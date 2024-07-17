@@ -2,7 +2,7 @@ using System.Text;
 using AutoMapper.Extensions.ExpressionMapping;
 using BusinessLayer.Category.Query;
 using BusinessLayer.Mapper;
-using BusinessLayer.Services.Authhentication;
+using BusinessLayer.Services;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.Concrete.Repository;
 using MediatR;
@@ -64,10 +64,11 @@ public static class ServiceExtensions
                 ValidateLifetime = true,
                 ValidIssuer = jwtSettings["Issuer"],
                 ValidAudience = jwtSettings["Audience"],
-
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
             };
         });
+
+        services.AddAuthorization();
     }
 
     public static void ConfigureAllExtensionMethods(this IServiceCollection services, IConfiguration configuration)

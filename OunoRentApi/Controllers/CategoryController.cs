@@ -1,11 +1,13 @@
 using BusinessLayer.Category.Command;
 using BusinessLayer.Category.Query;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTO.Category.Request;
 
 namespace OunoRentApi.Controllers.CategoryController;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class CategoryController : ControllerBase
