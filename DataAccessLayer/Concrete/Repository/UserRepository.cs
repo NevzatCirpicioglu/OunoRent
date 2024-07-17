@@ -92,6 +92,7 @@ public class UserRepository : IUserRepository
     {
         var user = await _applicationDbContext.Users
             .AsNoTracking()
+            .Where(x => x.Email == email)
             .Select(x => new UserDetailsResponse
             {
                 Id = x.Id,

@@ -81,6 +81,4 @@ public static class ServiceExtensions
         ConfigureAutoMapper(services);
         ConfigureJWT(services, configuration);
     }
-
-
 }

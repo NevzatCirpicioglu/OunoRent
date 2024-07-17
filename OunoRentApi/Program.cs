@@ -1,4 +1,5 @@
 using BusinessLayer.Extensions;
+using BusinessLayer.Middlewares;
 using Microsoft.OpenApi.Models;
 using OunoRentApi;
 
@@ -53,6 +54,9 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
         c.RoutePrefix = string.Empty;
     });
+
+app.UseMiddleware<SlidingExpirationMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
