@@ -8,7 +8,7 @@ namespace BusinessLayer.Category.Command;
 
 public sealed record CreateCategoryCommand(CreateCategoryRequest Category) : IRequest<CategoryResponse>;
 
-public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CategoryResponse>
+internal class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CategoryResponse>
 {
     private readonly ICategoryRepository _categoryRepository;
     private readonly IMapper _mapper;

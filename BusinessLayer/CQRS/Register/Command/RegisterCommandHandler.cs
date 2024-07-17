@@ -1,10 +1,13 @@
 using MediatR;
+using Shared.DTO.Register.Request;
 using Shared.DTO.User.Response;
 using Shared.Interface;
 
 namespace BusinessLayer.CQRS.Register.Command;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, UserResponse>
+public sealed record RegisterCommand(RegisterRequest RegisterRequest) : IRequest<UserResponse>;
+
+internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, UserResponse>
 {
     private readonly IAuthService _authService;
 

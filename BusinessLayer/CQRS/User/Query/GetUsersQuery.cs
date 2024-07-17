@@ -4,20 +4,20 @@ using Shared.Interface;
 
 namespace BusinessLayer.User.Query;
 
-public sealed record GetUsersQuery : IRequest<List<GetUsersResponse>>
+public sealed record GetUsersQuery : IRequest<List<GetUsersResponse>>;
+
+internal class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, List<GetUsersResponse>>
 {
-    internal class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, List<GetUsersResponse>>
+    private readonly IUserRepository _userRepository;
+
+    public GetUsersQueryHandler(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
+        _userRepository = userRepository;
+    }
 
-        public GetUsersQueryHandler(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
-
-        public async Task<List<GetUsersResponse>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
-        {
-            return await _userRepository.GetUsers();
-        }
+    public async Task<List<GetUsersResponse>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+    {
+        return await _userRepository.GetUsers();
     }
 }
+

@@ -5,20 +5,20 @@ using Shared.Interface;
 
 namespace BusinessLayer.User.Command;
 
-public sealed record CreateUserCommand(CreateUserRequest Request) : IRequest<UserResponse>
+public sealed record CreateUserCommand(CreateUserRequest Request) : IRequest<UserResponse>;
+
+internal class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserResponse>
 {
-    internal class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserResponse>
+    private readonly IUserRepository _userRepository;
+
+    public CreateUserCommandHandler(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
+        _userRepository = userRepository;
+    }
 
-        public CreateUserCommandHandler(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
-
-        public async Task<UserResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
-        {
-            return await _userRepository.CreateUser(request.Request);
-        }
+    public async Task<UserResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    {
+        return await _userRepository.CreateUser(request.Request);
     }
 }
+

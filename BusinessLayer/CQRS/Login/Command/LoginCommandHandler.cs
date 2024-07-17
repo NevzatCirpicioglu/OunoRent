@@ -1,10 +1,13 @@
 using MediatR;
+using Shared.DTO.Login.Request;
 using Shared.DTO.Login.Response;
 using Shared.Interface;
 
 namespace BusinessLayer.CQRS.Login.Command;
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
+public sealed record LoginCommand(LoginRequest LoginRequest) : IRequest<LoginResponse>;
+
+internal class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
 {
     private readonly IAuthService _authService;
 
