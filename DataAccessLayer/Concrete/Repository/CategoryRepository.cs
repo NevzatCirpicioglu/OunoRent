@@ -17,6 +17,7 @@ public class CategoryRepository : ICategoryRepository
     public async Task<List<GetCategoriesResponse>> GetCategories()
     {
         var categories = await _applicationDbContext.Categories
+        .AsNoTracking()
         .Select(x => new GetCategoriesResponse
         {
             CategoryId = x.Id,
@@ -29,22 +30,26 @@ public class CategoryRepository : ICategoryRepository
     public async Task<GetCategoryResponse> GetCategory(Guid categoryId)
     {
         var category = await _applicationDbContext.Categories
+        .AsNoTracking()
         .Where(x => x.Id == categoryId)
         .Select(x => new GetCategoryResponse
         {
             CategoryId = x.Id,
             CategoryName = x.Name
-        }).FirstOrDefaultAsync();
+        }).FirstOrDefaultAsync()
+        ?? throw new KeyNotFoundException("Category not found");
 
         return category;
     }
 
     public async Task<CategoryResponse> CreateCategory(string categoryName)
     {
-        var category = new Category
-        {
-            Name = categoryName,
-        };
+
+        await IsEsxitCategory(categoryName);
+
+        var category = new Category();
+
+        category.Name = categoryName;
 
         _applicationDbContext.Categories.Add(category);
 
@@ -65,7 +70,8 @@ public class CategoryRepository : ICategoryRepository
     {
         var category = await _applicationDbContext.Categories
         .Where(x => x.Id == request.CategoryId)
-        .FirstOrDefaultAsync();
+        .FirstOrDefaultAsync()
+        ?? throw new KeyNotFoundException("Category not found");
 
         category.Name = request.CategoryName;
 
@@ -87,12 +93,23 @@ public class CategoryRepository : ICategoryRepository
         var category = await _applicationDbContext.Categories
         .Where(x => x.Id == categoryId)
         .FirstOrDefaultAsync()
-        ?? throw new Exception("Category not found");
+        ?? throw new KeyNotFoundException("Category not found");
 
         _applicationDbContext.Categories.Remove(category);
 
         await _applicationDbContext.SaveChangesAsync();
 
        return category.Id;
+    }
+
+    private async Task IsEsxitCategory(string categoryName)
+    {
+        var isExist = await _applicationDbContext.Categories
+        .AnyAsync(x => x.Name == categoryName);
+
+        if (isExist)
+        {
+            throw new KeyNotFoundException("Category already exist");
+        }
     }
 }

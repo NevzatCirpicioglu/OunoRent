@@ -27,7 +27,7 @@ public class CategoryController : ControllerBase
         return Ok(categories);
     }
 
-    [HttpGet("{categoryId}")]
+    [HttpGet("{categoryId:guid}")]
     public async Task<IActionResult> GetCategory(Guid categoryId)
     {
         var category = await _mediator.Send(new GetCategoryQuery(categoryId));
@@ -41,14 +41,14 @@ public class CategoryController : ControllerBase
         return Ok(category);
     }
 
-    [HttpPut]
+    [HttpPut("{categoryId:guid}")]
     public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryRequest request)
     {
         var category = await _mediator.Send(new UpdateCategoryCommand(request));
         return Ok(category);
     }
 
-    [HttpDelete("{categoryId}")]
+    [HttpDelete("{categoryId:guid}")]
     public async Task<IActionResult> DeleteCategory(Guid categoryId)
     {
         var category = await _mediator.Send(new DeleteCategoryCommand(categoryId));

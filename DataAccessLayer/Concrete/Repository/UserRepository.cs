@@ -43,7 +43,7 @@ public class UserRepository : IUserRepository
         var deletedUser = _applicationDbContext.Users
         .Where(x => x.Id == userId)
         .FirstOrDefault()
-        ?? throw new Exception("User not found");
+        ?? throw new KeyNotFoundException("User not found");
 
         _applicationDbContext.Users.Remove(deletedUser);
 
@@ -59,6 +59,7 @@ public class UserRepository : IUserRepository
     public async Task<GetUserResponse> GetUserById(Guid userId)
     {
         var user = await _applicationDbContext.Users
+        .AsNoTracking()
         .Where(x => x.Id == userId)
         .Select(x => new GetUserResponse
         {
@@ -72,14 +73,16 @@ public class UserRepository : IUserRepository
             Gender = x.Gender,
             Address = x.Address
         }).FirstOrDefaultAsync()
-        ?? throw new Exception("User not found");
+        ?? throw new KeyNotFoundException("User not found");
 
         return user;
     }
 
     public async Task<bool> IsExistAsync(string email)
     {
-        var isExist = await _applicationDbContext.Users.AsNoTracking().AnyAsync(u => u.Email == email);
+        var isExist = await _applicationDbContext.Users
+        .AsNoTracking()
+        .AnyAsync(u => u.Email == email);
         return isExist;
 
     }
@@ -102,7 +105,7 @@ public class UserRepository : IUserRepository
                 AccountStatus = x.AccountStatus,
                 PasswordHash = x.PasswordHash
             }).FirstOrDefaultAsync()
-            ?? throw new Exception("User not found");
+            ?? throw new KeyNotFoundException("User not found");
 
         return user;
     }
@@ -132,7 +135,7 @@ public class UserRepository : IUserRepository
     {
         var userEntity = await _applicationDbContext.Users
         .FirstOrDefaultAsync(x => x.Id == request.Id)
-        ?? throw new Exception("User not found");
+        ?? throw new KeyNotFoundException("User not found");
 
         userEntity.Name = request.Name;
         userEntity.Surname = request.Surname;

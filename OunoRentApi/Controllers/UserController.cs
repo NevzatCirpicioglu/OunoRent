@@ -19,35 +19,28 @@ public class UserController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("users")]
+    [HttpGet("")]
     public async Task<IActionResult> GetUsers()
     {
         var result = await _mediator.Send(new GetUsersQuery());
         return Ok(result);
     }
 
-    [HttpGet("users/{userId:guid}")]
+    [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetUserById(Guid userId )
     {
         var result = await _mediator.Send(new GetUserQuery(userId));
         return Ok(result);
     }
 
-    [HttpPost("users")]
-    public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
-    {
-        var result = await _mediator.Send(new CreateUserCommand(request));
-        return Ok(result);
-    }
-
-    [HttpPut("users/{userId:guid}")]
+    [HttpPut("{userId:guid}")]
     public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
     {
         var result = await _mediator.Send(new UpdateUserCommand(request));
         return Ok(result);
     }
 
-    [HttpDelete("users/{userId:guid}")]
+    [HttpDelete("{userId:guid}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
         var result = await _mediator.Send(new DeleteUserCommand(userId));

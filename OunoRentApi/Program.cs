@@ -1,5 +1,6 @@
 using BusinessLayer.Extensions;
 using Microsoft.OpenApi.Models;
+using OunoRentApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,7 @@ builder.Services.AddControllers();
 // Swagger yapılandırması
 builder.Services.AddSwaggerGen(c =>
 {
-     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 
     // Bearer token authentication için security definition ekleyin
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -43,17 +44,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigureAllExtensionMethods(builder.Configuration);
 
 var app = builder.Build();
-
+app.UseMiddleware<ExceptionMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
     app.UseSwagger();
-app.UseSwaggerUI(c =>
+    app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
         c.RoutePrefix = string.Empty;
     });
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.UseHttpsRedirection();
 app.MapControllers();
