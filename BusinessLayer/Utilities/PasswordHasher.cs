@@ -4,6 +4,11 @@ namespace BusinessLayer.Utilities;
 
 public class PasswordHasher
 {
+    /// <summary>
+    /// Verilen şifreyi hash'ler ve Base64 string olarak döner.
+    /// </summary>
+    /// <param name="password">Hash'lenecek şifre.</param>
+    /// <returns>Hash'lenmiş şifrenin Base64 string hali.</returns>
     public static string HashPassword(string password)
     {
         byte[] salt = new byte[16];
@@ -22,6 +27,12 @@ public class PasswordHasher
         return Convert.ToBase64String(hashBytes);
     }
 
+    /// <summary>
+    /// Verilen şifrenin hash'lenmiş şifre ile eşleşip eşleşmediğini doğrular.
+    /// </summary>
+    /// <param name="password">Doğrulanacak şifre.</param>
+    /// <param name="hashedPassword">Hash'lenmiş şifre.</param>
+    /// <returns>Şifreler eşleşirse true, aksi takdirde false döner.</returns>
     public static bool VerifyPassword(string password, string hashedPassword)
     {
         byte[] hashBytes = Convert.FromBase64String(hashedPassword);

@@ -7,6 +7,10 @@ namespace BusinessLayer.User.Command;
 
 public sealed record CreateUserCommand(CreateUserRequest Request) : IRequest<UserResponse>;
 
+/// <summary>
+/// <c>CreateUserCommand</c> komutunu işleyen bir işleyici sınıfıdır.
+/// Kullanıcı oluşturma isteğini alır ve <see cref="IUserRepository"/> aracılığıyla kullanıcı oluşturma işlemini gerçekleştirir.
+/// </summary>
 internal class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserResponse>
 {
     private readonly IUserRepository _userRepository;

@@ -7,6 +7,10 @@ namespace BusinessLayer.User.Command;
 
 public sealed record UpdateUserCommand(UpdateUserRequest user) : IRequest<UserResponse>;
 
+/// <summary>
+/// <c>UpdateUserCommand</c> komutunu işleyen bir işleyici sınıfıdır.
+/// Kullanıcı güncelleme isteğini alır ve <see cref="IUserRepository"/> aracılığıyla kullanıcı güncelleme işlemini gerçekleştirir.
+/// </summary>
 internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserResponse>
 {
     private readonly IUserRepository _userRepository;

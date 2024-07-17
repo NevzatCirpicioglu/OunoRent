@@ -5,6 +5,10 @@ namespace BusinessLayer.CQRS.Category.Command;
 
 public sealed record DeleteCategoryCommand(Guid categoryId) : IRequest<Guid>;
 
+/// <summary>
+/// <c>DeleteCategoryCommand</c> komutunu işleyen bir işleyici sınıfıdır.
+/// Belirtilen kategori ID'sine göre kategori silme işlemini gerçekleştirir.
+/// </summary>
 internal class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Guid>
 {
     private readonly ICategoryRepository _categoryRepository;

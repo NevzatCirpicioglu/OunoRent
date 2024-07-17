@@ -7,6 +7,10 @@ namespace BusinessLayer.CQRS.Category.Command;
 
 public sealed record UpdateCategoryCommand(UpdateCategoryRequest category) : IRequest<CategoryResponse>;
 
+/// <summary>
+/// <c>UpdateCategoryCommand</c> komutunu işleyen bir işleyici sınıfıdır.
+/// Belirtilen kategori bilgisini güncellemek için repository üzerinden işlem yapar.
+/// </summary>
 internal class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, CategoryResponse>
 {
     private readonly ICategoryRepository _categoryRepository;

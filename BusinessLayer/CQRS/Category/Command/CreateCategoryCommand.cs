@@ -8,6 +8,10 @@ namespace BusinessLayer.Category.Command;
 
 public sealed record CreateCategoryCommand(CreateCategoryRequest Category) : IRequest<CategoryResponse>;
 
+/// <summary>
+/// <c>CreateCategoryCommand</c> komutunu işleyen bir işleyici sınıfıdır.
+/// Yeni bir kategori oluşturma işlemini gerçekleştirir ve sonucu <see cref="CategoryResponse"/> olarak döndürür.
+/// </summary>
 internal class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CategoryResponse>
 {
     private readonly ICategoryRepository _categoryRepository;

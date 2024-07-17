@@ -3,6 +3,14 @@ using Shared.Interface;
 
 namespace BusinessLayer.Middlewares;
 
+/// <summary>
+/// İstekler için kayan sona erme süresi olan token'ları yönetir.
+/// Gelen isteklerdeki Authorization başlığını kontrol eder ve gerekirse token'ı yeniler.
+/// Yenilenmiş token'ı yanıt başlıklarına ekler.
+/// </summary>
+/// <param name="context">HTTP bağlamı.</param>
+/// <param name="_tokenService">Token hizmeti.</param>
+/// <returns>Asenkron görev.</returns>
 public class SlidingExpirationMiddleware
 {
     private readonly RequestDelegate _next;

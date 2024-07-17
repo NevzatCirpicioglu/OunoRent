@@ -92,7 +92,6 @@ public class UserRepository : IUserRepository
         .AsNoTracking()
         .AnyAsync(u => u.Email == email);
         return isExist;
-
     }
     #endregion
 

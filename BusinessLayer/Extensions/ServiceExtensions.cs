@@ -18,6 +18,11 @@ namespace BusinessLayer.Extensions;
 
 public static class ServiceExtensions
 {
+    /// <summary>
+    /// Dependency Injection (DI) yapılandırmasını gerçekleştirir.
+    /// Bu yöntem, gerekli servislerin DI konteynerine eklenmesini sağlar.
+    /// </summary>
+    /// <param name="services">Servis koleksiyonu.</param>
     private static void ConfigureDI(this IServiceCollection services)
     {
         services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -26,17 +31,33 @@ public static class ServiceExtensions
         services.AddScoped<ITokenService, TokenService>();
     }
 
+    /// <summary>
+    /// Veritabanı bağlamını (DbContext) yapılandırır.
+    /// Bu yöntem, Npgsql kullanarak PostgreSQL veritabanı bağlantısını yapılandırır ve DI konteynerine ekler.
+    /// </summary>
+    /// <param name="services">Servis koleksiyonu.</param>
+    /// <param name="configuration">Uygulama yapılandırma ayarları.</param>
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
     }
 
+    /// <summary>
+    /// MediatR kütüphanesini yapılandırır.
+    /// Bu yöntem, MediatR'yi belirli bir assembly'deki taleplerle (queries) kullanmak üzere DI konteynerine ekler.
+    /// </summary>
+    /// <param name="services">Servis koleksiyonu.</param>
     private static void ConfigureMediatr(this IServiceCollection services)
     {
         services.AddMediatR(typeof(GetCategoriesQuery).Assembly);
     }
 
+    /// <summary>
+    /// AutoMapper kütüphanesini yapılandırır.
+    /// Bu yöntem, AutoMapper'ı belirli bir yapılandırma profili ve ifade eşleme desteği ile DI konteynerine ekler.
+    /// </summary>
+    /// <param name="services">Servis koleksiyonu.</param>
     private static void ConfigureAutoMapper(this IServiceCollection services)
     {
         services.AddAutoMapper(cfg =>
@@ -46,6 +67,12 @@ public static class ServiceExtensions
         });
     }
 
+    /// <summary>
+    /// JWT kimlik doğrulama ve yetkilendirme yapılandırmasını gerçekleştirir.
+    /// Bu yöntem, JWT belirteçlerini doğrulamak için gerekli ayarları yapar ve kimlik doğrulama hizmetlerini DI konteynerine ekler.
+    /// </summary>
+    /// <param name="services">Servis koleksiyonu.</param>
+    /// <param name="configuration">Uygulama yapılandırma ayarları.</param>
     private static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSettings = configuration.GetSection("JWT");
@@ -73,6 +100,12 @@ public static class ServiceExtensions
         services.AddAuthorization();
     }
 
+    /// <summary>
+    /// Tüm yapılandırma genişletme yöntemlerini çağırarak servisleri yapılandırır.
+    /// Bu yöntem, veritabanı bağlamı, bağımlılık enjeksiyonu, MediatR, AutoMapper ve JWT kimlik doğrulama yapılandırmalarını gerçekleştirir.
+    /// </summary>
+    /// <param name="services">Servis koleksiyonu.</param>
+    /// <param name="configuration">Uygulama yapılandırma ayarları.</param>
     public static void ConfigureAllExtensionMethods(this IServiceCollection services, IConfiguration configuration)
     {
         ConfigureDbContext(services, configuration);

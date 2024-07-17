@@ -14,6 +14,7 @@ public class CategoryRepository : ICategoryRepository
     {
         _applicationDbContext = applicationDbContext;
     }
+
     #region GetCategories
     public async Task<List<GetCategoriesResponse>> GetCategories()
     {
@@ -120,7 +121,14 @@ public class CategoryRepository : ICategoryRepository
     }
     #endregion
 
+
     #region IsEsisCategory
+    /// <summary>
+    /// Verilen kategori adının mevcut olup olmadığını kontrol eder.
+    /// </summary>
+    /// <param name="categoryName">Kontrol edilecek kategori adı.</param>
+    /// <returns>Mevcut kategori olup olmadığını kontrol eder ve kategori mevcutsa istisna fırlatır.</returns>
+    /// <exception cref="KeyNotFoundException">Kategori zaten mevcutsa fırlatılır.</exception>
     private async Task IsEsxitCategory(string categoryName)
     {
         var isExist = await _applicationDbContext.Categories

@@ -91,6 +91,10 @@ public class TokenService : ITokenService
         return principal;
     }
 
+    /// <summary>
+    /// JWT token doğrulama parametrelerini döner.
+    /// </summary>
+    /// <returns>JWT token doğrulama parametrelerini içeren TokenValidationParameters nesnesi.</returns>
     private TokenValidationParameters GetValidationParameters()
     {
         var jwtSettings = _configuration.GetSection("JWT");
@@ -110,6 +114,12 @@ public class TokenService : ITokenService
         return tokenValidationParameters;
     }
 
+    /// <summary>
+    /// JWT token oluşturma seçeneklerini döner.
+    /// </summary>
+    /// <param name="signingCredentials">Token imzalama bilgilerini içeren SigningCredentials nesnesi.</param>
+    /// <param name="claims">JWT token'a eklenecek claim listesi.</param>
+    /// <returns>Oluşturulan JWT token seçeneklerini içeren SecurityToken nesnesi.</returns>
     private SecurityToken GetTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
     {
         var jwtSettings = _configuration.GetSection("JWT");
@@ -125,6 +135,11 @@ public class TokenService : ITokenService
         return tokenOptions;
     }
 
+    /// <summary>
+    /// Verilen kullanıcı detaylarına göre claim listesini oluşturur.
+    /// </summary>
+    /// <param name="loginUserResponse">Kullanıcı giriş detaylarını içeren nesne.</param>
+    /// <returns>Kullanıcıya ait claim'leri içeren bir liste döner.</returns>
     private async Task<List<Claim>> GetClaims(UserDetailsResponse loginUserResponse)
     {
         var claims = new List<Claim>()
@@ -135,6 +150,10 @@ public class TokenService : ITokenService
         return claims;
     }
 
+    /// <summary>
+    /// JWT token imzalama bilgilerini oluşturur ve döner.
+    /// </summary>
+    /// <returns>JWT token imzalama bilgilerini içeren SigningCredentials nesnesi.</returns>
     private SigningCredentials GetSigningCredentials()
     {
         var jwtSettings = _configuration.GetSection("JWT");

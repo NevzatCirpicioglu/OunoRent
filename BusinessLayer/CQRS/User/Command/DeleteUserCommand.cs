@@ -6,6 +6,10 @@ namespace BusinessLayer.User.Command;
 
 public sealed record DeleteUserCommand(Guid UserId) : IRequest<UserResponse>;
 
+/// <summary>
+/// <c>DeleteUserCommand</c> komutunu işleyen bir işleyici sınıfıdır.
+/// Kullanıcı silme isteğini alır ve <see cref="IUserRepository"/> aracılığıyla kullanıcı silme işlemini gerçekleştirir.
+/// </summary>
 internal class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, UserResponse>
 {
     IUserRepository _userRepository;

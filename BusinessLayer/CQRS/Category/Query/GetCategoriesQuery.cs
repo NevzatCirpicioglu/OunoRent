@@ -6,6 +6,10 @@ namespace BusinessLayer.Category.Query;
 
 public sealed record GetCategoriesQuery() : IRequest<List<GetCategoriesResponse>>;
 
+/// <summary>
+/// <c>GetCategoriesQuery</c> sorgusunu işleyen bir işleyici sınıfıdır.
+/// Kategori bilgilerini almak için repository üzerinden işlem yapar.
+/// </summary>
 internal class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, List<GetCategoriesResponse>>
 {
     ICategoryRepository _categoryRepository;
