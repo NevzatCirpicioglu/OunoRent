@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using AutoMapper.Extensions.ExpressionMapping;
 using BusinessLayer.Category.Query;
@@ -64,7 +65,8 @@ public static class ServiceExtensions
                 ValidateLifetime = true,
                 ValidIssuer = jwtSettings["Issuer"],
                 ValidAudience = jwtSettings["Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                ClockSkew = TimeSpan.Zero,
             };
         });
 
