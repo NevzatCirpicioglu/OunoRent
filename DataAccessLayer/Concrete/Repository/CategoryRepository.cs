@@ -2,6 +2,7 @@ using Shared.DTO.Category.Response;
 using Shared.Interface;
 using Microsoft.EntityFrameworkCore;
 using EntityLayer.Entities;
+using Shared.DTO.Category.Request;
 
 namespace DataAccessLayer.Concrete.Repository;
 
@@ -58,5 +59,40 @@ public class CategoryRepository : ICategoryRepository
             ModifiedDateTime = category.ModifiedDateTime,
             ModifiedBy = category.ModifiedBy
         };
+    }
+
+    public async Task<CategoryResponse> UpdateCategory(UpdateCategoryRequest request)
+    {
+        var category = await _applicationDbContext.Categories
+        .Where(x => x.Id == request.CategoryId)
+        .FirstOrDefaultAsync();
+
+        category.Name = request.CategoryName;
+
+        await _applicationDbContext.SaveChangesAsync();
+
+        return new CategoryResponse
+        {
+            CategoryId = category.Id,
+            CategoryName = category.Name,
+            CreatedDateTime = category.CreatedDateTime,
+            CreatedBy = category.CreatedBy,
+            ModifiedDateTime = category.ModifiedDateTime,
+            ModifiedBy = category.ModifiedBy
+        };
+    }
+
+    public async Task<Guid> DeleteCategory(Guid categoryId)
+    {
+        var category = await _applicationDbContext.Categories
+        .Where(x => x.Id == categoryId)
+        .FirstOrDefaultAsync()
+        ?? throw new Exception("Category not found");
+
+        _applicationDbContext.Categories.Remove(category);
+
+        await _applicationDbContext.SaveChangesAsync();
+
+       return category.Id;
     }
 }

@@ -1,13 +1,15 @@
 using BusinessLayer.User.Command;
 using BusinessLayer.User.Query;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTO.User.Request;
 
 namespace OunoRentApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Authorize]
+[Route("api/user")]
 public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;

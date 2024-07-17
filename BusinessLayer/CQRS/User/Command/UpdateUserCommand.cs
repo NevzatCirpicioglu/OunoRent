@@ -9,7 +9,7 @@ using Shared.Interface;
 
 namespace BusinessLayer.User.Command;
 
-public sealed record UpdateUserCommand(UpdateUserRequest Request) : IRequest<UserResponse>
+public sealed record UpdateUserCommand(UpdateUserRequest user) : IRequest<UserResponse>
 {
     internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserResponse>
     {
@@ -22,7 +22,7 @@ public sealed record UpdateUserCommand(UpdateUserRequest Request) : IRequest<Use
 
         public async Task<UserResponse> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            return await _userRepository.UpdateUser(request.Request);
+            return await _userRepository.UpdateUser(request.user);
         }
     }
 }
