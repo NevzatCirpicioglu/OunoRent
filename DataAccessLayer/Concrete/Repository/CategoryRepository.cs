@@ -14,6 +14,7 @@ public class CategoryRepository : ICategoryRepository
     {
         _applicationDbContext = applicationDbContext;
     }
+    #region GetCategories
     public async Task<List<GetCategoriesResponse>> GetCategories()
     {
         var categories = await _applicationDbContext.Categories
@@ -30,7 +31,9 @@ public class CategoryRepository : ICategoryRepository
 
         return categories;
     }
+    #endregion
 
+    #region GetCategory
     public async Task<GetCategoryResponse> GetCategory(Guid categoryId)
     {
         var category = await _applicationDbContext.Categories
@@ -49,7 +52,9 @@ public class CategoryRepository : ICategoryRepository
 
         return category;
     }
+    #endregion
 
+    #region CreateCategory
     public async Task<CategoryResponse> CreateCategory(string categoryName)
     {
 
@@ -73,7 +78,9 @@ public class CategoryRepository : ICategoryRepository
             ModifiedBy = category.ModifiedBy
         };
     }
+    #endregion
 
+    #region UpdateCategory
     public async Task<CategoryResponse> UpdateCategory(UpdateCategoryRequest request)
     {
         var category = await _applicationDbContext.Categories
@@ -95,7 +102,9 @@ public class CategoryRepository : ICategoryRepository
             ModifiedBy = category.ModifiedBy
         };
     }
+    #endregion
 
+    #region DeleteCategory
     public async Task<Guid> DeleteCategory(Guid categoryId)
     {
         var category = await _applicationDbContext.Categories
@@ -107,9 +116,11 @@ public class CategoryRepository : ICategoryRepository
 
         await _applicationDbContext.SaveChangesAsync();
 
-       return category.Id;
+        return category.Id;
     }
+    #endregion
 
+    #region IsEsisCategory
     private async Task IsEsxitCategory(string categoryName)
     {
         var isExist = await _applicationDbContext.Categories
@@ -120,4 +131,6 @@ public class CategoryRepository : ICategoryRepository
             throw new KeyNotFoundException("Category already exist");
         }
     }
+    #endregion
+
 }

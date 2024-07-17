@@ -17,6 +17,7 @@ public class UserRepository : IUserRepository
         _applicationDbContext = applicatiıonDbContext;
     }
 
+    #region CreateUser
     public async Task<UserResponse> CreateUser(CreateUserRequest request)
     {
         var user = new User
@@ -37,7 +38,9 @@ public class UserRepository : IUserRepository
             CreatedDateTime = DateTime.UtcNow
         };
     }
+    #endregion
 
+    #region DeleteUser
     public async Task<UserResponse> DeleteUser(Guid userId)
     {
         var deletedUser = _applicationDbContext.Users
@@ -54,7 +57,9 @@ public class UserRepository : IUserRepository
             Id = deletedUser.Id,
         };
     }
+    #endregion
 
+    #region GetUserById
     public async Task<GetUserResponse> GetUserById(Guid userId)
     {
         var user = await _applicationDbContext.Users
@@ -78,7 +83,9 @@ public class UserRepository : IUserRepository
 
         return user;
     }
+    #endregion
 
+    #region IsExistAsync
     public async Task<bool> IsExistAsync(string email)
     {
         var isExist = await _applicationDbContext.Users
@@ -87,7 +94,9 @@ public class UserRepository : IUserRepository
         return isExist;
 
     }
+    #endregion
 
+    #region GetUserByEmail
     public async Task<UserDetailsResponse> GetUserByEmail(string email)
     {
         var user = await _applicationDbContext.Users
@@ -111,8 +120,9 @@ public class UserRepository : IUserRepository
 
         return user;
     }
+    #endregion
 
-
+    #region GetUsers
     public async Task<List<GetUsersResponse>> GetUsers()
     {
         var users = await _applicationDbContext.Users
@@ -134,6 +144,9 @@ public class UserRepository : IUserRepository
 
         return users;
     }
+    #endregion
+
+    #region UpdateUser
 
     public async Task<UserResponse> UpdateUser(UpdateUserRequest request)
     {
@@ -158,4 +171,16 @@ public class UserRepository : IUserRepository
             ModifiedDateTime = DateTime.UtcNow
         };
     }
+    #endregion
+
+
+
+
+
+
+
+
+
+
+
 }
