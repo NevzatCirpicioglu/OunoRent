@@ -3,6 +3,7 @@ using Shared.Interface;
 using Microsoft.EntityFrameworkCore;
 using EntityLayer.Entities;
 using Shared.DTO.Category.Request;
+using BusinessLayer.Middlewares;
 
 namespace DataAccessLayer.Concrete.Repository;
 
@@ -49,7 +50,7 @@ public class CategoryRepository : ICategoryRepository
             ModifiedDateTime = x.ModifiedDateTime,
             ModifiedBy = x.ModifiedBy
         }).FirstOrDefaultAsync()
-        ?? throw new KeyNotFoundException("Category not found");
+        ?? throw new NotFoundException("Category not found");
 
         return category;
     }
@@ -87,7 +88,7 @@ public class CategoryRepository : ICategoryRepository
         var category = await _applicationDbContext.Categories
         .Where(x => x.Id == request.CategoryId)
         .FirstOrDefaultAsync()
-        ?? throw new KeyNotFoundException("Category not found");
+        ?? throw new NotFoundException("Category not found");
 
         category.Name = request.CategoryName;
 
@@ -111,7 +112,7 @@ public class CategoryRepository : ICategoryRepository
         var category = await _applicationDbContext.Categories
         .Where(x => x.Id == categoryId)
         .FirstOrDefaultAsync()
-        ?? throw new KeyNotFoundException("Category not found");
+        ?? throw new NotFoundException("Category not found");
 
         _applicationDbContext.Categories.Remove(category);
 
@@ -136,7 +137,7 @@ public class CategoryRepository : ICategoryRepository
 
         if (isExist)
         {
-            throw new KeyNotFoundException("Category already exist");
+            throw new ConflictException("Category already exist");
         }
     }
     #endregion

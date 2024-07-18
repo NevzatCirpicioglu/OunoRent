@@ -1,17 +1,10 @@
-using System;
-using System.Net;
-using System.Text.Json;
-using System.Threading.Tasks;
+using BusinessLayer.Middlewares;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
-namespace OunoRentApi;
-
-/// <summary>
-/// HTTP istekleri için özel bir ara katman (middleware) sınıfıdır. 
-/// İstekler sırasında meydana gelen istisnaları (exceptions) yakalar ve uygun HTTP yanıtlarını döner.
-/// Ayrıca kullanıcı kimliği doğrulanmamışsa 401 Unauthorized yanıtını döner.
-/// </summary>
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
@@ -29,71 +22,52 @@ public class ExceptionMiddleware
         {
             await _next(httpContext);
         }
+        catch (CustomException ex)
+        {
+            _logger.LogError($"Custom error occurred: {ex.Message}");
+            await HandleExceptionAsync(httpContext, ex);
+        }
         catch (Exception ex)
         {
             _logger.LogError($"Something went wrong: {ex}");
             await HandleExceptionAsync(httpContext, ex);
         }
-
-        // Eğer kullanıcı kimliği doğrulanmamışsa
-        if (!httpContext.User.Identity.IsAuthenticated)
-        {
-            httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-            var response = new
-            {
-                StatusCode = httpContext.Response.StatusCode,
-                Message = "Login required.",
-                Detailed = "You need to log in to access this resource."
-            };
-
-            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
-            return; // İşlemi sonlandır
-        }
     }
 
-    private Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        int statusCode;
+        string message;
 
-        var response = new
+        if (exception is CustomException customException)
         {
-            StatusCode = context.Response.StatusCode,
-            Message = "An error occurred while processing your request.",
-            Detailed = exception.Message
-        };
-
-        if (exception is KeyNotFoundException)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            response = new
-            {
-                StatusCode = context.Response.StatusCode,
-                Message = "Resource not found.",
-                Detailed = exception.Message
-            };
+            statusCode = customException.StatusCode;
+            message = customException.Message;
         }
-        else if (exception is ArgumentException)
+        else
         {
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            response = new
-            {
-                StatusCode = context.Response.StatusCode,
-                Message = "Invalid request.",
-                Detailed = exception.Message
-            };
-        }
-        else if (exception is UnauthorizedAccessException) // 500 hatası
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            response = new
-            {
-                StatusCode = context.Response.StatusCode,
-                Message = "An unexpected error occurred.",
-                Detailed = "Internal server error."
-            };
+            statusCode = (int)HttpStatusCode.InternalServerError;
+            message = "Internal Server Error from the custom middleware.";
         }
 
-        return context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        context.Response.StatusCode = statusCode;
+
+        return context.Response.WriteAsync(new ErrorDetails()
+        {
+            StatusCode = statusCode,
+            Message = message
+        }.ToString());
+    }
+}
+
+public class ErrorDetails
+{
+    public int StatusCode { get; set; }
+    public string Message { get; set; }
+
+    public override string ToString()
+    {
+        return Newtonsoft.Json.JsonConvert.SerializeObject(this);
     }
 }

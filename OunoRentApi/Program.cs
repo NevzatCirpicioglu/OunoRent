@@ -37,7 +37,6 @@ builder.Services.AddSwaggerGen(c =>
             }
     });
 });
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -54,7 +53,7 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
         c.RoutePrefix = string.Empty;
     });
-
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<SlidingExpirationMiddleware>();
 
 app.UseAuthentication();

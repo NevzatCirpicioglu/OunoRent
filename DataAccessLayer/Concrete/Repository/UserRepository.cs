@@ -1,3 +1,4 @@
+using BusinessLayer.Middlewares;
 using EntityLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shared.DTO.Login.Response;
@@ -46,7 +47,7 @@ public class UserRepository : IUserRepository
         var deletedUser = _applicationDbContext.Users
         .Where(x => x.Id == userId)
         .FirstOrDefault()
-        ?? throw new KeyNotFoundException("User not found");
+        ?? throw new NotFoundException("User not found");
 
         _applicationDbContext.Users.Remove(deletedUser);
 
@@ -79,7 +80,7 @@ public class UserRepository : IUserRepository
             CreatedDateTime = x.CreatedDateTime,
             ModifiedDateTime = x.ModifiedDateTime
         }).FirstOrDefaultAsync()
-        ?? throw new KeyNotFoundException("User not found");
+        ?? throw new NotFoundException("User not found");
 
         return user;
     }
@@ -115,7 +116,7 @@ public class UserRepository : IUserRepository
                 AccountStatus = x.AccountStatus,
                 PasswordHash = x.PasswordHash
             }).FirstOrDefaultAsync()
-            ?? throw new KeyNotFoundException("User not found");
+            ?? throw new NotFoundException("User not found");
 
         return user;
     }
@@ -151,7 +152,7 @@ public class UserRepository : IUserRepository
     {
         var userEntity = await _applicationDbContext.Users
         .FirstOrDefaultAsync(x => x.Id == request.Id)
-        ?? throw new KeyNotFoundException("User not found");
+        ?? throw new NotFoundException("User not found");
 
         userEntity.Name = request.Name;
         userEntity.Surname = request.Surname;
@@ -171,15 +172,4 @@ public class UserRepository : IUserRepository
         };
     }
     #endregion
-
-
-
-
-
-
-
-
-
-
-
 }
