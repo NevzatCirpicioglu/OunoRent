@@ -13,9 +13,9 @@ public class UserRepository : IUserRepository
 
     private readonly ApplicationDbContext _applicationDbContext;
 
-    public UserRepository(ApplicationDbContext applicatiıonDbContext)
+    public UserRepository(ApplicationDbContext applicationDbContext)
     {
-        _applicationDbContext = applicatiıonDbContext;
+        _applicationDbContext = applicationDbContext;
     }
 
     #region CreateUser
