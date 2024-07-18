@@ -18,4 +18,16 @@ public class AuthController : Controller
         return View();
     }
 
+    [HttpGet("forget-password")]
+    public IActionResult ForgetPassword()
+    {
+        return View();
+    }
+
+    [HttpGet("reset-password")]
+    public IActionResult ResetPassword()
+    {
+        return View();
+    }
+
 }
