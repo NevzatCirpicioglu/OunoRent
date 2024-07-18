@@ -1,4 +1,4 @@
-namespace Shared.DTO.Login.Response;
+namespace Shared.DTO.Authentication.Response;
 
 public class UserDetailsResponse
 {
@@ -19,7 +19,7 @@ public class UserDetailsResponse
 
     public string? Address { get; set; }
 
-    public Boolean? AccountStatus { get; set; }
+    public bool? AccountStatus { get; set; }
 
     public string PasswordHash { get; set; }
 }

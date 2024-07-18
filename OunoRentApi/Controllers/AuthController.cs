@@ -1,9 +1,8 @@
-using BusinessLayer.CQRS.Login.Command;
-using BusinessLayer.CQRS.Register.Command;
+using BusinessLayer.CQRS.Authentication.Command;
+using BusinessLayer.CQRS.Authentication.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Shared.DTO.Login.Request;
-using Shared.DTO.Register.Request;
+using Shared.DTO.Authentication.Request;
 
 namespace OunoRentApi.Controllers;
 
@@ -38,6 +37,20 @@ public class AuthController : ControllerBase
         try
         {
             var result = await _mediator.Send(new RegisterCommand(registerRequest));
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("validate-token")]
+    public async Task<IActionResult> ValidateToken(ValidateTokenRequest validateTokenRequest)
+    {
+        try
+        {
+            var result = await _mediator.Send(new ValidateTokenQuery(validateTokenRequest));
             return Ok(result);
         }
         catch (Exception ex)

@@ -1,4 +1,4 @@
-namespace Shared.DTO.Login.Response;
+namespace Shared.DTO.Authentication.Response;
 
 public class LoginResponse
 {

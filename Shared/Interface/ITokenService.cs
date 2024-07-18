@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Shared.DTO.Login.Response;
+using Shared.DTO.Authentication.Response;
 
 namespace Shared.Interface;
 

@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Shared.DTO.Login.Response;
+using Shared.DTO.Authentication.Response;
 using Shared.Interface;
 
 namespace BusinessLayer.Services;
@@ -74,21 +74,28 @@ public class TokenService : ITokenService
 
     public ClaimsPrincipal? GetPrincipal(string token)
     {
-        var validationParameters = GetValidationParameters();
-        var tokenHandler = new JwtSecurityTokenHandler();
-        SecurityToken securityToken;
-
-        var principal = tokenHandler.ValidateToken(token, validationParameters, out securityToken);
-        var jwtSecurityToken = securityToken as JwtSecurityToken;
-
-        if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(
-            SecurityAlgorithms.HmacSha256,
-            StringComparison.InvariantCultureIgnoreCase))
+        try
         {
-            throw new SecurityTokenException("Invalid Token");
-        }
+            var validationParameters = GetValidationParameters();
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
 
-        return principal;
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(
+                SecurityAlgorithms.HmacSha256,
+                StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new SecurityTokenException("Invalid Token");
+            }
+
+            return principal;
+        }
+        catch (SecurityTokenExpiredException)
+        {
+            return null;
+        }
     }
 
     /// <summary>
@@ -109,6 +116,7 @@ public class TokenService : ITokenService
             ValidIssuer = jwtSettings["Issuer"],
             ValidAudience = jwtSettings["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+            ClockSkew = TimeSpan.Zero
         };
 
         return tokenValidationParameters;
