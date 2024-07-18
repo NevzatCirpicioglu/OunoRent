@@ -1,7 +1,7 @@
 using BusinessLayer.Middlewares;
 using EntityLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-using Shared.DTO.Login.Response;
+using Shared.DTO.Authentication.Response;
 using Shared.DTO.User.Request;
 using Shared.DTO.User.Response;
 using Shared.Interface;

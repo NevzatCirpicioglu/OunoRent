@@ -1,5 +1,4 @@
-using Shared.DTO.Login.Request;
-using Shared.DTO.Register.Request;
+using Shared.DTO.Authentication.Request;
 using Shared.DTO.User.Response;
 
 namespace Shared.Interface;
@@ -22,4 +21,17 @@ public interface IAuthService
     /// <exception cref="NullReferenceException">Kullanıcı bulunamadığında fırlatılır.</exception>
     /// <exception cref="Exception">Şifre yanlış olduğunda fırlatılır.</exception>
     Task<string> LoginAsync(LoginRequest loginRequest);
+
+    /// <summary>
+    /// Validates the given token and checks if it is valid.
+    /// </summary>
+    /// <param name="token">The token to be validated.</param>
+    /// <returns>
+    /// <c>true</c> if the token is valid; otherwise, <c>false</c>.
+    /// </returns>
+    /// <remarks>
+    /// This method uses the _tokenService to retrieve the principal associated with the token.
+    /// If a principal is found, the token is considered valid.
+    /// </remarks>
+    public bool ValidateToken(string token);
 }

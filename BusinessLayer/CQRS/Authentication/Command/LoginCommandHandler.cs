@@ -1,9 +1,9 @@
 using MediatR;
-using Shared.DTO.Login.Request;
-using Shared.DTO.Login.Response;
+using Shared.DTO.Authentication.Request;
+using Shared.DTO.Authentication.Response;
 using Shared.Interface;
 
-namespace BusinessLayer.CQRS.Login.Command;
+namespace BusinessLayer.CQRS.Authentication.Command;
 
 public sealed record LoginCommand(LoginRequest LoginRequest) : IRequest<LoginResponse>;
 
