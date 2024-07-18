@@ -11,6 +11,7 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<User> Users { get; set; }
 
     public override int SaveChanges()
     {
@@ -24,6 +25,9 @@ public class ApplicationDbContext : DbContext
         return await base.SaveChangesAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// Veritabanı değişikliklerini izler ve oluşturma ya da değiştirme işlemi yapılan varlıkların denetim bilgilerini günceller.
+    /// </summary>
     private void UpdateAuditInformation()
     {
         var entries = ChangeTracker.Entries().Where(e => e.Entity is AuditTrailer && (e.State == EntityState.Added || e.State == EntityState.Modified));
@@ -34,12 +38,12 @@ public class ApplicationDbContext : DbContext
             if (entry.State == EntityState.Added)
             {
                 baseEntity.CreatedDateTime = DateTime.UtcNow;
-                baseEntity.CreatedBy = "currentUser";
+                baseEntity.CreatedBy = "System";
             }
             else if (entry.State == EntityState.Modified)
             {
                 baseEntity.ModifiedDateTime = DateTime.UtcNow;
-                baseEntity.ModifiedBy = "currentUser";
+                baseEntity.ModifiedBy = "System";
             }
         }
     }
