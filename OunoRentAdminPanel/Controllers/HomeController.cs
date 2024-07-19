@@ -23,6 +23,18 @@ public class HomeController : Controller
     {
         return View();
     }
+    
+    [HttpGet("Slider")] //Post ekranının Get'i
+    public IActionResult Slider()
+    {
+        return View();
+    }
+
+    [HttpGet("Sliders")] //Tüm Slider'lar
+    public IActionResult Sliders()
+    {
+        return View();
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
