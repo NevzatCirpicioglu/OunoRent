@@ -58,7 +58,7 @@ public class TokenService : ITokenService
             return null;
         }
 
-        var principal = GetPrincipal(token);
+        var principal = GetPrincipalFromExpiredToken(token);
         var userEmail = principal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
         if (string.IsNullOrEmpty(userEmail))
@@ -96,6 +96,33 @@ public class TokenService : ITokenService
         {
             return null;
         }
+    }
+
+    /// <summary>
+    /// Extracts a <see cref="ClaimsPrincipal"/> from a given JWT token without validating its expiration or signature.
+    /// </summary>
+    /// <param name="token">The JWT token to extract the principal from.</param>
+    /// <returns>
+    /// A <see cref="ClaimsPrincipal"/> representing the claims in the token, or <c>null</c> if the token is invalid.
+    /// </returns>
+    /// <remarks>
+    /// This method is useful for scenarios where you need to access the claims in an expired token.
+    /// Note that this method does not perform any validation on the token's signature or expiration date.
+    /// Use this method with caution and ensure that you only use it in trusted environments.
+    /// </remarks>
+    private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+
+        if (jwtToken == null)
+            return null;
+
+        var claims = jwtToken.Claims;
+        var identity = new ClaimsIdentity(claims, "jwt");
+        var principal = new ClaimsPrincipal(identity);
+
+        return principal;
     }
 
     /// <summary>
