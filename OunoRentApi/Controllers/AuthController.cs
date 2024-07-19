@@ -51,7 +51,11 @@ public class AuthController : ControllerBase
         try
         {
             var result = await _mediator.Send(new ValidateTokenQuery(validateTokenRequest));
-            return Ok(result);
+
+            if (!result.IsValid)
+                return Unauthorized();
+
+            return Ok();
         }
         catch (Exception ex)
         {
