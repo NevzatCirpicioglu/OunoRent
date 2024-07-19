@@ -98,6 +98,21 @@ public class TokenService : ITokenService
         }
     }
 
+    public DateTime? ValidateTokenExpiry(string token)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+
+        if (jwtToken == null)
+            return null;
+
+        var tokenExpireTime = jwtToken
+            .ValidTo
+            .ToLocalTime();
+
+        return tokenExpireTime;
+    }
+
     /// <summary>
     /// Extracts a <see cref="ClaimsPrincipal"/> from a given JWT token without validating its expiration or signature.
     /// </summary>
