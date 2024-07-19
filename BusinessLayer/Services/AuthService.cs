@@ -48,9 +48,17 @@ public class AuthService : IAuthService
         return result;
     }
 
-    public bool ValidateToken(string token)
+    public DateTime? ValidateToken(string token)
     {
         var result = _tokenService.GetPrincipal(token);
-        return result != null;
+
+        if (result != null)
+        {
+            var expireTime = _tokenService.ValidateTokenExpiry(token);
+
+            if (expireTime != null)
+                return expireTime;
+        }
+        return null;
     }
 }

@@ -21,7 +21,7 @@ public class ValidateTokenQueryHandler : IRequestHandler<ValidateTokenQuery, Val
         var result = _authService.ValidateToken(request.ValidateTokenRequest.Token);
         var validateTokenResponse = new ValidateTokenResponse()
         {
-            IsValid = result
+            ExpireTime = result
         };
 
         return Task.FromResult(validateTokenResponse);

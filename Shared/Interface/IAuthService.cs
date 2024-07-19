@@ -23,15 +23,9 @@ public interface IAuthService
     Task<string> LoginAsync(LoginRequest loginRequest);
 
     /// <summary>
-    /// Validates the given token and checks if it is valid.
+    /// Validates the provided token and returns its expiration time if valid.
     /// </summary>
-    /// <param name="token">The token to be validated.</param>
-    /// <returns>
-    /// <c>true</c> if the token is valid; otherwise, <c>false</c>.
-    /// </returns>
-    /// <remarks>
-    /// This method uses the _tokenService to retrieve the principal associated with the token.
-    /// If a principal is found, the token is considered valid.
-    /// </remarks>
-    public bool ValidateToken(string token);
+    /// <param name="token">The JWT token to validate.</param>
+    /// <returns>The expiration time of the token if it is valid; otherwise, null.</returns>
+    DateTime? ValidateToken(string token);
 }

@@ -52,10 +52,10 @@ public class AuthController : ControllerBase
         {
             var result = await _mediator.Send(new ValidateTokenQuery(validateTokenRequest));
 
-            if (!result.IsValid)
+            if (result.ExpireTime == null)
                 return Unauthorized();
 
-            return Ok();
+            return Ok(result);
         }
         catch (Exception ex)
         {
