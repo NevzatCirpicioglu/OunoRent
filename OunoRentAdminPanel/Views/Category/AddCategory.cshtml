@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "AddCategory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@await Html.PartialAsync("/Views/NavbarPartial/_navbarPartial.cshtml")
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+
+<body>
+    <html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Kategori Ekle</title>
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <form action="index.html" method="post" enctype="multipart/form-data">
+            <h1>Kategori</h1>
+            <fieldset>
+                <legend><span class="number">1</span> Kategori Ekle</legend>
+                <label for="Category_Name">Kategori Adı:</label>
+                <input type="text" id="Category_Name" name="Category_Name">
+            </fieldset>
+            <div class="w-100 d-flex justify-content-center">
+            <button type="submit" class="w-50">Ekle</button>
+            </div>
+        </form>
+    </body>
+
+    </html>
+
+</body>
+
+</html>

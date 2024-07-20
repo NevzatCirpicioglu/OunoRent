@@ -9,29 +9,23 @@ using Microsoft.Extensions.Logging;
 namespace OunoRentAdminPanel.Controllers;
 
 [Route("[controller]")]
-public class HomeController : Controller
+public class CategoryController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<CategoryController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public CategoryController(ILogger<CategoryController> logger)
     {
         _logger = logger;
     }
 
-    [HttpGet("Home")]
+    [HttpGet("Category")]
     public IActionResult Index()
     {
         return View();
     }
-    
-    [HttpGet("AddSlider")]
-    public IActionResult AddSlider()
-    {
-        return View();
-    }
 
-    [HttpGet("Sliders")] //Tüm Slider'lar
-    public IActionResult Sliders()
+      [HttpGet("AddCategory")]
+    public IActionResult AddCategory()
     {
         return View();
     }

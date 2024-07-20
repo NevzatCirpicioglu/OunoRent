@@ -32,10 +32,15 @@ td {
 }
 
 th {
-    background-color: #5fcf80;
+    background-color: #3500b0;
     color: white;
 }
 
 img {
     max-width: 100px;
+}
+
+a{
+    text-decoration: none;
+    color: #000000;
 }

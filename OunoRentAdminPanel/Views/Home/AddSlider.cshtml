@@ -1,0 +1,52 @@
+@{
+    ViewData["Title"] = "AddSlider";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@await Html.PartialAsync("/Views/NavbarPartial/_navbarPartial.cshtml")
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+
+<body>
+    <html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up Form</title>
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <form action="index.html" method="post" enctype="multipart/form-data">
+            <h1>Slider</h1>
+            <fieldset>
+                <legend><span class="number">1</span> Banner Ekle</legend>
+                <label for="name">Başlık:</label>
+                <input type="text" id="img_title" name="img_title">
+                <label for="name">Yönlendirme Adresi (Url):</label>
+                <input type="text" id="img_target_url" name="img_target_url">
+                <label for="banner_img_order">Sıralama:</label>
+                <input type="number" id="banner_img_order" name="banner_img_order" value="1">
+            </fieldset>
+            <fieldset>
+                <label for="slider_img">Resim Seçin:</label>
+                <input type="file" id="slider_img" name="slider_img">
+            </fieldset>
+            <button type="submit">Yükle</button>
+        </form>
+    </body>
+
+    </html>
+
+</body>
+
+</html>
