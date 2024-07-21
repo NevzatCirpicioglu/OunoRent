@@ -9,11 +9,11 @@ using Microsoft.Extensions.Logging;
 namespace OunoRentAdminPanel.Controllers;
 
 [Route("[controller]")]
-public class HomeController : Controller
+public class SliderController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<SliderController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public SliderController(ILogger<SliderController> logger)
     {
         _logger = logger;
     }
@@ -24,13 +24,13 @@ public class HomeController : Controller
         return View();
     }
     
-    [HttpGet("AddSlider")]
+    [HttpGet("AddSlider")] 
     public IActionResult AddSlider()
     {
         return View();
     }
 
-    [HttpGet("Sliders")] //Tüm Slider'lar
+    [HttpGet("Sliders")] //Tüm Slider'lar - Edit Slider Modal olarak bu sayfada açılacak
     public IActionResult Sliders()
     {
         return View();
