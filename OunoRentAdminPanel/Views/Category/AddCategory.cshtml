@@ -1,3 +1,5 @@
+@using OunoRentAdminPanel.Models.EntityModels.CategoryModel
+@model CreateCategoryModel
 @{
     ViewData["Title"] = "AddCategory";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -5,7 +7,6 @@
 }
 
 @await Html.PartialAsync("/Views/Shared/Partials/NavbarPartial/_NavbarPartial.cshtml")
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,12 +27,12 @@
     </head>
 
     <body>
-        <form action="index.html" method="post" enctype="multipart/form-data">
+        <form asp-controller="Category" asp-action="addCategory" method="post" enctype="multipart/form-data">
             <h1>Kategori</h1>
             <fieldset>
                 <legend><span class="number">1</span> Kategori Ekle</legend>
                 <label for="Category_Name">Kategori Adı:</label>
-                <input type="text" id="Category_Name" name="Category_Name">
+                <input type="text" asp-for="@Model.CategoryName" name="CategoryName">
             </fieldset>
             <div class="w-100 d-flex justify-content-center">
             <button type="submit" class="w-50">Ekle</button>
