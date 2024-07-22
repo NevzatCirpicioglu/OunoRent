@@ -45,7 +45,7 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpPost("validate-token")]
+    [HttpGet("validate-token")]
     public async Task<IActionResult> ValidateToken()
     {
         try
@@ -53,7 +53,7 @@ public class AuthController : ControllerBase
             if (!HttpContext.Request.Headers.ContainsKey("Authorization"))
                 return Unauthorized();
 
-            var token = HttpContext.Request.Headers["Authorization"];
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
             if (string.IsNullOrEmpty(token))
                 return Unauthorized();
