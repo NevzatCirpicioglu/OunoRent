@@ -1,3 +1,6 @@
+@using OunoRentAdminPanel.Models.EntityModels.CategoryModel
+@model List<CategoryViewModel>
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -34,17 +37,20 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>5834028503284</td>
-                    <td>Telefonlar</td>
-                    <td>
-                        <div class="w-75 d-flex gap-3">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">Düzenle</button>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Sil</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
+                @foreach (var item in Model)
+                {
+                    <tr class="w-25">
+                        <td class="w-25">@item.CategoryId</td>
+                        <td class="text-center">@item.CategoryName</td>
+                        <td>
+                            <div class="w-75 d-flex gap-3">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">Düzenle</button>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Sil</button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @* <tr>
                     <td>4532452345</td>
                     <td>Tabletler</td>
                     <td>
@@ -73,7 +79,7 @@
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Sil</button>
                         </div>
                     </td>
-                </tr>
+                </tr> *@
 
             </tbody>
         </table>

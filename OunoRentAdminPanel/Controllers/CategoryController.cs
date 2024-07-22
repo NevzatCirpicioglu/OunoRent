@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using OunoRentAdminPanel.Models.EntityModels;
 using OunoRentAdminPanel.Models.EntityModels.CategoryModel;
 using OunoRentAdminPanel.Utilities.Attributes;
 
@@ -17,8 +18,18 @@ public class CategoryController : Controller
     }
 
     [HttpGet()]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+        var client = _httpClientFactory.CreateClient("ounoRentApi");
+        
+        var response = await client.GetAsync("category");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var categories = await response.Content.ReadFromJsonAsync<List<CategoryViewModel>>();
+            return View(categories);
+        }
+
         return View();
     }
 
