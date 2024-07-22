@@ -45,12 +45,22 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpPost("validate-token")]
-    public async Task<IActionResult> ValidateToken(ValidateTokenRequest validateTokenRequest)
+    [HttpGet("validate-token")]
+    public async Task<IActionResult> ValidateToken()
     {
         try
         {
-            var result = await _mediator.Send(new ValidateTokenQuery(validateTokenRequest));
+            if (!HttpContext.Request.Headers.ContainsKey("Authorization"))
+                return Unauthorized();
+
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            if (string.IsNullOrEmpty(token))
+                return Unauthorized();
+
+            var result = await _mediator.Send(
+                new ValidateTokenQuery(
+                    new ValidateTokenRequest { Token = token.ToString() }));
 
             if (result.ExpireTime == null)
                 return Unauthorized();

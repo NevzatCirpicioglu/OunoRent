@@ -18,7 +18,8 @@ public class AuthAttribute : AuthorizeAttribute, IAsyncAuthorizationFilter
     public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
         //Sessionda depolanan token ve tokenın sona erme süresini getiriyor
-        var token = context.HttpContext.Session.GetString("token");
+        var token = context.HttpContext.Session.GetString("token") ??
+            context.HttpContext.Request.Cookies["token"];
         var expireTimeString = context.HttpContext.Session.GetString("expireTime");
 
         //Token yoksa unauthorized dönüyor
@@ -41,8 +42,7 @@ public class AuthAttribute : AuthorizeAttribute, IAsyncAuthorizationFilter
 
         //Eğer token null değil ve geçerlilik süresi bitmişse apiye istek atıyoruz
         var client = _httpClientFactory.CreateClient("ounoRentApi");
-        var content = new { Token = token };
-        var response = await client.PostAsJsonAsync("auth/validate-token", content);
+        var response = await client.GetAsync("auth/validate-token");
 
         //Validate token endpointinden dönen cevap başarılıysa response olarak tokenın
         //geçerlilik süresini döndürüyor. Dönen cevabı sessiona kaydederek bir sonraki
@@ -64,6 +64,7 @@ public class AuthAttribute : AuthorizeAttribute, IAsyncAuthorizationFilter
         //Bu durumda apiden gelen response headerında New-Token var mı diye kontrol
         //ediyoruz. New-Token refresh token sayesinde yeniden oluşturulan token.
         //Bu tokenı bir sonraki istekte kullanmak için sessiona kaydediyoruz
+        //Eğer cookie içinde token keyli bir kayıt varsa bunu da yenisiyle değiştiriyoruz
         if (response.Headers.Contains("New-Token"))
         {
             if (response.Headers.TryGetValues("New-Token", out var tokenValues))
@@ -71,6 +72,9 @@ public class AuthAttribute : AuthorizeAttribute, IAsyncAuthorizationFilter
                 var newToken = tokenValues.FirstOrDefault();
                 if (newToken != null)
                 {
+                    if (context.HttpContext.Request.Cookies.ContainsKey("token"))
+                        context.HttpContext.Response.Cookies.Append("token", newToken);
+
                     context.HttpContext.Session.SetString("token", newToken);
                 }
             }
@@ -82,12 +86,17 @@ public class AuthAttribute : AuthorizeAttribute, IAsyncAuthorizationFilter
         //dönmemişse ve responsun status codeu unautherized ise ilk token ve refresh
         //token süreleri dolmuş demektir. Sessiondan token ve expireTime bilgisini
         //kaldırıyoruz. Böylece kullanıcı bir sonraki istekte otomatik olarak login
-        //sayfasına yönlendirilicek
+        //sayfasına yönlendirilicek. Eğer cookie içinde token anahtarı varsa bunu 
+        //da siliyoruz
         if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
             context.Result = new UnauthorizedResult();
             context.HttpContext.Session.Remove("token");
             context.HttpContext.Session.Remove("expireTime");
+
+            if (context.HttpContext.Request.Cookies.ContainsKey("token"))
+                context.HttpContext.Response.Cookies.Delete("token");
+
             return;
         }
     }

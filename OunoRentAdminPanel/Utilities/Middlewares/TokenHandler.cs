@@ -19,6 +19,11 @@ public class TokenHandler : DelegatingHandler
         //authorization headerının olmadığını tespit edip. Unauthorized result döndürüyor
         //MVC unauhtorize ile dönen response sonrası kullanıcıyı login sayfasına yönlendiriyor.
         var token = _httpContextAccessor.HttpContext.Session.GetString("token");
+
+        if (token == null && _httpContextAccessor
+            .HttpContext.Request.Cookies.ContainsKey("token"))
+            token = _httpContextAccessor.HttpContext.Request.Cookies["token"];
+
         if (!string.IsNullOrEmpty(token))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);

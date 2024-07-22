@@ -35,7 +35,20 @@ public class AuthService : IAuthService
             return new UnauthorizedObjectResult("Login failed.");
         }
 
+        if (loginViewModel.RememberMe)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                Expires = DateTime.Now.AddDays(30),
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            };
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("token", apiConfiguration.Token, cookieOptions);
+        }
+
         _httpContextAccessor.HttpContext.Session.SetString("token", apiConfiguration.Token);
+
         return new OkObjectResult(apiConfiguration);
     }
 
@@ -43,5 +56,9 @@ public class AuthService : IAuthService
     {
         _httpContextAccessor.HttpContext.Session.Remove("token");
         _httpContextAccessor.HttpContext.Session.Remove("expireTime");
+
+        if (_httpContextAccessor.HttpContext.Request.Cookies.ContainsKey("token"))
+            _httpContextAccessor.HttpContext.Response.Cookies.Delete("token");
+
     }
 }

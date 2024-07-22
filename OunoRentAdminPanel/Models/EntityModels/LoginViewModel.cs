@@ -9,4 +9,6 @@ public class LoginViewModel
 
     [Required(ErrorMessage = "Şifre alanı boş bırakılamaz")]
     public required string Password { get; set; }
+
+    public bool RememberMe { get; set; }
 }
