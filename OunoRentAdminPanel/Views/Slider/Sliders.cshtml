@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@await Html.PartialAsync("/Views/NavbarPartial/_navbarPartial.cshtml")
+@await Html.PartialAsync("/Views/Shared/Partials/NavbarPartial/_navbarPartial.cshtml")
 
 <head>
     <meta charset="UTF-8">
@@ -12,8 +12,9 @@
     <link rel="stylesheet" href="./Slider.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-        <!-- Slider Datatable -->
+    <!-- Slider Datatable -->
     <div class="container" style="border-width: 5px;">
         <div class="row">
             <div class="col-md-12">
@@ -127,7 +128,7 @@
         </table>
     </div>
 
-        <!-- Edit Slider Modal -->
+    <!-- Edit Slider Modal -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -157,25 +158,26 @@
             </div>
         </div>
     </div>
-   
 
-        <!-- Confirm Delete Modal -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">Silme Onayı</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Bu öğeyi silmek istediğinize emin misiniz?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Sil</button>
+
+    <!-- Confirm Delete Modal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Silme Onayı</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bu öğeyi silmek istediğinize emin misiniz?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Sil</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 </body>
