@@ -17,12 +17,6 @@ public class SliderController : Controller
     {
         _logger = logger;
     }
-
-    [HttpGet("Home")]
-    public IActionResult Index()
-    {
-        return View();
-    }
     
     [HttpGet("AddSlider")] 
     public IActionResult AddSlider()
