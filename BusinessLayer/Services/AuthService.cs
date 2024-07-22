@@ -1,3 +1,4 @@
+using BusinessLayer.Middlewares;
 using BusinessLayer.Utilities;
 using Shared.DTO.Authentication.Request;
 using Shared.DTO.User.Request;
@@ -22,13 +23,13 @@ public class AuthService : IAuthService
         var isUserExist = await _userRepository.IsExistAsync(loginRequest.Email);
 
         if (!isUserExist)
-            throw new NullReferenceException("Böyle bir kullanıcı bulunamadı");
+            throw new NotFoundException("Böyle bir kullanıcı bulunamadı");
 
         var user = await _userRepository.GetUserByEmail(loginRequest.Email);
         var isVerify = PasswordHasher.VerifyPassword(loginRequest.Password, user.PasswordHash);
 
         if (!isVerify)
-            throw new Exception("Şifre yanlış.");
+            throw new BadRequestException("Şifre yanlış.");
 
         var token = await _tokenService.GenerateTokenAsync(user);
         return token;
@@ -39,7 +40,7 @@ public class AuthService : IAuthService
         var isUserExist = await _userRepository.IsExistAsync(registerRequest.Email);
 
         if (isUserExist)
-            throw new NullReferenceException("Bu email başka bir kullanıcıya kayıtlı.");
+            throw new ConflictException("Bu email başka bir kullanıcıya kayıtlı.");
 
         var hashPassword = PasswordHasher.HashPassword(registerRequest.Password);
         var createUserRequest = new CreateUserRequest(registerRequest.Email, hashPassword);

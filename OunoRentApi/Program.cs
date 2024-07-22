@@ -1,11 +1,10 @@
 using BusinessLayer.Extensions;
 using BusinessLayer.Middlewares;
 using Microsoft.OpenApi.Models;
-using OunoRentApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the cŞontainer.
 builder.Services.AddControllers();
 
 // Swagger yapılandırması
@@ -48,11 +47,11 @@ app.UseMiddleware<ExceptionMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        c.RoutePrefix = string.Empty;
-    });
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    c.RoutePrefix = string.Empty;
+});
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<SlidingExpirationMiddleware>();
 
