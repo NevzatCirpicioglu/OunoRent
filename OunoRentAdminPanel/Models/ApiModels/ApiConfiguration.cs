@@ -1,4 +1,4 @@
-namespace OunoRentAdminPanel.Models;
+namespace OunoRentAdminPanel.Models.ApiModels;
 
 public class ApiConfiguration
 {

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Options;
 using OunoRentAdminPanel.Middlewares;
-using OunoRentAdminPanel.Models;
+using OunoRentAdminPanel.Models.ApiModels;
 using OunoRentAdminPanel.Services.Concrete;
 using OunoRentAdminPanel.Services.Interface;
 using OunoRentAdminPanel.Utilities.Attributes;
