@@ -1,4 +1,4 @@
-namespace OunoRentAdminPanel.Models;
+namespace OunoRentAdminPanel.Models.EntityModels;
 
 public class CategoryViewModel
 {

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using OunoRentAdminPanel.Models;
+using OunoRentAdminPanel.Models.ApiModels;
 using OunoRentAdminPanel.Services.Interface;
 
 namespace OunoRentAdminPanel.Services.Concrete;
