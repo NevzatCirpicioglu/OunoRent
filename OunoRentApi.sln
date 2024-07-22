@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{B956FA62-54A1-47AA-83AB-E88FBC78E529}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OunoRentAdminPanel", "OunoRentAdminPanel\OunoRentAdminPanel.csproj", "{8B9429E5-645E-4CCF-9B96-B5ACD29DC105}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OunoRentAdminPanel", "OunoRentAdminPanel\OunoRentAdminPanel.csproj", "{ADCF3A12-00C2-4704-B747-64D4F3F79C1F}"
 EndProject
 Global

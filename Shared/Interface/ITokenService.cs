@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Shared.DTO.Login.Response;
+using Shared.DTO.Authentication.Response;
 
 namespace Shared.Interface;
 
@@ -26,4 +26,11 @@ public interface ITokenService
     /// <param name="token">Yenilenmesi istenen JWT token.</param>
     /// <returns>Yenilenmiş JWT token veya geçersiz token durumunda null döner.</returns>
     Task<string?> RefreshTokenAsync(string token);
+
+    /// <summary>
+    /// Validates the expiration time of the provided JWT token.
+    /// </summary>
+    /// <param name="token">The JWT token to check.</param>
+    /// <returns>The expiration time of the token as a local DateTime if the token is valid; otherwise, null.</returns>
+    DateTime? ValidateTokenExpiry(string token);
 }

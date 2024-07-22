@@ -1,6 +1,5 @@
 using BusinessLayer.Utilities;
-using Shared.DTO.Login.Request;
-using Shared.DTO.Register.Request;
+using Shared.DTO.Authentication.Request;
 using Shared.DTO.User.Request;
 using Shared.DTO.User.Response;
 using Shared.Interface;
@@ -47,5 +46,19 @@ public class AuthService : IAuthService
 
         var result = await _userRepository.CreateUser(createUserRequest);
         return result;
+    }
+
+    public DateTime? ValidateToken(string token)
+    {
+        var result = _tokenService.GetPrincipal(token);
+
+        if (result != null)
+        {
+            var expireTime = _tokenService.ValidateTokenExpiry(token);
+
+            if (expireTime != null)
+                return expireTime;
+        }
+        return null;
     }
 }

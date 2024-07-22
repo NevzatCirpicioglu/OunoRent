@@ -1,4 +1,4 @@
-namespace Shared.DTO.Login.Request;
+namespace Shared.DTO.Authentication.Request;
 
 public class LoginRequest
 {

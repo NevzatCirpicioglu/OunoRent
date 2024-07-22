@@ -1,3 +1,5 @@
+@model LoginViewModel
+
 @{
     ViewData["Title"] = "Login";
     Layout = "/Views/Shared/_Layout.cshtml";
@@ -65,23 +67,23 @@
                     <!-- /Logo -->
                     <h4 class="mb-2">Admin Girişi</h4>
 
-                    <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+                    <form id="formAuthentication" class="mb-3" asp-action="login" asp-controller="auth" method="POST">
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="text" class="form-control" id="email" name="email-username"
-                                placeholder="Email giriniz" autofocus />
+                            <label class="form-label">Email</label>
+                            <input type="text" class="form-control" placeholder="Email giriniz" autofocus
+                                asp-for="Email" />
                         </div>
                         <div class="mb-3 form-password-toggle">
                             <div class="d-flex justify-content-between">
-                                <label class="form-label" for="password">Şifre</label>
+                                <label class="form-label" asp-for="Password">Şifre</label>
                                 <a href="auth-forgot-password-basic.html">
                                     <small>Şifremi Unuttum</small>
                                 </a>
                             </div>
                             <div class="input-group input-group-merge">
-                                <input type="password" id="password" class="form-control" name="password"
+                                <input type="password" class="form-control"
                                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                    aria-describedby="password" />
+                                    aria-describedby="password" asp-for="Password" />
                                 <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                             </div>
                         </div>
