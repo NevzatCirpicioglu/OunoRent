@@ -21,7 +21,7 @@ public class CategoryController : Controller
     public async Task<IActionResult> Index()
     {
         var client = _httpClientFactory.CreateClient("ounoRentApi");
-        
+
         var response = await client.GetAsync("category");
 
         if (response.IsSuccessStatusCode)
@@ -62,4 +62,38 @@ public class CategoryController : Controller
             return View(model);
         }
     }
+    [HttpGet("editCategory/{id}")]
+    public async Task<IActionResult> EditCategory(Guid id)
+    {
+        var client = _httpClientFactory.CreateClient("ounoRentApi");
+        var response = await client.GetAsync($"category/{id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var category = await response.Content.ReadFromJsonAsync<CategoryViewModel>();
+            return View(category);
+        }
+
+        return RedirectToAction("Index");
+    }
+
+    // [HttpPost("editCategory")]
+    // public async Task<IActionResult> EditCategory(CategoryViewModel model)
+    // {
+    //     if (!ModelState.IsValid)
+    //     {
+    //         return View(model);
+    //     }
+
+    //     var client = _httpClientFactory.CreateClient("ounoRentApi");
+    //     var response = await client.PutAsJsonAsync($"category/{model.categoryId}", model);
+
+    //     if (response.IsSuccessStatusCode)
+    //     {
+    //         return RedirectToAction("Index");
+    //     }
+
+    //     return View(model);
+    // }
+
 }
