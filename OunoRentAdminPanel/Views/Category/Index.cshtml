@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category Datatable</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="/css/slider.css" />
     <link rel="stylesheet" href="/css/sliders.css" />
 </head>
@@ -31,8 +31,8 @@
         <table class="w75">
             <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Kategori Adı</th>
+                    <th class="text-center">Id</th>
+                    <th class="text-center">Kategori Adı</th>
                     <th class="text-center">Menu</th>
                 </tr>
             </thead>
@@ -43,44 +43,15 @@
                         <td class="w-25">@item.CategoryId</td>
                         <td class="text-center">@item.CategoryName</td>
                         <td>
-                            <div class="w-75 d-flex gap-3">
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">Düzenle</button>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Sil</button>
+                            <div class="d-flex justify-content-center gap-3">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                    data-bs-target="#editModal">Düzenle</button>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#confirmDeleteModal">Sil</button>
                             </div>
                         </td>
                     </tr>
                 }
-                @* <tr>
-                    <td>4532452345</td>
-                    <td>Tabletler</td>
-                    <td>
-                         <div class="w-75 d-flex gap-3">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">Düzenle</button>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Sil</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>890234243</td>
-                    <td>Akıllı Saatler</td>
-                    <td>
-                       <div class="w-75 d-flex gap-3">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">Düzenle</button>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Sil</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>984983094</td>
-                    <td>Akıllı Robotlar</td>
-                    <td>
-                       <div class="w-75 d-flex gap-3">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">Düzenle</button>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Sil</button>
-                        </div>
-                    </td>
-                </tr> *@
-
             </tbody>
         </table>
 
@@ -112,22 +83,23 @@
     @* #endregion *@
 
     <!-- Silme Onay Modalı -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">Silme Onayı</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Bu öğeyi silmek istediğinize emin misiniz?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Sil</button>
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Silme Onayı</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bu öğeyi silmek istediğinize emin misiniz?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Sil</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 </body>

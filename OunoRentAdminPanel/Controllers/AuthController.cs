@@ -20,13 +20,19 @@ public class AuthController : Controller
         return View();
     }
 
-    [HttpPost("login")]
+  [HttpPost("login")]
     public async Task<IActionResult> Login(LoginViewModel loginViewModel)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         var result = await _authService.LoginAsync(loginViewModel);
+
+        if (result is OkObjectResult || result is OkResult)
+        {
+            return RedirectToAction("Index", "Category");
+        }
+
         return result;
     }
 
