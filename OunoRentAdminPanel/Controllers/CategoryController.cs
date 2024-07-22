@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using OunoRentAdminPanel.Models.EntityModels.CategoryModel;
+using OunoRentAdminPanel.Utilities.Attributes;
 
 namespace OunoRentAdminPanel.Controllers;
 
+[ServiceFilter(typeof(AuthAttribute))]
 [Route("category")]
 public class CategoryController : Controller
 {
@@ -42,11 +44,11 @@ public class CategoryController : Controller
 
             return View(model);
         }
-          else
-            {
-                ModelState.AddModelError(string.Empty, "Kategori eklenirken bir hata oluştu.");
+        else
+        {
+            ModelState.AddModelError(string.Empty, "Kategori eklenirken bir hata oluştu.");
 
-                return View(model);
-            }
+            return View(model);
+        }
     }
 }

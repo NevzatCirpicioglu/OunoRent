@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace OunoRentAdminPanel.Controllers;
 
+[ServiceFilter(typeof(AuthAttribute))]
 [Route("slider")]
 public class SliderController : Controller
 {
