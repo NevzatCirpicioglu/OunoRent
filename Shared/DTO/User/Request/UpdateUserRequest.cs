@@ -6,6 +6,9 @@ public sealed record UpdateUserRequest(
     string Surname,
     string Email,
     string PhoneNumber,
-    string Address
+    string Address,
+    string Tc,
+    string Gender,
+    DateTime BirthDate
 );
 

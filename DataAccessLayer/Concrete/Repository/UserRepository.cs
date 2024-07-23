@@ -29,7 +29,6 @@ public class UserRepository : IUserRepository
             Email = request.Email,
             AccountStatus = true,
             PasswordHash = request.PasswordHash,
-            //ToDo : Account Status bool olucak
         };
 
         _applicationDbContext.Users.Add(user);
@@ -112,22 +111,24 @@ public class UserRepository : IUserRepository
 
     public async Task<UserResponse> UpdateUser(UpdateUserRequest request)
     {
-        var userEntity = await _applicationDbContext.Users
+        var user = await _applicationDbContext.Users
         .FirstOrDefaultAsync(x => x.Id == request.Id)
         ?? throw new NotFoundException("User not found");
 
-        userEntity.Name = request.Name;
-        userEntity.Surname = request.Surname;
-        userEntity.Email = request.Email;
-        userEntity.PhoneNumber = request.PhoneNumber;
-        userEntity.Address = request.Address;
+        user.Name = request.Name;
+        user.Surname = request.Surname;
+        user.Email = request.Email;
+        user.PhoneNumber = request.PhoneNumber;
+        user.Address = request.Address;
+        user.TC = request.Tc;
+        user.Gender = request.Gender;
+        user.BirthDate = request.BirthDate;
 
-        _applicationDbContext.Update(userEntity);
+        _applicationDbContext.Update(user);
 
         await _applicationDbContext.SaveChangesAsync();
 
-        var userResponse = _mapper.Map<UserResponse>(userEntity);
-        userResponse.ModifiedDateTime = DateTime.UtcNow;
+        var userResponse = _mapper.Map<UserResponse>(user);
 
         return userResponse;
     }
