@@ -1,6 +1,6 @@
 using System.Text;
 using AutoMapper.Extensions.ExpressionMapping;
-using BusinessLayer.Category.Query;
+using BusinessLayer.CQRS.Category.Query;
 using BusinessLayer.Mapper;
 using BusinessLayer.Services;
 using DataAccessLayer.Concrete;

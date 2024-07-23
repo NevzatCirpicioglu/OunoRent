@@ -2,7 +2,7 @@ using MediatR;
 using Shared.DTO.Category.Response;
 using Shared.Interface;
 
-namespace BusinessLayer.Category.Query;
+namespace BusinessLayer.CQRS.Category.Query;
 
 public sealed record GetCategoriesQuery() : IRequest<List<GetCategoriesResponse>>;
 

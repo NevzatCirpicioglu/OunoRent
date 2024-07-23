@@ -2,7 +2,7 @@ using MediatR;
 using Shared.DTO.User.Response;
 using Shared.Interface;
 
-namespace BusinessLayer.User.Command;
+namespace BusinessLayer.CQRS.User.Command;
 
 public sealed record DeleteUserCommand(Guid UserId) : IRequest<UserResponse>;
 

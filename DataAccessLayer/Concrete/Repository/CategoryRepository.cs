@@ -4,16 +4,20 @@ using Microsoft.EntityFrameworkCore;
 using EntityLayer.Entities;
 using Shared.DTO.Category.Request;
 using BusinessLayer.Middlewares;
+using AutoMapper;
+using System.Collections.Generic;
 
 namespace DataAccessLayer.Concrete.Repository;
 
 public class CategoryRepository : ICategoryRepository
 {
     private readonly ApplicationDbContext _applicationDbContext;
+    private readonly IMapper _mapper;
 
-    public CategoryRepository(ApplicationDbContext applicationDbContext)
+    public CategoryRepository(ApplicationDbContext applicationDbContext, IMapper mapper)
     {
         _applicationDbContext = applicationDbContext;
+        _mapper = mapper;
     }
 
     #region GetCategories
@@ -21,17 +25,10 @@ public class CategoryRepository : ICategoryRepository
     {
         var categories = await _applicationDbContext.Categories
         .AsNoTracking()
-        .Select(x => new GetCategoriesResponse
-        {
-            CategoryId = x.Id,
-            CategoryName = x.Name,
-            CreatedDateTime = x.CreatedDateTime,
-            CreatedBy = x.CreatedBy,
-            ModifiedDateTime = x.ModifiedDateTime,
-            ModifiedBy = x.ModifiedBy
-        }).ToListAsync();
+        .ToListAsync();
 
-        return categories;
+        var categoriesResponse = _mapper.Map<List<GetCategoriesResponse>>(categories);
+        return categoriesResponse;
     }
     #endregion
 

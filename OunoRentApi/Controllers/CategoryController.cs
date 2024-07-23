@@ -1,6 +1,5 @@
-using BusinessLayer.Category.Command;
-using BusinessLayer.Category.Query;
 using BusinessLayer.CQRS.Category.Command;
+using BusinessLayer.CQRS.Category.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

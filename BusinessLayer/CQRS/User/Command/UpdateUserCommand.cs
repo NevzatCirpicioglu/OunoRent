@@ -3,7 +3,7 @@ using Shared.DTO.User.Request;
 using Shared.DTO.User.Response;
 using Shared.Interface;
 
-namespace BusinessLayer.User.Command;
+namespace BusinessLayer.CQRS.User.Command;
 
 public sealed record UpdateUserCommand(UpdateUserRequest user) : IRequest<UserResponse>;
 

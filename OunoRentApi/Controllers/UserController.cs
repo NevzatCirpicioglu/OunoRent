@@ -1,4 +1,4 @@
-using BusinessLayer.User.Command;
+using BusinessLayer.CQRS.User.Command;
 using BusinessLayer.User.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +27,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{userId:guid}")]
-    public async Task<IActionResult> GetUserById(Guid userId )
+    public async Task<IActionResult> GetUserById(Guid userId)
     {
         var result = await _mediator.Send(new GetUserQuery(userId));
         return Ok(result);
