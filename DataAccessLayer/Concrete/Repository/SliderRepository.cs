@@ -24,6 +24,7 @@ public class SliderRepository : ISliderRepository
         _mapper = mapper;
     }
 
+    #region CreateSlider
     public async Task<SliderResponse> CreateSlider(CreateSliderRequest createSliderRequest)
     {
         await IsEsxitSlider(createSliderRequest.Title, createSliderRequest.OrderNumber);
@@ -46,6 +47,9 @@ public class SliderRepository : ISliderRepository
 
     }
 
+    #endregion
+
+    #region DeleteSlider
     public async Task<Guid> DeleteSlider(Guid sliderId)
     {
         var slider = await _applicationDbContext.Sliders
@@ -58,6 +62,9 @@ public class SliderRepository : ISliderRepository
         return slider.Id;
     }
 
+    #endregion
+
+    #region GetSlider
     public async Task<GetSliderResponse> GetSlider(Guid sliderId)
     {
         var slider = await _applicationDbContext.Sliders
@@ -69,6 +76,9 @@ public class SliderRepository : ISliderRepository
         return getSliderResponse;
     }
 
+    #endregion
+
+    #region GetSliders
     public async Task<List<GetSlidersResponse>> GetSliders()
     {
         var sliders = await _applicationDbContext.Sliders.ToListAsync();
@@ -78,6 +88,9 @@ public class SliderRepository : ISliderRepository
         return getSlidersResponse;
     }
 
+    #endregion
+
+    #region UpdateSlider
     public async Task<SliderResponse> UpdateSlider(UpdateSliderRequest updateSliderRequest)
     {
         var slider = await _applicationDbContext.Sliders.FirstOrDefaultAsync(x => x.Id == updateSliderRequest.Id)
@@ -98,6 +111,9 @@ public class SliderRepository : ISliderRepository
         return sliderResponse;
     }
 
+    #endregion
+
+    #region IsEsxitSlider
     private async Task IsEsxitSlider(string title, int orderNumber)
     {
         var isExistSlider = await _applicationDbContext.Sliders
@@ -111,9 +127,13 @@ public class SliderRepository : ISliderRepository
             throw new ConflictException("Slider already exists");
         }
 
-        else if(isExistOrderNumber)
+        else if (isExistOrderNumber)
         {
             throw new ConflictException("Order number already exists");
         }
     }
+    #endregion
 }
+
+
+

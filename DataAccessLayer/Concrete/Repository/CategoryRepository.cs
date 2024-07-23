@@ -98,7 +98,6 @@ public class CategoryRepository : ICategoryRepository
     }
     #endregion
 
-
     #region IsEsisCategory
     /// <summary>
     /// Verilen kategori adının mevcut olup olmadığını kontrol eder.
