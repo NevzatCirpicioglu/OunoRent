@@ -16,7 +16,7 @@ public class GetSlidersResponse : GenericResponse
 
     public string TargetUrl { get; set; }
 
-    public int Order { get; set; }
+    public int OrderNumber { get; set; }
 
     public Boolean IsActive { get; set; }
 }

@@ -39,10 +39,26 @@ public class SliderController : ControllerBase
         return Ok(sliders);
     }
 
-    [HttpGet("{sliderId}")]
+    [HttpGet("{sliderId:guid}")]
     public async Task<IActionResult> GetSlider(Guid sliderId)
     {
         var slider = await _mediator.Send(new GetSliderQuery(sliderId));
+        
+        return Ok(slider);
+    }
+
+    [HttpPut("{sliderId:guid}")]
+    public async Task<IActionResult> UpdateSlider([FromBody] UpdateSliderRequest request)
+    {
+        var slider = await _mediator.Send(new UpdateSliderCommand(request));
+        
+        return Ok(slider);
+    }
+
+    [HttpDelete("{sliderId:guid}")]
+    public async Task<IActionResult> DeleteSlider(Guid sliderId)
+    {
+        var slider = await _mediator.Send(new DeleteSliderCommand(sliderId));
         
         return Ok(slider);
     }

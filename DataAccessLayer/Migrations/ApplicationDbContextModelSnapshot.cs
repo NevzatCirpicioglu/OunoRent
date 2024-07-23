@@ -106,7 +106,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Order")
+                    b.Property<int>("OrderNumber")
                         .HasColumnType("integer");
 
                     b.Property<string>("TargetUrl")
