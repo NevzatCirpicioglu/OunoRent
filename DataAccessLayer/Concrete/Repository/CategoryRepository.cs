@@ -38,18 +38,11 @@ public class CategoryRepository : ICategoryRepository
         var category = await _applicationDbContext.Categories
         .AsNoTracking()
         .Where(x => x.Id == categoryId)
-        .Select(x => new GetCategoryResponse
-        {
-            CategoryId = x.Id,
-            CategoryName = x.Name,
-            CreatedDateTime = x.CreatedDateTime,
-            CreatedBy = x.CreatedBy,
-            ModifiedDateTime = x.ModifiedDateTime,
-            ModifiedBy = x.ModifiedBy
-        }).FirstOrDefaultAsync()
+        .FirstOrDefaultAsync()
         ?? throw new NotFoundException("Category not found");
 
-        return category;
+        var categoryResponse = _mapper.Map<GetCategoryResponse>(category);
+        return categoryResponse;
     }
     #endregion
 
@@ -67,15 +60,8 @@ public class CategoryRepository : ICategoryRepository
 
         await _applicationDbContext.SaveChangesAsync();
 
-        return new CategoryResponse
-        {
-            CategoryId = category.Id,
-            CategoryName = category.Name,
-            CreatedDateTime = category.CreatedDateTime,
-            CreatedBy = category.CreatedBy,
-            ModifiedDateTime = category.ModifiedDateTime,
-            ModifiedBy = category.ModifiedBy
-        };
+        var categoryResponse = _mapper.Map<CategoryResponse>(category);
+        return categoryResponse;
     }
     #endregion
 
@@ -91,15 +77,8 @@ public class CategoryRepository : ICategoryRepository
 
         await _applicationDbContext.SaveChangesAsync();
 
-        return new CategoryResponse
-        {
-            CategoryId = category.Id,
-            CategoryName = category.Name,
-            CreatedDateTime = category.CreatedDateTime,
-            CreatedBy = category.CreatedBy,
-            ModifiedDateTime = category.ModifiedDateTime,
-            ModifiedBy = category.ModifiedBy
-        };
+        var categoryResponse = _mapper.Map<CategoryResponse>(category);
+        return categoryResponse;
     }
     #endregion
 
