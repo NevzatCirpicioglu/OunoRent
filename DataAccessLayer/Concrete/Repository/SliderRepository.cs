@@ -41,4 +41,13 @@ public class SliderRepository : ISliderRepository
         return sliderResponse;
 
     }
+
+    public async Task<List<GetSlidersResponse>> GetSliders()
+    {
+        var sliders = _applicationDbContext.Sliders.ToList();
+
+        var getSlidersResponse = _mapper.Map<List<GetSlidersResponse>>(sliders);
+
+        return getSlidersResponse;
+    }
 }

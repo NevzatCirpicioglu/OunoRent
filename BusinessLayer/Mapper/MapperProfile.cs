@@ -26,6 +26,10 @@ public class MapperProfile : Profile
         CreateMap<Slider, SliderResponse>()
                 .ForMember(dest => dest.SliderId, opt => opt.MapFrom(src => src.Id));
 
+        CreateMap<Slider, GetSlidersResponse>()
+                .ForMember(dest => dest.SliderId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.ImgUrl));
+
         CreateMap<User, UserResponse>();
         CreateMap<User, GetUserResponse>();
         CreateMap<User, GetUsersResponse>();

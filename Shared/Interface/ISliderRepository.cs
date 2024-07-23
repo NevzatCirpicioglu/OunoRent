@@ -10,4 +10,6 @@ namespace Shared.Interface;
 public interface ISliderRepository
 {
     Task<SliderResponse> CreateSlider(CreateSliderRequest createSliderRequest);
+
+    Task<List<GetSlidersResponse>> GetSliders();
 }

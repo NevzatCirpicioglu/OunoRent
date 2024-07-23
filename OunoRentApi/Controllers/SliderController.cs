@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLayer.CQRS.Slider.Command;
+using BusinessLayer.CQRS.Slider.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,5 +29,13 @@ public class SliderController : ControllerBase
         var slider = await _mediator.Send(new CreateSliderCommand(request));
         
         return Ok(slider);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetSliders()
+    {
+        var sliders = await _mediator.Send(new GetSlidersQuery());
+        
+        return Ok(sliders);
     }
 }
