@@ -12,4 +12,6 @@ public interface ISliderRepository
     Task<SliderResponse> CreateSlider(CreateSliderRequest createSliderRequest);
 
     Task<List<GetSlidersResponse>> GetSliders();
+
+    Task<GetSliderResponse> GetSlider(Guid sliderId);
 }

@@ -38,4 +38,12 @@ public class SliderController : ControllerBase
         
         return Ok(sliders);
     }
+
+    [HttpGet("{sliderId}")]
+    public async Task<IActionResult> GetSlider(Guid sliderId)
+    {
+        var slider = await _mediator.Send(new GetSliderQuery(sliderId));
+        
+        return Ok(slider);
+    }
 }

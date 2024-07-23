@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EntityLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using Shared.DTO.Slider.Request;
 using Shared.DTO.Slider.Response;
 using Shared.Interface;
@@ -40,6 +41,15 @@ public class SliderRepository : ISliderRepository
 
         return sliderResponse;
 
+    }
+
+    public async Task<GetSliderResponse> GetSlider(Guid sliderId)
+    {
+        var slider = await _applicationDbContext.Sliders.FirstOrDefaultAsync(x => x.Id == sliderId);
+
+        var getSliderResponse = _mapper.Map<GetSliderResponse>(slider);
+
+        return getSliderResponse;
     }
 
     public async Task<List<GetSlidersResponse>> GetSliders()
