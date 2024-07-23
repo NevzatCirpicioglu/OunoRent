@@ -1,5 +1,7 @@
+using BusinessLayer.ActionFilters;
 using BusinessLayer.CQRS.Authentication.Command;
 using BusinessLayer.CQRS.Authentication.Query;
+using BusinessLayer.Middlewares;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTO.Authentication.Request;
@@ -32,6 +34,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
+    [ValidateModel]
     public async Task<IActionResult> Register(RegisterRequest registerRequest)
     {
         try
