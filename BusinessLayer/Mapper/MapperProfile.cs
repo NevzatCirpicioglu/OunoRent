@@ -3,6 +3,7 @@ using Shared.DTO.Category.Response;
 using EntityLayer.Entities;
 using Shared.DTO.User.Response;
 using Shared.DTO.Authentication.Response;
+using Shared.DTO.Slider.Response;
 
 namespace BusinessLayer.Mapper;
 
@@ -21,6 +22,9 @@ public class MapperProfile : Profile
         CreateMap<Category, CategoryResponse>()
                 .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Name));
+
+        CreateMap<Slider, SliderResponse>()
+                .ForMember(dest => dest.SliderId, opt => opt.MapFrom(src => src.Id));
 
         CreateMap<User, UserResponse>();
         CreateMap<User, GetUserResponse>();
