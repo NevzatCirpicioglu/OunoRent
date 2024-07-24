@@ -134,6 +134,3 @@ public class SliderRepository : ISliderRepository
     }
     #endregion
 }
-
-
-
