@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using System.Reflection.Metadata;
 using AutoMapper;
 using BusinessLayer.Middlewares;
 using EntityLayer.Entities;
@@ -32,14 +31,12 @@ public class BlogRepository : IBlogRepository
             OrderNumber = createBlogRequest.OrderNumber,
             Slug = createBlogRequest.Slug,
             SmallImageUrl = createBlogRequest.SmallImageUrl,
-            Tags = createBlogRequest.Tags,
             IsActive = true,
-            Date = DateTime.UtcNow
+            Date = DateTime.UtcNow,
+            Body = sanitizer.Sanitize(createBlogRequest.Body),
+            Title = sanitizer.Sanitize(createBlogRequest.Title),
+            Tags = sanitizer.Sanitize(createBlogRequest.Tags)
         };
-
-        blog.Body = sanitizer.Sanitize(createBlogRequest.Body);
-        blog.Title = sanitizer.Sanitize(createBlogRequest.Title);
-        blog.Tags = sanitizer.Sanitize(createBlogRequest.Tags);
 
         var result = await _applicationDbContext.Blogs.AddAsync(blog);
 
@@ -90,8 +87,8 @@ public class BlogRepository : IBlogRepository
     public async Task<Guid> DeleteBlog(Guid blogId)
     {
         var blog = await _applicationDbContext.Blogs
-        .Where(x => x.Id == blogId)
-        .FirstOrDefaultAsync()
+            .Where(x => x.Id == blogId)
+            .FirstOrDefaultAsync()
         ?? throw new NotFoundException("Blog bulunamadı");
 
         _applicationDbContext.Blogs.Remove(blog);
@@ -107,8 +104,8 @@ public class BlogRepository : IBlogRepository
     public async Task<BlogResponse> UpdateBlog(UpdateBlogRequest updateBlogRequest)
     {
         var blog = await _applicationDbContext.Blogs
-        .Where(x => x.Id == updateBlogRequest.BlogId)
-        .FirstOrDefaultAsync()
+            .Where(x => x.Id == updateBlogRequest.BlogId)
+            .FirstOrDefaultAsync()
         ?? throw new NotFoundException("Blog bulunamadı");
 
         blog.Title = updateBlogRequest.Title;
