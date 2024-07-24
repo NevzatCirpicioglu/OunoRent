@@ -1,10 +1,8 @@
-using System;
+namespace Shared.DTO.Blog.Response;
 
-namespace EntityLayer.Entities;
-
-public class Blog : AuditTrailer
+public class GetBlogResponse : GenericResponse
 {
-    public Guid Id { get; set; }
+    public Guid BlogId { get; set; }
     public string Title { get; set; }
     public string Body { get; set; }
     public string LargeImageUrl { get; set; }
