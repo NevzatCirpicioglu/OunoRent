@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using BusinessLayer.Middlewares;
 using EntityLayer.Entities;
@@ -29,13 +25,18 @@ public class SliderRepository : ISliderRepository
     {
         await IsEsxitSlider(createSliderRequest.Title, createSliderRequest.OrderNumber);
 
-        var slider = new Slider();
-
-        slider.Title = createSliderRequest.Title;
-        slider.ImgUrl = createSliderRequest.ImgUrl;
-        slider.TargetUrl = createSliderRequest.TargetUrl;
-        slider.OrderNumber = createSliderRequest.OrderNumber;
-        slider.IsActive = createSliderRequest.IsActive;
+        var slider = new Slider
+        {
+            Title = createSliderRequest.Title,
+            MainImageUrl = createSliderRequest.MainImageUrl,
+            MobileImageUrl = createSliderRequest.MobileImageUrl,
+            TargetUrl = createSliderRequest.TargetUrl,
+            OrderNumber = createSliderRequest.OrderNumber,
+            ActiveFrom = createSliderRequest.ActiveFrom,
+            ActiveTo = createSliderRequest.ActiveTo,
+            Duration = createSliderRequest.Duration,
+            IsActive = createSliderRequest.IsActive
+        };
 
         _applicationDbContext.Sliders.Add(slider);
 
@@ -53,13 +54,13 @@ public class SliderRepository : ISliderRepository
     public async Task<Guid> DeleteSlider(Guid sliderId)
     {
         var slider = await _applicationDbContext.Sliders
-        .FirstOrDefaultAsync(x => x.Id == sliderId);
+        .FirstOrDefaultAsync(x => x.SliderId == sliderId);
 
         _applicationDbContext.Sliders.Remove(slider);
 
         await _applicationDbContext.SaveChangesAsync();
 
-        return slider.Id;
+        return slider.SliderId;
     }
 
     #endregion
@@ -68,7 +69,7 @@ public class SliderRepository : ISliderRepository
     public async Task<GetSliderResponse> GetSlider(Guid sliderId)
     {
         var slider = await _applicationDbContext.Sliders
-        .FirstOrDefaultAsync(x => x.Id == sliderId)
+        .FirstOrDefaultAsync(x => x.SliderId == sliderId)
         ?? throw new NotFoundException("Slider Bulunamadı");
 
         var getSliderResponse = _mapper.Map<GetSliderResponse>(slider);
@@ -93,15 +94,20 @@ public class SliderRepository : ISliderRepository
     #region UpdateSlider
     public async Task<SliderResponse> UpdateSlider(UpdateSliderRequest updateSliderRequest)
     {
-        var slider = await _applicationDbContext.Sliders.FirstOrDefaultAsync(x => x.Id == updateSliderRequest.Id)
-        ?? throw new NotFoundException("Slider Bulunamadı");
+        var slider = await _applicationDbContext.Sliders.FirstOrDefaultAsync(
+            x => x.SliderId == updateSliderRequest.SliderId)
+                ?? throw new NotFoundException("Slider Bulunamadı");
 
         await IsEsxitSlider(updateSliderRequest.Title, updateSliderRequest.OrderNumber);
 
         slider.Title = updateSliderRequest.Title;
-        slider.ImgUrl = updateSliderRequest.Url;
+        slider.MainImageUrl = updateSliderRequest.MainImageUrl;
+        slider.MobileImageUrl = updateSliderRequest.MobileImageUrl;
         slider.TargetUrl = updateSliderRequest.TargetUrl;
         slider.OrderNumber = updateSliderRequest.OrderNumber;
+        slider.Duration = updateSliderRequest.Duration;
+        slider.ActiveFrom = updateSliderRequest.ActiveFrom;
+        slider.ActiveTo = updateSliderRequest.ActiveTo;
         slider.IsActive = updateSliderRequest.IsActive;
 
         await _applicationDbContext.SaveChangesAsync();

@@ -1,3 +1,4 @@
+using System.Net;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,8 +36,7 @@ public class ValidateModelAttribute : ActionFilterAttribute
                     errorResponse.Errors[error.PropertyName].Add(error.ErrorMessage);
                 }
 
-                context.HttpContext.Response.WriteAsJsonAsync(errorResponse);
-                return;
+                context.Result = new BadRequestObjectResult(errorResponse);
             }
         }
         base.OnActionExecuting(context);

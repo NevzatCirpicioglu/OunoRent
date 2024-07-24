@@ -7,14 +7,12 @@ using BusinessLayer.Validators;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.Concrete.Repository;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Shared.DTO.Authentication.Request;
 using Shared.Interface;
 
 namespace BusinessLayer.Extensions;

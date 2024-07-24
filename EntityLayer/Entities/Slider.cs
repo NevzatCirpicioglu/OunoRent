@@ -1,22 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace EntityLayer.Entities;
 
 public class Slider : AuditTrailer
 {
-    public Guid Id { get; set; }
+    public Guid SliderId { get; set; }
 
-    public string Title { get; set; }
+    public string MainImageUrl { get; set; }
 
-    public string ImgUrl { get; set; }
+    public string MobileImageUrl { get; set; }
 
     public string TargetUrl { get; set; }
 
+    public string Title { get; set; }
+
     public int OrderNumber { get; set; }
 
-    public bool IsActive { get; set; }
+    public int Duration { get; set; }
 
+    public DateTime ActiveFrom { get; set; }
+
+    public DateTime ActiveTo { get; set; }
+
+    public bool IsActive { get; set; }
 }

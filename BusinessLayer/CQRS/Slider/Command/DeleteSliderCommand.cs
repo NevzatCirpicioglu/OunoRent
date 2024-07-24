@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
 using Shared.Interface;
 
@@ -19,7 +15,7 @@ public sealed record DeleteSliderCommand(Guid SliderId) : IRequest<Guid>
         }
         public async Task<Guid> Handle(DeleteSliderCommand request, CancellationToken cancellationToken)
         {
-             var slider = await _sliderRepository.DeleteSlider(request.SliderId);
+            var slider = await _sliderRepository.DeleteSlider(request.SliderId);
 
             return slider;
         }
