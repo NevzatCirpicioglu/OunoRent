@@ -35,7 +35,7 @@ public class ValidateModelAttribute : ActionFilterAttribute
                     errorResponse.Errors[error.PropertyName].Add(error.ErrorMessage);
                 }
 
-                context.Result = new BadRequestObjectResult(errorResponse);
+                context.HttpContext.Response.WriteAsJsonAsync(errorResponse);
                 return;
             }
         }
