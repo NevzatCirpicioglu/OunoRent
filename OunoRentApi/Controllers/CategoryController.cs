@@ -7,7 +7,6 @@ using Shared.DTO.Category.Request;
 
 namespace OunoRentApi.Controllers.CategoryController;
 
-[Authorize]
 [ApiController]
 [Route("api/category")]
 public class CategoryController : ControllerBase
