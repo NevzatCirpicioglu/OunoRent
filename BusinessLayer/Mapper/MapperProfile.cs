@@ -25,16 +25,9 @@ public class MapperProfile : Profile
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Id))
 				.ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Name));
 
-		CreateMap<Slider, SliderResponse>()
-				.ForMember(dest => dest.SliderId, opt => opt.MapFrom(src => src.Id));
-
-		CreateMap<Slider, GetSlidersResponse>()
-				.ForMember(dest => dest.SliderId, opt => opt.MapFrom(src => src.Id))
-				.ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.ImgUrl));
-
-		CreateMap<Slider, GetSliderResponse>()
-				.ForMember(dest => dest.SliderId, opt => opt.MapFrom(src => src.Id))
-				.ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.ImgUrl));
+		CreateMap<Slider, SliderResponse>();
+		CreateMap<Slider, GetSlidersResponse>();
+		CreateMap<Slider, GetSliderResponse>();
 
 		CreateMap<User, UserResponse>();
 		CreateMap<User, GetUserResponse>();

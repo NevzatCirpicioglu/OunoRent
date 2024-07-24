@@ -1,9 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Shared.DTO.Slider.Request;
 
-public sealed record UpdateSliderRequest(Guid Id, string Title, string Url, string TargetUrl, int OrderNumber, Boolean IsActive);
+public sealed record UpdateSliderRequest(
+    Guid SliderId,
+    string Title,
+    string MainImageUrl,
+    string MobileImageUrl,
+    string TargetUrl,
+    int OrderNumber,
+    int Duration,
+    DateTime ActiveFrom,
+    DateTime ActiveTo,
+    bool IsActive
+);
 

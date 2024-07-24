@@ -139,9 +139,15 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Entities.Slider", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("SliderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ActiveFrom")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ActiveTo")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
@@ -149,12 +155,19 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime?>("CreatedDateTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("ImgUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Duration")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("MainImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("MobileImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("text");
@@ -173,7 +186,7 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("SliderId");
 
                     b.ToTable("Sliders");
                 });

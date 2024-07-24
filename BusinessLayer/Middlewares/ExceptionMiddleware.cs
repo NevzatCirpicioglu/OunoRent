@@ -1,4 +1,3 @@
-using BusinessLayer.Middlewares;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
