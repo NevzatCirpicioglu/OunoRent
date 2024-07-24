@@ -1,8 +1,6 @@
 using BusinessLayer.CQRS.Blog.Command;
 using BusinessLayer.CQRS.Blog.Query;
 using MediatR;
-using BusinessLayer.CQRS.Blog.Command;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTO.Blog.Request;
 
@@ -38,12 +36,6 @@ public class BlogController : ControllerBase
     {
         var result = await _mediator.Send(new GetBlogsCommand());
         return Ok(result);
-    }
-    private readonly IMediator _mediator;
-
-    public BlogController(IMediator mediator)
-    {
-        _mediator = mediator;
     }
 
     [HttpDelete("{id:guid}")]

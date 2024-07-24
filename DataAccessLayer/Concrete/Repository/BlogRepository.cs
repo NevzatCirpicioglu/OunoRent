@@ -7,11 +7,6 @@ using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
 using Shared.DTO.Blog.Request;
 using Shared.DTO.Blog.Response;
-using AutoMapper;
-using BusinessLayer.Middlewares;
-using Microsoft.EntityFrameworkCore;
-using Shared.DTO.Blog.Request;
-using Shared.DTO.Blog.Response;
 using Shared.Interface;
 
 namespace DataAccessLayer.Concrete.Repository;
@@ -40,9 +35,11 @@ public class BlogRepository : IBlogRepository
         blog.Date = DateTime.UtcNow;
 
         var result = await _applicationDbContext.Blogs.AddAsync(blog);
+
         await _applicationDbContext.SaveChangesAsync();
 
         blog.Id = result.Entity.Id;
+
         var blogResponse = _mapper.Map<BlogResponse>(blog);
 
         return blogResponse;
@@ -73,14 +70,6 @@ public class BlogRepository : IBlogRepository
             throw new ConflictException("Böyle bir başlık zaten var");
 
         return result;
-    }
-    private readonly ApplicationDbContext _applicationDbContext;
-    private readonly IMapper _mapper;
-
-    public BlogRepository(ApplicationDbContext applicationDbContext, IMapper mapper)
-    {
-        _applicationDbContext = applicationDbContext;
-        _mapper = mapper;
     }
 
     #region DeleteBlog
