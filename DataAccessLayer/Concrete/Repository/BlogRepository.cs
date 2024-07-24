@@ -18,6 +18,7 @@ public class BlogRepository : IBlogRepository
         _mapper = mapper;
     }
 
+    #region DeleteBlog
     public async Task<Guid> DeleteBlog(Guid blogId)
     {
         var blog = await _applicationDbContext.Blogs
@@ -32,6 +33,9 @@ public class BlogRepository : IBlogRepository
         return blog.Id;
     }
 
+    #endregion
+
+    #region UpdateBlog
     public async Task<BlogResponse> UpdateBlog(UpdateBlogRequest updateBlogRequest)
     {
         var blog = await _applicationDbContext.Blogs
@@ -54,4 +58,6 @@ public class BlogRepository : IBlogRepository
 
         return blogResponse;
     }
+
+    #endregion
 }
