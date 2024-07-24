@@ -2,7 +2,7 @@ using System;
 
 namespace EntityLayer.Entities;
 
-public class Blog
+public class Blog : AuditTrailer
 {
     public Guid BlogId { get; set; }
     public string Title { get; set; }
