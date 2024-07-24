@@ -22,13 +22,14 @@ public class BlogRepository : IBlogRepository
         _mapper = mapper;
     }
 
+    #region CreateBlog
     public async Task<BlogResponse> CreateBlogAsync(CreateBlogRequest createBlogRequest)
     {
         var sanitizer = new HtmlSanitizer();
         var blog = new Blog
         {
             LargeImageUrl = createBlogRequest.LargeImageUrl,
-            Order = createBlogRequest.Order,
+            OrderNumber = createBlogRequest.Order,
             Slug = createBlogRequest.Slug,
             SmallImageUrl = createBlogRequest.SmallImageUrl,
             Tags = createBlogRequest.Tags,
@@ -50,7 +51,9 @@ public class BlogRepository : IBlogRepository
 
         return blogResponse;
     }
+    #endregion
 
+    #region GetBlog
     public async Task<GetBlogResponse> GetBlogAsync(Guid id)
     {
         var result = await _applicationDbContext.Blogs.FirstOrDefaultAsync(b => b.Id == id)
@@ -59,7 +62,9 @@ public class BlogRepository : IBlogRepository
         var blogResponse = _mapper.Map<GetBlogResponse>(result);
         return blogResponse;
     }
+    #endregion
 
+    #region GetBlogs
     public async Task<List<GetBlogsResponse>> GetBlogsAsync()
     {
         var result = await _applicationDbContext.Blogs.ToListAsync();
@@ -67,7 +72,9 @@ public class BlogRepository : IBlogRepository
         var blogResponse = _mapper.Map<List<GetBlogsResponse>>(result);
         return blogResponse;
     }
+    #endregion
 
+    #region IsExist
     private async Task<bool> IsExistAsync(Expression<Func<Blog, bool>> filter)
     {
         var result = await _applicationDbContext.Blogs.AnyAsync(filter);
@@ -77,6 +84,7 @@ public class BlogRepository : IBlogRepository
 
         return result;
     }
+    #endregion
 
     #region DeleteBlog
     public async Task<Guid> DeleteBlog(Guid blogId)

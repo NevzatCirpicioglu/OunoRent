@@ -47,7 +47,5 @@ public class MapperProfile : Profile
 				.ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.Id));
 		CreateMap<Blog, GetBlogsResponse>()
 				.ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.Id));
-
-		CreateMap<CreateBlogRequest, Blog>();
 	}
 }
