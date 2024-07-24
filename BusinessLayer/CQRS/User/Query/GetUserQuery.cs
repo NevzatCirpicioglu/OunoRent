@@ -2,7 +2,7 @@ using MediatR;
 using Shared.DTO.User.Response;
 using Shared.Interface;
 
-namespace BusinessLayer.User.Query;
+namespace BusinessLayer.CQRS.User.Query;
 
 public sealed record GetUserQuery(Guid UserId) : IRequest<GetUserResponse>;
 

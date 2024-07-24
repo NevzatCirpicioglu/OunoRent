@@ -4,16 +4,20 @@ using Microsoft.EntityFrameworkCore;
 using EntityLayer.Entities;
 using Shared.DTO.Category.Request;
 using BusinessLayer.Middlewares;
+using AutoMapper;
+using System.Collections.Generic;
 
 namespace DataAccessLayer.Concrete.Repository;
 
 public class CategoryRepository : ICategoryRepository
 {
     private readonly ApplicationDbContext _applicationDbContext;
+    private readonly IMapper _mapper;
 
-    public CategoryRepository(ApplicationDbContext applicationDbContext)
+    public CategoryRepository(ApplicationDbContext applicationDbContext, IMapper mapper)
     {
         _applicationDbContext = applicationDbContext;
+        _mapper = mapper;
     }
 
     #region GetCategories
@@ -21,17 +25,10 @@ public class CategoryRepository : ICategoryRepository
     {
         var categories = await _applicationDbContext.Categories
         .AsNoTracking()
-        .Select(x => new GetCategoriesResponse
-        {
-            CategoryId = x.Id,
-            CategoryName = x.Name,
-            CreatedDateTime = x.CreatedDateTime,
-            CreatedBy = x.CreatedBy,
-            ModifiedDateTime = x.ModifiedDateTime,
-            ModifiedBy = x.ModifiedBy
-        }).ToListAsync();
+        .ToListAsync();
 
-        return categories;
+        var categoriesResponse = _mapper.Map<List<GetCategoriesResponse>>(categories);
+        return categoriesResponse;
     }
     #endregion
 
@@ -41,18 +38,11 @@ public class CategoryRepository : ICategoryRepository
         var category = await _applicationDbContext.Categories
         .AsNoTracking()
         .Where(x => x.Id == categoryId)
-        .Select(x => new GetCategoryResponse
-        {
-            CategoryId = x.Id,
-            CategoryName = x.Name,
-            CreatedDateTime = x.CreatedDateTime,
-            CreatedBy = x.CreatedBy,
-            ModifiedDateTime = x.ModifiedDateTime,
-            ModifiedBy = x.ModifiedBy
-        }).FirstOrDefaultAsync()
+        .FirstOrDefaultAsync()
         ?? throw new NotFoundException("Category not found");
 
-        return category;
+        var categoryResponse = _mapper.Map<GetCategoryResponse>(category);
+        return categoryResponse;
     }
     #endregion
 
@@ -70,15 +60,8 @@ public class CategoryRepository : ICategoryRepository
 
         await _applicationDbContext.SaveChangesAsync();
 
-        return new CategoryResponse
-        {
-            CategoryId = category.Id,
-            CategoryName = category.Name,
-            CreatedDateTime = category.CreatedDateTime,
-            CreatedBy = category.CreatedBy,
-            ModifiedDateTime = category.ModifiedDateTime,
-            ModifiedBy = category.ModifiedBy
-        };
+        var categoryResponse = _mapper.Map<CategoryResponse>(category);
+        return categoryResponse;
     }
     #endregion
 
@@ -94,15 +77,8 @@ public class CategoryRepository : ICategoryRepository
 
         await _applicationDbContext.SaveChangesAsync();
 
-        return new CategoryResponse
-        {
-            CategoryId = category.Id,
-            CategoryName = category.Name,
-            CreatedDateTime = category.CreatedDateTime,
-            CreatedBy = category.CreatedBy,
-            ModifiedDateTime = category.ModifiedDateTime,
-            ModifiedBy = category.ModifiedBy
-        };
+        var categoryResponse = _mapper.Map<CategoryResponse>(category);
+        return categoryResponse;
     }
     #endregion
 
@@ -121,7 +97,6 @@ public class CategoryRepository : ICategoryRepository
         return category.Id;
     }
     #endregion
-
 
     #region IsEsisCategory
     /// <summary>

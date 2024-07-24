@@ -1,3 +1,4 @@
+using AutoMapper;
 using BusinessLayer.Middlewares;
 using EntityLayer.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,12 @@ public class UserRepository : IUserRepository
 {
 
     private readonly ApplicationDbContext _applicationDbContext;
+    private readonly IMapper _mapper;
 
-    public UserRepository(ApplicationDbContext applicationDbContext)
+    public UserRepository(ApplicationDbContext applicationDbContext, IMapper mapper)
     {
         _applicationDbContext = applicationDbContext;
+        _mapper = mapper;
     }
 
     #region CreateUser
@@ -26,18 +29,14 @@ public class UserRepository : IUserRepository
             Email = request.Email,
             AccountStatus = true,
             PasswordHash = request.PasswordHash,
-            //ToDo : Account Status bool olucak
         };
 
         _applicationDbContext.Users.Add(user);
 
         await _applicationDbContext.SaveChangesAsync();
 
-        return new UserResponse
-        {
-            Id = user.Id,
-            CreatedDateTime = DateTime.UtcNow
-        };
+        var userResponse = _mapper.Map<UserResponse>(user);
+        return userResponse;
     }
     #endregion
 
@@ -53,10 +52,8 @@ public class UserRepository : IUserRepository
 
         await _applicationDbContext.SaveChangesAsync();
 
-        return new UserResponse
-        {
-            Id = deletedUser.Id,
-        };
+        var userResponse = _mapper.Map<UserResponse>(deletedUser);
+        return userResponse;
     }
     #endregion
 
@@ -66,23 +63,11 @@ public class UserRepository : IUserRepository
         var user = await _applicationDbContext.Users
         .AsNoTracking()
         .Where(x => x.Id == userId)
-        .Select(x => new GetUserResponse
-        {
-            Id = x.Id,
-            Name = x.Name,
-            Surname = x.Surname,
-            Email = x.Email,
-            PhoneNumber = x.PhoneNumber,
-            TC = x.TC,
-            BirthDate = x.BirthDate,
-            Gender = x.Gender,
-            Address = x.Address,
-            CreatedDateTime = x.CreatedDateTime,
-            ModifiedDateTime = x.ModifiedDateTime
-        }).FirstOrDefaultAsync()
+        .FirstOrDefaultAsync()
         ?? throw new NotFoundException("User not found");
 
-        return user;
+        var userResponse = _mapper.Map<GetUserResponse>(user);
+        return userResponse;
     }
     #endregion
 
@@ -102,23 +87,11 @@ public class UserRepository : IUserRepository
         var user = await _applicationDbContext.Users
             .AsNoTracking()
             .Where(x => x.Email == email)
-            .Select(x => new UserDetailsResponse
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Surname = x.Surname,
-                Email = x.Email,
-                PhoneNumber = x.PhoneNumber,
-                TC = x.TC,
-                BirthDate = x.BirthDate,
-                Gender = x.Gender,
-                Address = x.Address,
-                AccountStatus = x.AccountStatus,
-                PasswordHash = x.PasswordHash
-            }).FirstOrDefaultAsync()
+            .FirstOrDefaultAsync()
             ?? throw new NotFoundException("User not found");
 
-        return user;
+        var userDetailsResponse = _mapper.Map<UserDetailsResponse>(user);
+        return userDetailsResponse;
     }
     #endregion
 
@@ -127,22 +100,10 @@ public class UserRepository : IUserRepository
     {
         var users = await _applicationDbContext.Users
         .AsNoTracking()
-        .Select(x => new GetUsersResponse
-        {
-            Id = x.Id,
-            Name = x.Name,
-            Surname = x.Surname,
-            Email = x.Email,
-            PhoneNumber = x.PhoneNumber,
-            TC = x.TC,
-            BirthDate = x.BirthDate,
-            Gender = x.Gender,
-            Address = x.Address,
-            CreatedDateTime = x.CreatedDateTime,
-            ModifiedDateTime = x.ModifiedDateTime
-        }).ToListAsync();
+        .ToListAsync();
 
-        return users;
+        var usersResponse = _mapper.Map<List<GetUsersResponse>>(users);
+        return usersResponse;
     }
     #endregion
 
@@ -150,26 +111,26 @@ public class UserRepository : IUserRepository
 
     public async Task<UserResponse> UpdateUser(UpdateUserRequest request)
     {
-        var userEntity = await _applicationDbContext.Users
+        var user = await _applicationDbContext.Users
         .FirstOrDefaultAsync(x => x.Id == request.Id)
         ?? throw new NotFoundException("User not found");
 
-        userEntity.Name = request.Name;
-        userEntity.Surname = request.Surname;
-        userEntity.Email = request.Email;
-        userEntity.PhoneNumber = request.PhoneNumber;
-        userEntity.Address = request.Address;
+        user.Name = request.Name;
+        user.Surname = request.Surname;
+        user.Email = request.Email;
+        user.PhoneNumber = request.PhoneNumber;
+        user.Address = request.Address;
+        user.TC = request.Tc;
+        user.Gender = request.Gender;
+        user.BirthDate = request.BirthDate;
 
-        _applicationDbContext.Update(userEntity);
+        _applicationDbContext.Update(user);
 
         await _applicationDbContext.SaveChangesAsync();
 
-        return new UserResponse
-        {
-            Id = userEntity.Id,
-            CreatedDateTime = userEntity.CreatedDateTime,
-            ModifiedDateTime = DateTime.UtcNow
-        };
+        var userResponse = _mapper.Map<UserResponse>(user);
+
+        return userResponse;
     }
     #endregion
 }

@@ -1,16 +1,20 @@
 using System.Text;
 using AutoMapper.Extensions.ExpressionMapping;
-using BusinessLayer.Category.Query;
+using BusinessLayer.CQRS.Category.Query;
 using BusinessLayer.Mapper;
 using BusinessLayer.Services;
+using BusinessLayer.Validators;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.Concrete.Repository;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Shared.DTO.Authentication.Request;
 using Shared.Interface;
 
 namespace BusinessLayer.Extensions;
@@ -28,6 +32,7 @@ public static class ServiceExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<ISliderRepository, SliderRepository>();
     }
 
     /// <summary>
@@ -99,6 +104,25 @@ public static class ServiceExtensions
         services.AddAuthorization();
     }
 
+    public static void ConfigureFluentValidation(this IServiceCollection services)
+    {
+        services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
+        //services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
+    }
+
+    public static void ConfigureCORS(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAllOrigin",
+                builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+            );
+        });
+    }
+
     /// <summary>
     /// Tüm yapılandırma genişletme yöntemlerini çağırarak servisleri yapılandırır.
     /// Bu yöntem, veritabanı bağlamı, bağımlılık enjeksiyonu, MediatR, AutoMapper ve JWT kimlik doğrulama yapılandırmalarını gerçekleştirir.
@@ -112,5 +136,7 @@ public static class ServiceExtensions
         ConfigureMediatr(services);
         ConfigureAutoMapper(services);
         ConfigureJWT(services, configuration);
+        ConfigureFluentValidation(services);
+        ConfigureCORS(services);
     }
 }

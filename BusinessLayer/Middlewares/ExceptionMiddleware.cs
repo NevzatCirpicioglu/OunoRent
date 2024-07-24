@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
+namespace BusinessLayer.Middlewares;
+
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;

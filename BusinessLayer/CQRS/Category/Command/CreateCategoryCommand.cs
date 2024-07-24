@@ -4,7 +4,7 @@ using Shared.DTO.Category.Response;
 using Shared.Interface;
 using AutoMapper;
 
-namespace BusinessLayer.Category.Command;
+namespace BusinessLayer.CQRS.Category.Command;
 
 public sealed record CreateCategoryCommand(CreateCategoryRequest Category) : IRequest<CategoryResponse>;
 

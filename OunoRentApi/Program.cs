@@ -1,18 +1,22 @@
+using BusinessLayer.ActionFilters;
 using BusinessLayer.Extensions;
 using BusinessLayer.Middlewares;
+using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the cŞontainer.
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(typeof(ValidateModelAttribute));
+});
 
 // Swagger yapılandırması
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 
-    // Bearer token authentication için security definition ekleyin
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -23,7 +27,6 @@ builder.Services.AddSwaggerGen(c =>
         BearerFormat = "JWT"
     });
 
-    // Global security requirement ekleyin
     c.AddSecurityRequirement(new OpenApiSecurityRequirement{
             {
                 new OpenApiSecurityScheme{
@@ -36,28 +39,32 @@ builder.Services.AddSwaggerGen(c =>
             }
     });
 });
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 // Extension Services
 builder.Services.ConfigureAllExtensionMethods(builder.Configuration);
 
 var app = builder.Build();
-app.UseMiddleware<ExceptionMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-    app.UseSwagger();
-app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    c.RoutePrefix = string.Empty;
-});
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = string.Empty;
+    });
+}
+
+app.UseCors("AllowAllOrigin");
+
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<SlidingExpirationMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 app.UseHttpsRedirection();
 app.MapControllers();
