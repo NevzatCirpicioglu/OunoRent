@@ -1,7 +1,8 @@
-namespace Shared.DTO.Blog.Request;
+namespace Shared.DTO.Blog.Response;
 
-public class CreateBlogRequest
+public class GetBlogResponse : GenericResponse
 {
+    public Guid BlogId { get; set; }
     public string Title { get; set; }
     public string Body { get; set; }
     public string LargeImageUrl { get; set; }
@@ -9,4 +10,6 @@ public class CreateBlogRequest
     public string Tags { get; set; }
     public string Slug { get; set; }
     public int Order { get; set; }
+    public DateTime Date { get; set; }
+    public bool IsActive { get; set; }
 }
