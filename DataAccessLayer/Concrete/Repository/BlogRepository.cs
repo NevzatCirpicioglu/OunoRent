@@ -37,9 +37,9 @@ public class BlogRepository : IBlogRepository
             Date = DateTime.UtcNow
         };
 
-        blog.Body = sanitizer.Sanitize(blog.Body);
-        blog.Title = sanitizer.Sanitize(blog.Title);
-        blog.Tags = sanitizer.Sanitize(blog.Tags);
+        blog.Body = sanitizer.Sanitize(createBlogRequest.Body);
+        blog.Title = sanitizer.Sanitize(createBlogRequest.Title);
+        blog.Tags = sanitizer.Sanitize(createBlogRequest.Tags);
 
         var result = await _applicationDbContext.Blogs.AddAsync(blog);
 
