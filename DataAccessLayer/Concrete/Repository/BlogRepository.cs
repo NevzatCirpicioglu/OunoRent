@@ -28,7 +28,7 @@ public class BlogRepository : IBlogRepository
         var blog = new Blog
         {
             LargeImageUrl = createBlogRequest.LargeImageUrl,
-            Order = createBlogRequest.Order,
+            OrderNumber = createBlogRequest.OrderNumber,
             Slug = createBlogRequest.Slug,
             SmallImageUrl = createBlogRequest.SmallImageUrl,
             Tags = createBlogRequest.Tags,
