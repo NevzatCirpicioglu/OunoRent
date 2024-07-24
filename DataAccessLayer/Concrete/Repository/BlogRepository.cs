@@ -25,14 +25,20 @@ public class BlogRepository : IBlogRepository
     public async Task<BlogResponse> CreateBlogAsync(CreateBlogRequest createBlogRequest)
     {
         var sanitizer = new HtmlSanitizer();
-        var blog = _mapper.Map<Blog>(createBlogRequest);
+        var blog = new Blog
+        {
+            LargeImageUrl = createBlogRequest.LargeImageUrl,
+            Order = createBlogRequest.Order,
+            Slug = createBlogRequest.Slug,
+            SmallImageUrl = createBlogRequest.SmallImageUrl,
+            Tags = createBlogRequest.Tags,
+            IsActive = true,
+            Date = DateTime.UtcNow
+        };
 
         blog.Body = sanitizer.Sanitize(blog.Body);
         blog.Title = sanitizer.Sanitize(blog.Title);
         blog.Tags = sanitizer.Sanitize(blog.Tags);
-        blog.Slug = sanitizer.Sanitize(blog.Slug);
-        blog.IsActive = true;
-        blog.Date = DateTime.UtcNow;
 
         var result = await _applicationDbContext.Blogs.AddAsync(blog);
 
