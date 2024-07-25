@@ -53,8 +53,11 @@ public class BlogRepository : IBlogRepository
     #region GetBlog
     public async Task<GetBlogResponse> GetBlogAsync(Guid id)
     {
-        var result = await _applicationDbContext.Blogs.FirstOrDefaultAsync(b => b.Id == id)
-            ?? throw new NotFoundException("Böyle bir blog bulunamadı");
+        var result = await _applicationDbContext.Blogs
+        .Include(x => x.SubCategory)
+        .AsNoTracking()
+        .FirstOrDefaultAsync(b => b.BlogId == blogId)
+            ?? throw new NotFoundException("Blog bulunamadı");
 
         var blogResponse = _mapper.Map<GetBlogResponse>(result);
         return blogResponse;
@@ -64,7 +67,10 @@ public class BlogRepository : IBlogRepository
     #region GetBlogs
     public async Task<List<GetBlogsResponse>> GetBlogsAsync()
     {
-        var result = await _applicationDbContext.Blogs.ToListAsync();
+        var blogList = await _applicationDbContext.Blogs
+        .Include(x => x.SubCategory)
+        .AsNoTracking()
+        .ToListAsync();
 
         var blogResponse = _mapper.Map<List<GetBlogsResponse>>(result);
         return blogResponse;
