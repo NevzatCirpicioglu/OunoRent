@@ -16,7 +16,7 @@ public class GetSlidersResponse : GenericResponse
 
     public int Duration { get; set; }
 
-    public DateTime ActiceFrom { get; set; }
+    public DateTime ActiveFrom { get; set; }
 
     public DateTime ActiveTo { get; set; }
 
