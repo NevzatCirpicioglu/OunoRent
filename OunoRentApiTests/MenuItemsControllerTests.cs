@@ -260,7 +260,7 @@ public class MenuItemsControllerTests : IClassFixture<WebApplicationFactory<Prog
         var deleteResponse = await _client.DeleteAsync($"/api/menuitem/{menuItemId}");
         deleteResponse.EnsureSuccessStatusCode();
 
-        var deleteContent = await deleteResponse.Content.ReadFromJsonAsync<MenuItemResponse>();
+        var deleteContent = await deleteResponse.Content.ReadFromJsonAsync<Guid>();
 
         //<-------------------------------------------------------->
         //Sildiğim idyi kontrol için tekrar çektim
