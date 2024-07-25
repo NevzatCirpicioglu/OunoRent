@@ -24,7 +24,7 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Entities.Blog", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("BlogId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -54,7 +54,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Order")
+                    b.Property<int>("OrderNumber")
                         .HasColumnType("integer");
 
                     b.Property<string>("Slug")
@@ -65,6 +65,9 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("SubCategoryId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Tags")
                         .IsRequired()
                         .HasColumnType("text");
@@ -73,7 +76,9 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("BlogId");
+
+                    b.HasIndex("SubCategoryId");
 
                     b.ToTable("Blogs");
                 });
@@ -280,6 +285,15 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("EntityLayer.Entities.Blog", b =>
+                {
+                    b.HasOne("EntityLayer.Entities.SubCategory", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId");
+
+                    b.Navigation("SubCategory");
                 });
 
             modelBuilder.Entity("EntityLayer.Entities.SubCategory", b =>
