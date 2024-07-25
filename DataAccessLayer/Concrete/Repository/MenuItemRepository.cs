@@ -22,6 +22,13 @@ public class MenuItemRepository : IMenuItemRepository
 
     public async Task<MenuItemResponse> CreateMenuItemAsync(CreateMenuItemRequest createMenuItemRequest)
     {
+        var existingMenuItem = await _applicationDbContext.MenuItems.FirstOrDefaultAsync(mi =>
+            mi.OrderNumber == createMenuItemRequest.OrderNumber);
+
+        if (existingMenuItem != null && existingMenuItem.IsActive)
+            throw new ConflictException("Aynı sıra numarasına sahip iki adet slider mevcut olamaz." +
+                "Lütfen her slider için benzersiz bir sıra numarası kullanın.");
+
         var menuItem = new MenuItem
         {
             Label = createMenuItemRequest.Label,
@@ -71,6 +78,14 @@ public class MenuItemRepository : IMenuItemRepository
     {
         if (!await IsExistAsync(mi => mi.MenuItemId == updateMenuItemRequest.MenuItemId))
             throw new NotFoundException("Menü öğesi bulunamadı");
+
+        var existingMenuItem = await _applicationDbContext.MenuItems.FirstOrDefaultAsync(mi =>
+            mi.OrderNumber == updateMenuItemRequest.OrderNumber);
+
+        if (existingMenuItem != null && existingMenuItem.IsActive
+            && existingMenuItem.MenuItemId != updateMenuItemRequest.MenuItemId)
+            throw new ConflictException("Aynı sıra numarasına sahip iki adet slider mevcut olamaz." +
+                "Lütfen her slider için benzersiz bir sıra numarası kullanın.");
 
         var entity = new MenuItem
         {

@@ -75,6 +75,33 @@ public class MenuItemsControllerTests : IClassFixture<WebApplicationFactory<Prog
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Equal(content.MenuItemId, Guid.Empty);
     }
+
+    [Fact]
+    public async Task CreateMenuItem_ReturnConflictExceptionAsync()
+    {
+        // Arrange
+        var getResponse = await _client.GetAsync("/api/MenuItem");
+        var getContent = await getResponse.Content.ReadFromJsonAsync<List<GetMenuItemsResponse>>();
+
+        var menuItem = getContent.FirstOrDefault(mi => mi.IsActive);
+
+        var faker = new Faker<CreateMenuItemRequest>()
+        .CustomInstantiator(f => new CreateMenuItemRequest(
+            Label: f.Lorem.Sentence(), // 20% chance of being null
+            TargetUrl: f.Internet.DomainName(),
+            OrderNumber: menuItem.OrderNumber,
+            OnlyToMembers: f.Random.Bool(),
+            IsActive: f.Random.Bool()
+        ));
+
+        var fakeMenuItem = faker.Generate();
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/menuitem/", fakeMenuItem);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+    }
     #endregion
 
     #region GetMenuItem
@@ -183,6 +210,35 @@ public class MenuItemsControllerTests : IClassFixture<WebApplicationFactory<Prog
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Equal(new MenuItemResponse(), content);
+    }
+
+    [Fact]
+    public async Task UpdateMenuItem_ReturnsConflictAsync()
+    {
+        // Arrange
+        var getResponse = await _client.GetAsync("/api/MenuItem");
+        var getContent = await getResponse.Content.ReadFromJsonAsync<List<GetMenuItemsResponse>>();
+
+        var activeMenuItemOrderNumber = getContent.FirstOrDefault(mi => mi.IsActive).OrderNumber;
+        var menuItem = getContent.FirstOrDefault();
+
+        var faker = new Faker<UpdateMenuItemRequest>()
+            .CustomInstantiator(f => new UpdateMenuItemRequest(
+                MenuItemId: menuItem.MenuItemId,
+                Label: f.Lorem.Sentence(),
+                TargetUrl: f.Internet.DomainName(),
+                OrderNumber: activeMenuItemOrderNumber,
+                OnlyToMembers: f.Random.Bool(),
+                IsActive: f.Random.Bool()
+            ));
+
+        var fakeMenuItem = faker.Generate();
+
+        // Act
+        var updateResponse = await _client.PutAsJsonAsync($"/api/menuitem/{menuItem.MenuItemId}", fakeMenuItem);
+
+        //Assert
+        Assert.Equal(HttpStatusCode.Conflict, updateResponse.StatusCode);
     }
     #endregion
 
