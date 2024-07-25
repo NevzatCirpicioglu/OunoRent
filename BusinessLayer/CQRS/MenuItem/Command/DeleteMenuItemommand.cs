@@ -4,9 +4,9 @@ using Shared.Interface;
 
 namespace BusinessLayer.CQRS.MenuItem.Command;
 
-public sealed record DeleteMenuItemommand(Guid MenuItemId) : IRequest<MenuItemResponse>;
+public sealed record DeleteMenuItemommand(Guid MenuItemId) : IRequest<Guid>;
 
-public class DeleteMenuItemCommandHandler : IRequestHandler<DeleteMenuItemommand, MenuItemResponse>
+public class DeleteMenuItemCommandHandler : IRequestHandler<DeleteMenuItemommand, Guid>
 {
     private readonly IMenuItemRepository _menuItemRepository;
 
@@ -15,7 +15,7 @@ public class DeleteMenuItemCommandHandler : IRequestHandler<DeleteMenuItemommand
         _menuItemRepository = menuItemRepository;
     }
 
-    public async Task<MenuItemResponse> Handle(DeleteMenuItemommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(DeleteMenuItemommand request, CancellationToken cancellationToken)
     {
         var menuItem = await _menuItemRepository.DeleteMenuItemAsync(request.MenuItemId);
         return menuItem;
