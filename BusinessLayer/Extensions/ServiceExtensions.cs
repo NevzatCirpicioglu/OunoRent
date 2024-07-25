@@ -1,6 +1,7 @@
 using System.Text;
 using AutoMapper.Extensions.ExpressionMapping;
 using BusinessLayer.CQRS.Category.Query;
+using BusinessLayer.CQRS.MenuItem.Query;
 using BusinessLayer.Mapper;
 using BusinessLayer.Services;
 using BusinessLayer.Validators;
@@ -33,6 +34,7 @@ public static class ServiceExtensions
         services.AddScoped<ISliderRepository, SliderRepository>();
         services.AddScoped<IBlogRepository, BlogRepository>();
         services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+        services.AddScoped<IMenuItemRepository, MenuItemRepository>();
     }
 
     /// <summary>
