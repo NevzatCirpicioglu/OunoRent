@@ -5,7 +5,6 @@ using EntityLayer.Entities;
 using Shared.DTO.Category.Request;
 using BusinessLayer.Middlewares;
 using AutoMapper;
-using System.Collections.Generic;
 
 namespace DataAccessLayer.Concrete.Repository;
 

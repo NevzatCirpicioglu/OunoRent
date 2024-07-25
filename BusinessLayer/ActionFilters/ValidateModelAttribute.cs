@@ -1,3 +1,4 @@
+using System.Net;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,6 @@ public class ValidateModelAttribute : ActionFilterAttribute
                 }
 
                 context.Result = new BadRequestObjectResult(errorResponse);
-                return;
             }
         }
         base.OnActionExecuting(context);

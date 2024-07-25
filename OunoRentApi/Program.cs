@@ -1,7 +1,6 @@
 using BusinessLayer.ActionFilters;
 using BusinessLayer.Extensions;
 using BusinessLayer.Middlewares;
-using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);

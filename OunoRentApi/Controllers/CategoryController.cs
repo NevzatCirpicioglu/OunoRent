@@ -3,7 +3,6 @@ using BusinessLayer.CQRS.Category.Query;
 using BusinessLayer.CQRS.SubCategory.Command;
 using BusinessLayer.CQRS.SubCategory.Query;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTO.Category.Request;
 using Shared.DTO.SubCategory.Request;

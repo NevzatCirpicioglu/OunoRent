@@ -1,14 +1,13 @@
 using BusinessLayer.CQRS.User.Command;
 using BusinessLayer.CQRS.User.Query;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTO.User.Request;
 
 namespace OunoRentApi.Controllers;
 
 [ApiController]
-[Authorize]
+//[Authorize]
 [Route("api/user")]
 public class UserController : ControllerBase
 {
