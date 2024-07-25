@@ -21,7 +21,7 @@ public class Category : AuditTrailer
 
     public Boolean IsActive { get; set; }
 
-    // Relationships
+    // Relationship
 
     public ICollection<SubCategory> SubCategories { get; set; }
 }
