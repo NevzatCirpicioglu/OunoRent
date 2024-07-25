@@ -59,7 +59,8 @@ public class MenuItemRepository : IMenuItemRepository
 
     public async Task<GetMenuItemResponse> GetMenuItemAsync(Guid id)
     {
-        var entity = await _applicationDbContext.MenuItems.FirstOrDefaultAsync(mi => mi.MenuItemId == id)
+        var entity = await _applicationDbContext.MenuItems
+            .AsNoTracking().FirstOrDefaultAsync(mi => mi.MenuItemId == id)
             ?? throw new NotFoundException("Menü öğesi bulunamadı");
 
         var menuItemResponse = _mapper.Map<GetMenuItemResponse>(entity);
@@ -68,7 +69,7 @@ public class MenuItemRepository : IMenuItemRepository
 
     public async Task<List<GetMenuItemsResponse>> GetMenuItemsAsync()
     {
-        var entity = await _applicationDbContext.MenuItems.ToListAsync();
+        var entity = await _applicationDbContext.MenuItems.AsNoTracking().ToListAsync();
         var menuItemResponse = _mapper.Map<List<GetMenuItemsResponse>>(entity);
 
         return menuItemResponse;
