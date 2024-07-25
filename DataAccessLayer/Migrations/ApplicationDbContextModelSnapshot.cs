@@ -54,7 +54,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Order")
+                    b.Property<int>("OrderNumber")
                         .HasColumnType("integer");
 
                     b.Property<string>("Slug")
@@ -103,6 +103,34 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("EntityLayer.Entities.MenuItem", b =>
+                {
+                    b.Property<Guid>("MenuItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("OnlyToMembers")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("OrderNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TargetUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("MenuItemId");
+
+                    b.ToTable("MenuItems");
                 });
 
             modelBuilder.Entity("EntityLayer.Entities.Product", b =>

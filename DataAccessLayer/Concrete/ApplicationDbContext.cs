@@ -14,6 +14,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Slider> Sliders { get; set; }
     public DbSet<Blog> Blogs { get; set; }
+    public DbSet<MenuItem> MenuItems { get; set; }
 
     public override int SaveChanges()
     {

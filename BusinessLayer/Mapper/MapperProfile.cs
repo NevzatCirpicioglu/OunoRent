@@ -6,6 +6,7 @@ using Shared.DTO.Authentication.Response;
 using Shared.DTO.Slider.Response;
 using Shared.DTO.Blog.Response;
 using Shared.DTO.Blog.Request;
+using Shared.DTO.MenuItem.Response;
 
 namespace BusinessLayer.Mapper;
 
@@ -40,5 +41,9 @@ public class MapperProfile : Profile
 				.ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.Id));
 		CreateMap<Blog, GetBlogsResponse>()
 				.ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.Id));
+
+		CreateMap<MenuItem, MenuItemResponse>();
+		CreateMap<MenuItem, GetMenuItemResponse>();
+		CreateMap<MenuItem, GetMenuItemsResponse>();
 	}
 }
