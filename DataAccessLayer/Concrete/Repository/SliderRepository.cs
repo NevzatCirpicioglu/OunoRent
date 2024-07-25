@@ -70,7 +70,7 @@ public class SliderRepository : ISliderRepository
     public async Task<GetSliderResponse> GetSlider(Guid sliderId)
     {
         var slider = await _applicationDbContext.Sliders
-        .FirstOrDefaultAsync(x => x.SliderId == sliderId)
+        .AsNoTracking().FirstOrDefaultAsync(x => x.SliderId == sliderId)
         ?? throw new NotFoundException("Slider Bulunamadı");
 
         var getSliderResponse = _mapper.Map<GetSliderResponse>(slider);
@@ -83,7 +83,7 @@ public class SliderRepository : ISliderRepository
     #region GetSliders
     public async Task<List<GetSlidersResponse>> GetSliders()
     {
-        var sliders = await _applicationDbContext.Sliders.ToListAsync();
+        var sliders = await _applicationDbContext.Sliders.AsNoTracking().ToListAsync();
 
         var getSlidersResponse = _mapper.Map<List<GetSlidersResponse>>(sliders);
 
