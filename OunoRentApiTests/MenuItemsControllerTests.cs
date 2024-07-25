@@ -1,8 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
+using Bogus;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Newtonsoft.Json;
 using Shared.DTO.MenuItem.Request;
 using Shared.DTO.MenuItem.Response;
 
@@ -36,15 +36,18 @@ public class MenuItemsControllerTests : IClassFixture<WebApplicationFactory<Prog
     [Fact]
     public async Task CreateMenuItem_ReturnsSuccess()
     {
-        var body = new CreateMenuItemRequest(
-            Label: "string",
-            TargetUrl: "string",
-            OrderNumber: 1,
-            OnlyToMembers: true,
-            IsActive: true
-        );
+        var faker = new Faker<CreateMenuItemRequest>()
+            .CustomInstantiator(f => new CreateMenuItemRequest(
+                Label: f.Lorem.Sentence(),
+                TargetUrl: f.Internet.DomainName(),
+                OrderNumber: f.Random.Int(1, 10000),
+                OnlyToMembers: f.Random.Bool(),
+                IsActive: f.Random.Bool()
+            ));
 
-        var response = await _client.PostAsJsonAsync("/api/menuitem/", body);
+        var fakeMenuItem = faker.Generate();
+
+        var response = await _client.PostAsJsonAsync("/api/menuitem/", fakeMenuItem);
         var content = await response.Content.ReadFromJsonAsync<MenuItemResponse>();
 
         response.EnsureSuccessStatusCode();
@@ -55,15 +58,18 @@ public class MenuItemsControllerTests : IClassFixture<WebApplicationFactory<Prog
     [Fact]
     public async Task CreateMenuItem_ReturnBadRequest()
     {
-        var body = new CreateMenuItemRequest(
-            Label: null,
-            TargetUrl: "string",
-            OrderNumber: 1,
-            OnlyToMembers: true,
-            IsActive: true
-        );
+        var faker = new Faker<CreateMenuItemRequest>()
+            .CustomInstantiator(f => new CreateMenuItemRequest(
+                Label: f.Random.Bool(1) ? null : f.Lorem.Sentence(), // 20% chance of being null
+                TargetUrl: f.Internet.DomainName(),
+                OrderNumber: f.Random.Int(1, 10000),
+                OnlyToMembers: f.Random.Bool(),
+                IsActive: f.Random.Bool()
+            ));
 
-        var response = await _client.PostAsJsonAsync("/api/menuitem/", body);
+        var fakeMenuItem = faker.Generate();
+
+        var response = await _client.PostAsJsonAsync("/api/menuitem/", fakeMenuItem);
         var content = await response.Content.ReadFromJsonAsync<MenuItemResponse>();
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -124,16 +130,19 @@ public class MenuItemsControllerTests : IClassFixture<WebApplicationFactory<Prog
         //<-------------------------------------------------------->
 
         //Act
-        var updatedMenuItem = new UpdateMenuItemRequest(
-            MenuItemId: menuItem.MenuItemId,
-            Label: "Merhaba",
-            TargetUrl: menuItem.TargetUrl,
-            OrderNumber: menuItem.OrderNumber,
-            OnlyToMembers: menuItem.OnlyToMembers,
-            IsActive: menuItem.IsActive
-        );
+        var faker = new Faker<UpdateMenuItemRequest>()
+            .CustomInstantiator(f => new UpdateMenuItemRequest(
+                MenuItemId: menuItem.MenuItemId,
+                Label: f.Lorem.Sentence(),
+                TargetUrl: f.Internet.DomainName(),
+                OrderNumber: f.Random.Int(1, 10000),
+                OnlyToMembers: f.Random.Bool(),
+                IsActive: f.Random.Bool()
+            ));
 
-        var updateResponse = await _client.PutAsJsonAsync($"/api/menuitem/{menuItem.MenuItemId}", updatedMenuItem);
+        var fakeMenuItem = faker.Generate();
+
+        var updateResponse = await _client.PutAsJsonAsync($"/api/menuitem/{menuItem.MenuItemId}", fakeMenuItem);
         updateResponse.EnsureSuccessStatusCode();
 
         var updateContent = await updateResponse.Content.ReadFromJsonAsync<MenuItemResponse>();
@@ -150,23 +159,26 @@ public class MenuItemsControllerTests : IClassFixture<WebApplicationFactory<Prog
         Assert.NotNull(updateContent);
         Assert.NotNull(getAllContent);
         Assert.Equal(updateContent.MenuItemId, menuItem.MenuItemId);
-        Assert.Equal(getContent.Label, updatedMenuItem.Label);
+        Assert.Equal(getContent.Label, fakeMenuItem.Label);
         Assert.NotEqual(getContent.Label, menuItem.Label);
     }
 
     [Fact]
     public async Task UpdateMenuItem_ReturnsBadRequest()
     {
-        var updatedMenuItem = new UpdateMenuItemRequest(
-            MenuItemId: Guid.Empty,
-            Label: "",
-            TargetUrl: "",
-            OrderNumber: 1,
-            OnlyToMembers: true,
-            IsActive: false
-        );
+        var faker = new Faker<UpdateMenuItemRequest>()
+            .CustomInstantiator(f => new UpdateMenuItemRequest(
+                MenuItemId: Guid.Empty,
+                Label: f.Lorem.Sentence(), // 20% chance of being null
+                TargetUrl: f.Internet.DomainName(),
+                OrderNumber: f.Random.Int(1, 10000),
+                OnlyToMembers: f.Random.Bool(),
+                IsActive: f.Random.Bool()
+            ));
 
-        var response = await _client.PutAsJsonAsync($"/api/MenuItem/49e7697d-7d11-404d-af72-beed870e301c", updatedMenuItem);
+        var fakeMenuItem = faker.Generate();
+
+        var response = await _client.PutAsJsonAsync($"/api/MenuItem/49e7697d-7d11-404d-af72-beed870e301c", fakeMenuItem);
         var content = await response.Content.ReadFromJsonAsync<MenuItemResponse>();
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
