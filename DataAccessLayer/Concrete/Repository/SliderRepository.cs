@@ -54,7 +54,8 @@ public class SliderRepository : ISliderRepository
     public async Task<Guid> DeleteSlider(Guid sliderId)
     {
         var slider = await _applicationDbContext.Sliders
-        .FirstOrDefaultAsync(x => x.SliderId == sliderId);
+        .FirstOrDefaultAsync(x => x.SliderId == sliderId)
+        ?? throw new NotFoundException("Böyle bir öğe bulunamadı.");
 
         _applicationDbContext.Sliders.Remove(slider);
 
