@@ -7,7 +7,7 @@ public interface IMenuItemRepository
 {
     Task<MenuItemResponse> CreateMenuItemAsync(CreateMenuItemRequest createMenuItemRequest);
     Task<MenuItemResponse> UpdateMenuItemAsync(UpdateMenuItemRequest updateMenuItemRequest);
-    Task<MenuItemResponse> DeleteMenuItemAsync(Guid id);
+    Task<Guid> DeleteMenuItemAsync(Guid id);
     Task<GetMenuItemResponse> GetMenuItemAsync(Guid id);
     Task<List<GetMenuItemsResponse>> GetMenuItemsAsync();
 }

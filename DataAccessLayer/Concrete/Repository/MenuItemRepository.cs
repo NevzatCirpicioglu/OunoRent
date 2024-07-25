@@ -38,7 +38,7 @@ public class MenuItemRepository : IMenuItemRepository
         return menuItemResponse;
     }
 
-    public async Task<MenuItemResponse> DeleteMenuItemAsync(Guid id)
+    public async Task<Guid> DeleteMenuItemAsync(Guid id)
     {
         var entity = await _applicationDbContext
             .MenuItems.FirstOrDefaultAsync(mi => mi.MenuItemId == id)
@@ -47,8 +47,7 @@ public class MenuItemRepository : IMenuItemRepository
         _applicationDbContext.MenuItems.Remove(entity);
         await _applicationDbContext.SaveChangesAsync();
 
-        var menuItemResponse = _mapper.Map<MenuItemResponse>(entity);
-        return menuItemResponse;
+        return entity.MenuItemId;
     }
 
     public async Task<GetMenuItemResponse> GetMenuItemAsync(Guid id)
