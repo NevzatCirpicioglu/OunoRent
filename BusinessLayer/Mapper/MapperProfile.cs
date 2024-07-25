@@ -12,29 +12,25 @@ namespace BusinessLayer.Mapper;
 
 public class MapperProfile : Profile
 {
-        public MapperProfile()
-        {
-                CreateMap<Category, GetCategoriesResponse>();
-                CreateMap<Category, GetCategoryResponse>();
-                CreateMap<Category, CategoryResponse>();
+	public MapperProfile()
+	{
+		CreateMap<Category, GetCategoriesResponse>();
+		CreateMap<Category, GetCategoryResponse>();
+		CreateMap<Category, CategoryResponse>();
 
 		CreateMap<Slider, SliderResponse>();
 		CreateMap<Slider, GetSlidersResponse>();
 		CreateMap<Slider, GetSliderResponse>();
 
-                CreateMap<User, UserResponse>();
-                CreateMap<User, GetUserResponse>();
-                CreateMap<User, GetUsersResponse>();
-                CreateMap<User, UserDetailsResponse>();
-                CreateMap<SubCategory, SubCategoryResponse>();
-                CreateMap<SubCategory, GetSubCategoriesResponse>();
-                CreateMap<SubCategory, GetSubCategoryResponse>();
-        }
 		CreateMap<User, UserResponse>();
 		CreateMap<User, GetUserResponse>();
 		CreateMap<User, GetUsersResponse>();
 		CreateMap<User, UserDetailsResponse>();
-
+		
+		CreateMap<SubCategory, SubCategoryResponse>();
+		CreateMap<SubCategory, GetSubCategoriesResponse>();
+		CreateMap<SubCategory, GetSubCategoryResponse>();
+	
 		CreateMap<Blog, BlogResponse>()
 				.ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.Id));
 		CreateMap<Blog, GetBlogResponse>()
