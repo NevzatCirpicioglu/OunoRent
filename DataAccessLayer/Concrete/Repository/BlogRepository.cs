@@ -59,6 +59,7 @@ public class BlogRepository : IBlogRepository
     {
         var result = await _applicationDbContext.Blogs
         .Include(x => x.SubCategory)
+        .AsNoTracking()
         .FirstOrDefaultAsync(b => b.BlogId == blogId)
             ?? throw new NotFoundException("Blog bulunamadı");
 
@@ -73,6 +74,7 @@ public class BlogRepository : IBlogRepository
     {
         var blogList = await _applicationDbContext.Blogs
         .Include(x => x.SubCategory)
+        .AsNoTracking()
         .ToListAsync();
 
         var blogResponse = _mapper.Map<List<GetBlogsResponse>>(blogList);
