@@ -34,6 +34,25 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime?>("CreatedDateTime")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageHorizontalUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageSquareUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("text");
 
@@ -44,41 +63,12 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("OrderNumber")
+                        .HasColumnType("integer");
+
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("EntityLayer.Entities.Product", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Brand")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("CategoryId1")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId1");
-
-                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("EntityLayer.Entities.Slider", b =>
@@ -223,17 +213,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("EntityLayer.Entities.Product", b =>
-                {
-                    b.HasOne("EntityLayer.Entities.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
             modelBuilder.Entity("EntityLayer.Entities.SubCategory", b =>
                 {
                     b.HasOne("EntityLayer.Entities.Category", "Category")
@@ -247,8 +226,6 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Entities.Category", b =>
                 {
-                    b.Navigation("Products");
-
                     b.Navigation("SubCategories");
                 });
 #pragma warning restore 612, 618

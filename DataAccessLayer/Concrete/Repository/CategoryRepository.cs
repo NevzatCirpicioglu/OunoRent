@@ -47,33 +47,45 @@ public class CategoryRepository : ICategoryRepository
     #endregion
 
     #region CreateCategory
-    public async Task<CategoryResponse> CreateCategory(string categoryName)
+    public async Task<CategoryResponse> CreateCategory(CreateCategoryRequest createCategoryRequest)
     {
-
-        await IsEsxitCategory(categoryName);
+        await IsExitsCategory(createCategoryRequest.Name);
 
         var category = new Category();
 
-        category.Name = categoryName;
+        category.Name = createCategoryRequest.Name;
+        category.Description = createCategoryRequest.Description;
+        category.Icon = createCategoryRequest.Icon;
+        category.OrderNumber = createCategoryRequest.OrderNumber;
+        category.ImageHorizontalUrl = createCategoryRequest.ImageHorizontalUrl;
+        category.ImageSquareUrl = createCategoryRequest.ImageSquareUrl;
+        category.IsActive = true;
 
         _applicationDbContext.Categories.Add(category);
 
         await _applicationDbContext.SaveChangesAsync();
 
         var categoryResponse = _mapper.Map<CategoryResponse>(category);
+
         return categoryResponse;
     }
     #endregion
 
     #region UpdateCategory
-    public async Task<CategoryResponse> UpdateCategory(UpdateCategoryRequest request)
+    public async Task<CategoryResponse> UpdateCategory(UpdateCategoryRequest updateCategoryRequest)
     {
         var category = await _applicationDbContext.Categories
-        .Where(x => x.CategoryId == request.CategoryId)
+        .Where(x => x.CategoryId == updateCategoryRequest.CategoryId)
         .FirstOrDefaultAsync()
         ?? throw new NotFoundException("Category not found");
 
-        category.Name = request.CategoryName;
+        category.Name = updateCategoryRequest.Name;
+        category.Description = updateCategoryRequest.Description;
+        category.Icon = updateCategoryRequest.Icon;
+        category.OrderNumber = updateCategoryRequest.OrderNumber;
+        category.ImageHorizontalUrl = updateCategoryRequest.ImageHorizontalUrl;
+        category.ImageSquareUrl = updateCategoryRequest.ImageSquareUrl;
+        category.IsActive =  true;
 
         await _applicationDbContext.SaveChangesAsync();
 
@@ -90,6 +102,8 @@ public class CategoryRepository : ICategoryRepository
         .FirstOrDefaultAsync()
         ?? throw new NotFoundException("Category not found");
 
+        await IsUsedCategory(categoryId);
+
         _applicationDbContext.Categories.Remove(category);
 
         await _applicationDbContext.SaveChangesAsync();
@@ -98,14 +112,14 @@ public class CategoryRepository : ICategoryRepository
     }
     #endregion
 
-    #region IsEsisCategory
+    #region IsExistCategory
     /// <summary>
     /// Verilen kategori adının mevcut olup olmadığını kontrol eder.
     /// </summary>
     /// <param name="categoryName">Kontrol edilecek kategori adı.</param>
     /// <returns>Mevcut kategori olup olmadığını kontrol eder ve kategori mevcutsa istisna fırlatır.</returns>
     /// <exception cref="KeyNotFoundException">Kategori zaten mevcutsa fırlatılır.</exception>
-    private async Task IsEsxitCategory(string categoryName)
+    private async Task IsExitsCategory(string categoryName)
     {
         var isExist = await _applicationDbContext.Categories
         .AnyAsync(x => x.Name == categoryName);
@@ -117,4 +131,16 @@ public class CategoryRepository : ICategoryRepository
     }
     #endregion
 
+    #region IsUsedCategory
+    private async Task IsUsedCategory(Guid categoryId)
+    {
+        var isUsed = await _applicationDbContext.SubCategories
+        .AnyAsync(x => x.CategoryId == categoryId);
+
+        if (isUsed)
+        {
+            throw new IsUsedException("Category is used");
+        }
+    }
+    #endregion
 }

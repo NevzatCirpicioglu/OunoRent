@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BusinessLayer.Middlewares;
 using EntityLayer.Entities;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
 using Shared.DTO.SubCategory.Request;
 using Shared.DTO.SubCategory.Response;
@@ -25,6 +26,8 @@ public class SubCategoryRepository : ISubCategoryRepository
 
     public async Task<SubCategoryResponse> CreateSubCategory(Guid categoryId, CreateSubCategoryRequest createSubCategoryRequest)
     {
+        await IsExistSubCategory(categoryId, createSubCategoryRequest.Name, createSubCategoryRequest.OrderNumber);
+
         var subCategory = new SubCategory();
 
         subCategory.CategoryId = categoryId;
@@ -104,5 +107,26 @@ public class SubCategoryRepository : ISubCategoryRepository
         var subCategoryResponse = _mapper.Map<SubCategoryResponse>(subCategory);
 
         return subCategoryResponse;
+    }
+
+    private async Task IsExistSubCategory(Guid CategoryId, string SubCategoryName, int OrderNumber)
+    {
+        var isExistSubCategory = await _applicationDbContext.SubCategories
+        .Include(x => x.Category)
+        .AnyAsync(x => x.CategoryId == CategoryId && x.Name == SubCategoryName);
+
+        var isExistOrderNumber = await _applicationDbContext.SubCategories
+        .Include(x => x.Category)
+        .AnyAsync(x => x.CategoryId == CategoryId && x.OrderNumber == OrderNumber);
+
+        if (isExistSubCategory)
+        {
+            throw new ConflictException("SubCategory already exist");
+        }
+
+        else if(isExistOrderNumber)
+        {
+            throw new ConflictException("Order number already exist");
+        }
     }
 }

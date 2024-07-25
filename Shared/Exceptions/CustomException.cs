@@ -26,3 +26,8 @@ public class ConflictException : CustomException
 {
     public ConflictException(string message) : base(message, (int)HttpStatusCode.Conflict) { }
 }
+
+public class IsUsedException : CustomException
+{
+    public IsUsedException(string message) : base(message, (int)HttpStatusCode.Conflict) { }
+}

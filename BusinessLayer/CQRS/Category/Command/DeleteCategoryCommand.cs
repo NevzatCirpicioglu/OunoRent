@@ -3,7 +3,7 @@ using Shared.Interface;
 
 namespace BusinessLayer.CQRS.Category.Command;
 
-public sealed record DeleteCategoryCommand(Guid categoryId) : IRequest<Guid>;
+public sealed record DeleteCategoryCommand(Guid CategoryId) : IRequest<Guid>;
 
 /// <summary>
 /// <c>DeleteCategoryCommand</c> komutunu işleyen bir işleyici sınıfıdır.
@@ -20,7 +20,7 @@ internal class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryComm
 
     public async Task<Guid> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
-        return await _categoryRepository.DeleteCategory(request.categoryId);
+        return await _categoryRepository.DeleteCategory(request.CategoryId);
     }
 }
 

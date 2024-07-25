@@ -12,14 +12,9 @@ public class MapperProfile : Profile
 {
         public MapperProfile()
         {
-                CreateMap<Category, GetCategoriesResponse>()
-                         .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Name));
-
-                CreateMap<Category, GetCategoryResponse>()
-                        .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Name));
-
-                CreateMap<Category, CategoryResponse>()
-                        .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Name));
+                CreateMap<Category, GetCategoriesResponse>();
+                CreateMap<Category, GetCategoryResponse>();
+                CreateMap<Category, CategoryResponse>();
 
                 CreateMap<Slider, SliderResponse>()
                         .ForMember(dest => dest.SliderId, opt => opt.MapFrom(src => src.Id));

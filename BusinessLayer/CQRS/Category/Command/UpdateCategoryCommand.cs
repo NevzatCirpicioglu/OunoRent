@@ -5,7 +5,7 @@ using Shared.Interface;
 
 namespace BusinessLayer.CQRS.Category.Command;
 
-public sealed record UpdateCategoryCommand(UpdateCategoryRequest category) : IRequest<CategoryResponse>;
+public sealed record UpdateCategoryCommand(UpdateCategoryRequest Category) : IRequest<CategoryResponse>;
 
 /// <summary>
 /// <c>UpdateCategoryCommand</c> komutunu işleyen bir işleyici sınıfıdır.
@@ -22,7 +22,7 @@ internal class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryComm
 
     public async Task<CategoryResponse> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
-        return await _categoryRepository.UpdateCategory(request.category);
+        return await _categoryRepository.UpdateCategory(request.Category);
     }
 }
 
