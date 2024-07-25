@@ -37,7 +37,7 @@ public class CategoryRepository : ICategoryRepository
     {
         var category = await _applicationDbContext.Categories
         .AsNoTracking()
-        .Where(x => x.Id == categoryId)
+        .Where(x => x.CategoryId == categoryId)
         .FirstOrDefaultAsync()
         ?? throw new NotFoundException("Category not found");
 
@@ -69,7 +69,7 @@ public class CategoryRepository : ICategoryRepository
     public async Task<CategoryResponse> UpdateCategory(UpdateCategoryRequest request)
     {
         var category = await _applicationDbContext.Categories
-        .Where(x => x.Id == request.CategoryId)
+        .Where(x => x.CategoryId == request.CategoryId)
         .FirstOrDefaultAsync()
         ?? throw new NotFoundException("Category not found");
 
@@ -86,7 +86,7 @@ public class CategoryRepository : ICategoryRepository
     public async Task<Guid> DeleteCategory(Guid categoryId)
     {
         var category = await _applicationDbContext.Categories
-        .Where(x => x.Id == categoryId)
+        .Where(x => x.CategoryId == categoryId)
         .FirstOrDefaultAsync()
         ?? throw new NotFoundException("Category not found");
 
@@ -94,7 +94,7 @@ public class CategoryRepository : ICategoryRepository
 
         await _applicationDbContext.SaveChangesAsync();
 
-        return category.Id;
+        return category.CategoryId;
     }
     #endregion
 

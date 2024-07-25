@@ -33,6 +33,7 @@ public static class ServiceExtensions
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<ISliderRepository, SliderRepository>();
+        services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
     }
 
     /// <summary>

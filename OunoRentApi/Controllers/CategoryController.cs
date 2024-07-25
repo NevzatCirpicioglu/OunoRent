@@ -1,9 +1,12 @@
 using BusinessLayer.CQRS.Category.Command;
 using BusinessLayer.CQRS.Category.Query;
+using BusinessLayer.CQRS.SubCategory.Command;
+using BusinessLayer.CQRS.SubCategory.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.DTO.Category.Request;
+using Shared.DTO.SubCategory.Request;
 
 namespace OunoRentApi.Controllers.CategoryController;
 
@@ -50,6 +53,49 @@ public class CategoryController : ControllerBase
     public async Task<IActionResult> DeleteCategory(Guid categoryId)
     {
         var category = await _mediator.Send(new DeleteCategoryCommand(categoryId));
+        return Ok(category);
+    }
+
+    [HttpPost("{categoryId:guid}/subcategory")]
+    public async Task<IActionResult> CreateSubCategory(Guid categoryId, CreateSubCategoryRequest createSubCategoryRequest)
+    {
+        var category = await _mediator.Send(new CreateSubCategoryCommand(
+            CategoryId: categoryId, CreateSubCategoryRequest: createSubCategoryRequest));
+
+        return Ok(category);
+    }
+
+    [HttpGet("{categoryId:guid}/subcategory/{subCategoryId:guid}")]
+    public async Task<IActionResult> GetSubCategory(Guid categoryId, Guid subCategoryId)
+    {
+        var category = await _mediator.Send(new GetSubCategoryQuery(
+            CategoryId: categoryId, SubCategoryId: subCategoryId));
+
+        return Ok(category);
+    }
+
+    [HttpGet("{categoryId:guid}/subcategory")]
+    public async Task<IActionResult> GetSubCategories(Guid categoryId)
+    {
+        var category = await _mediator.Send(new GetSubCategoriesQuery(categoryId));
+
+        return Ok(category);
+    }
+
+    [HttpPut("{categoryId:guid}/subcategory{subCategoryId:guid}")]
+    public async Task<IActionResult> UpdateSubCategory(Guid categoryId, UpdateSubCategoryRequest updateSubCategoryRequest)
+    {
+        var category = await _mediator.Send(new UpdateSubCategoryCommand(
+            CategoryId: categoryId, UpdateSubCategoryRequest: updateSubCategoryRequest));
+
+        return Ok(category);
+    }
+
+    [HttpDelete("subcategory{subCategoryId:guid}")]
+    public async Task<IActionResult> DeleteSubCategory(Guid subCategoryId)
+    {
+        var category = await _mediator.Send(new DeleteSubCategoryCommand(subCategoryId));
+
         return Ok(category);
     }
 }
