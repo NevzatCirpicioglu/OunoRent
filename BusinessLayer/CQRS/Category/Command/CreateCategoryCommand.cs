@@ -25,7 +25,7 @@ internal class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryComm
 
     public async Task<CategoryResponse> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
-        var category = await _categoryRepository.CreateCategory(request.Category.CategoryName);
+        var category = await _categoryRepository.CreateCategory(request.Category);
 
         var categoryResponse = _mapper.Map<CategoryResponse>(category);
 

@@ -1,11 +1,15 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EntityLayer.Entities;
 
-public class Category : AuditTrailer
+public class SubCategory : AuditTrailer
 {
     [Key]
-    public Guid CategoryId { get; set; }
+    public Guid SubCategoryId { get; set; }
 
     public string Name { get; set; }
 
@@ -15,13 +19,11 @@ public class Category : AuditTrailer
 
     public int OrderNumber { get; set; }
 
-    public string ImageHorizontalUrl { get; set; }
-
-    public string ImageSquareUrl { get; set; }
-
     public Boolean IsActive { get; set; }
 
     // Relationships
 
-    public ICollection<SubCategory> SubCategories { get; set; }
+    public Guid CategoryId { get; set; }
+
+    public Category Category { get; set; }
 }

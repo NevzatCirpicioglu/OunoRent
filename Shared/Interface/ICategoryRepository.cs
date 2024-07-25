@@ -24,7 +24,7 @@ public interface ICategoryRepository
     /// </summary>
     /// <param name="categoryName">Oluşturulacak kategorinin adı.</param>
     /// <returns>Oluşturulan kategorinin bilgilerini içeren CategoryResponse nesnesi.</returns>
-    Task<CategoryResponse> CreateCategory(string categoryName);
+    Task<CategoryResponse> CreateCategory(CreateCategoryRequest createCategoryRequest);
 
     /// <summary>
     /// Verilen güncelleme isteğine göre bir kategoriyi günceller ve kategori bilgilerini içeren bir nesne döner.
