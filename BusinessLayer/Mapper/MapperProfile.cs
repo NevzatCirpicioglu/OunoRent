@@ -31,8 +31,7 @@ public class MapperProfile : Profile
 		CreateMap<SubCategory, GetSubCategoriesResponse>();
 		CreateMap<SubCategory, GetSubCategoryResponse>();
 
-		CreateMap<Blog, BlogResponse>()
-				.ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.BlogId));
+		CreateMap<Blog, BlogResponse>();
 		CreateMap<Blog, GetBlogResponse>()
 				.ForMember(dest => dest.SubCategoryName, opt => opt.MapFrom(src => src.SubCategory.Name));
 		CreateMap<Blog, GetBlogsResponse>()
