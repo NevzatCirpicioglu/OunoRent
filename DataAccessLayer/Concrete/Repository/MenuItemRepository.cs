@@ -22,7 +22,7 @@ public class MenuItemRepository : IMenuItemRepository
 
     public async Task<MenuItemResponse> CreateMenuItemAsync(CreateMenuItemRequest createMenuItemRequest)
     {
-        var existingMenuItem = await _applicationDbContext.MenuItems.FirstOrDefaultAsync(mi =>
+        var existingMenuItem = await _applicationDbContext.MenuItems.AsNoTracking().FirstOrDefaultAsync(mi =>
             mi.OrderNumber == createMenuItemRequest.OrderNumber);
 
         if (existingMenuItem != null && existingMenuItem.IsActive)
@@ -48,7 +48,7 @@ public class MenuItemRepository : IMenuItemRepository
     public async Task<Guid> DeleteMenuItemAsync(Guid id)
     {
         var entity = await _applicationDbContext
-            .MenuItems.FirstOrDefaultAsync(mi => mi.MenuItemId == id)
+            .MenuItems.AsNoTracking().FirstOrDefaultAsync(mi => mi.MenuItemId == id)
             ?? throw new NotFoundException("Menü öğesi bulunamadı.");
 
         _applicationDbContext.MenuItems.Remove(entity);
@@ -80,7 +80,8 @@ public class MenuItemRepository : IMenuItemRepository
         if (!await IsExistAsync(mi => mi.MenuItemId == updateMenuItemRequest.MenuItemId))
             throw new NotFoundException("Menü öğesi bulunamadı");
 
-        var existingMenuItem = await _applicationDbContext.MenuItems.FirstOrDefaultAsync(mi =>
+        var existingMenuItem = await _applicationDbContext.MenuItems
+            .AsNoTracking().FirstOrDefaultAsync(mi =>
             mi.OrderNumber == updateMenuItemRequest.OrderNumber);
 
         if (existingMenuItem != null && existingMenuItem.IsActive
