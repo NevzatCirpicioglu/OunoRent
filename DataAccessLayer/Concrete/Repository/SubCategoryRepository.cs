@@ -24,6 +24,7 @@ public class SubCategoryRepository : ISubCategoryRepository
         _mapper = mapper;
     }
 
+    #region CreateSubCategory
     public async Task<SubCategoryResponse> CreateSubCategory(Guid categoryId, CreateSubCategoryRequest createSubCategoryRequest)
     {
         await IsExistSubCategory(categoryId, createSubCategoryRequest.Name, createSubCategoryRequest.OrderNumber);
@@ -46,6 +47,9 @@ public class SubCategoryRepository : ISubCategoryRepository
         return categoryResponse;
     }
 
+    #endregion
+
+    #region DeleteSubCategory
     public async Task<Guid> DeleteSubCategory(Guid subCategoryId)
     {
         var subCategory = await _applicationDbContext.SubCategories
@@ -61,6 +65,9 @@ public class SubCategoryRepository : ISubCategoryRepository
         return subCategoryId;
     }
 
+    #endregion
+
+    #region GetSubCategories
     public async Task<List<GetSubCategoriesResponse>> GetSubCategories(Guid categoryId)
     {
         var subCategoriesList = await _applicationDbContext.SubCategories
@@ -74,6 +81,9 @@ public class SubCategoryRepository : ISubCategoryRepository
         return subCategoriesResponse;
     }
 
+    #endregion
+
+    #region GetSubCategory
     public async Task<GetSubCategoryResponse> GetSubCategory(Guid categoryId, Guid subCategoryId)
     {
         var subCategory = await _applicationDbContext.SubCategories
@@ -87,10 +97,13 @@ public class SubCategoryRepository : ISubCategoryRepository
         return subCategoryResponse;
     }
 
+    #endregion
+
+    #region UpdateSubCategory
     public async Task<SubCategoryResponse> UpdateSubCategory(Guid categoryId, UpdateSubCategoryRequest updateSubCategoryRequest)
     {
         var subCategory = await _applicationDbContext.SubCategories
-        .Include(x=> x.Category)
+        .Include(x => x.Category)
         .Where(x => x.CategoryId == categoryId && x.SubCategoryId == updateSubCategoryRequest.SubCategoryId)
         .FirstOrDefaultAsync()
         ?? throw new NotFoundException("SubCategory not found");
@@ -109,6 +122,9 @@ public class SubCategoryRepository : ISubCategoryRepository
         return subCategoryResponse;
     }
 
+    #endregion
+
+    #region IsExistSubCategory
     private async Task IsExistSubCategory(Guid CategoryId, string SubCategoryName, int OrderNumber)
     {
         var isExistSubCategory = await _applicationDbContext.SubCategories
@@ -124,9 +140,12 @@ public class SubCategoryRepository : ISubCategoryRepository
             throw new ConflictException("SubCategory already exist");
         }
 
-        else if(isExistOrderNumber)
+        else if (isExistOrderNumber)
         {
             throw new ConflictException("Order number already exist");
         }
     }
+
+    #endregion
+
 }
