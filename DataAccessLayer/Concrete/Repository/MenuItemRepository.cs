@@ -20,14 +20,13 @@ public class MenuItemRepository : IMenuItemRepository
         _mapper = mapper;
     }
 
+    #region CreateMenuItem
+
     public async Task<MenuItemResponse> CreateMenuItemAsync(CreateMenuItemRequest createMenuItemRequest)
     {
-        var existingMenuItem = await _applicationDbContext.MenuItems.AsNoTracking().FirstOrDefaultAsync(mi =>
-            mi.OrderNumber == createMenuItemRequest.OrderNumber);
+        await IsExistGeneric(x => x.Label == createMenuItemRequest.Label);
 
-        if (existingMenuItem != null && existingMenuItem.IsActive)
-            throw new ConflictException("Aynı sıra numarasına sahip iki adet slider mevcut olamaz." +
-                "Lütfen her slider için benzersiz bir sıra numarası kullanın.");
+        await IsExistOrderNumber(createMenuItemRequest.OrderNumber);
 
         var menuItem = new MenuItem
         {
@@ -38,76 +37,120 @@ public class MenuItemRepository : IMenuItemRepository
             IsActive = createMenuItemRequest.IsActive,
         };
 
-        await _applicationDbContext.MenuItems.AddAsync(menuItem);
+        _applicationDbContext.MenuItems.Add(menuItem);
+
         await _applicationDbContext.SaveChangesAsync();
 
         var menuItemResponse = _mapper.Map<MenuItemResponse>(menuItem);
+
         return menuItemResponse;
     }
 
-    public async Task<Guid> DeleteMenuItemAsync(Guid id)
+
+    #endregion
+ 
+    #region DeleteMenuItem
+
+    public async Task<Guid> DeleteMenuItemAsync(Guid menuItemId)
     {
-        var entity = await _applicationDbContext
-            .MenuItems.AsNoTracking().FirstOrDefaultAsync(mi => mi.MenuItemId == id)
-            ?? throw new NotFoundException("Menü öğesi bulunamadı.");
+        var entity = await _applicationDbContext.MenuItems
+                         .AsNoTracking()
+                         .FirstOrDefaultAsync(x => x.MenuItemId == menuItemId)
+                     ?? throw new NotFoundException("Menu item not found.");
 
         _applicationDbContext.MenuItems.Remove(entity);
+
         await _applicationDbContext.SaveChangesAsync();
 
         return entity.MenuItemId;
     }
 
-    public async Task<GetMenuItemResponse> GetMenuItemAsync(Guid id)
-    {
-        var entity = await _applicationDbContext.MenuItems
-            .AsNoTracking().FirstOrDefaultAsync(mi => mi.MenuItemId == id)
-            ?? throw new NotFoundException("Menü öğesi bulunamadı");
 
-        var menuItemResponse = _mapper.Map<GetMenuItemResponse>(entity);
+    #endregion
+
+    #region GetMenuItem
+
+    public async Task<GetMenuItemResponse> GetMenuItemAsync(Guid menuItemId)
+    {
+        var menuItem = await _applicationDbContext.MenuItems
+                           .AsNoTracking()
+                           .FirstOrDefaultAsync(x => x.MenuItemId == menuItemId)
+                       ?? throw new NotFoundException("Menu not found");
+
+        var menuItemResponse = _mapper.Map<GetMenuItemResponse>(menuItem);
+        
         return menuItemResponse;
     }
 
+
+    #endregion
+ 
+    #region GetMenuItems
+
     public async Task<List<GetMenuItemsResponse>> GetMenuItemsAsync()
     {
-        var entity = await _applicationDbContext.MenuItems.AsNoTracking().ToListAsync();
+        var entity = await _applicationDbContext.MenuItems
+            .AsNoTracking()
+            .ToListAsync();
+
         var menuItemResponse = _mapper.Map<List<GetMenuItemsResponse>>(entity);
 
         return menuItemResponse;
     }
 
+
+    #endregion
+  
+    #region UpdateMenuItem
+
     public async Task<MenuItemResponse> UpdateMenuItemAsync(UpdateMenuItemRequest updateMenuItemRequest)
     {
-        if (!await IsExistAsync(mi => mi.MenuItemId == updateMenuItemRequest.MenuItemId))
-            throw new NotFoundException("Menü öğesi bulunamadı");
+        await IsExistGeneric(x => x.Label == updateMenuItemRequest.Label);
 
-        var existingMenuItem = await _applicationDbContext.MenuItems
-            .AsNoTracking().FirstOrDefaultAsync(mi =>
-            mi.OrderNumber == updateMenuItemRequest.OrderNumber);
+        await IsExistOrderNumber(updateMenuItemRequest.OrderNumber);
 
-        if (existingMenuItem != null && existingMenuItem.IsActive
-            && existingMenuItem.MenuItemId != updateMenuItemRequest.MenuItemId)
-            throw new ConflictException("Aynı sıra numarasına sahip iki adet slider mevcut olamaz." +
-                "Lütfen her slider için benzersiz bir sıra numarası kullanın.");
+        var menuItem = await _applicationDbContext.MenuItems
+                           .Where(x => x.MenuItemId == updateMenuItemRequest.MenuItemId)
+                           .FirstOrDefaultAsync()
+                       ?? throw new NotFoundException("Menu item not found");
 
-        var entity = new MenuItem
-        {
-            MenuItemId = updateMenuItemRequest.MenuItemId,
-            Label = updateMenuItemRequest.Label,
-            TargetUrl = updateMenuItemRequest.TargetUrl,
-            OrderNumber = updateMenuItemRequest.OrderNumber,
-            OnlyToMembers = updateMenuItemRequest.OnlyToMembers,
-            IsActive = updateMenuItemRequest.IsActive,
-        };
+        menuItem.Label = updateMenuItemRequest.Label;
+        menuItem.TargetUrl = updateMenuItemRequest.TargetUrl;
+        menuItem.OrderNumber = updateMenuItemRequest.OrderNumber;
+        menuItem.OnlyToMembers = updateMenuItemRequest.OnlyToMembers;
+        menuItem.IsActive = updateMenuItemRequest.IsActive;
 
-        _applicationDbContext.MenuItems.Update(entity);
+        _applicationDbContext.MenuItems.Update(menuItem);
+
         await _applicationDbContext.SaveChangesAsync();
 
-        var menuItemResponse = _mapper.Map<MenuItemResponse>(entity);
+        var menuItemResponse = _mapper.Map<MenuItemResponse>(menuItem);
+
         return menuItemResponse;
     }
 
-    private async Task<bool> IsExistAsync(Expression<Func<MenuItem, bool>> filter)
+
+    #endregion
+  
+    #region IsExist
+
+    private async Task<bool> IsExistGeneric(Expression<Func<MenuItem, bool>> filter)
     {
         return await _applicationDbContext.MenuItems.AnyAsync(filter);
     }
+
+    private async Task IsExistOrderNumber(int orderNumber)
+    {
+        var isExistOrderNumber = await _applicationDbContext.MenuItems
+            .AnyAsync(x => x.OrderNumber == orderNumber);
+
+        if (isExistOrderNumber)
+            throw new ConflictException("Order number already exists");
+    }
+
+
+    #endregion
+    
+   
+    
 }
