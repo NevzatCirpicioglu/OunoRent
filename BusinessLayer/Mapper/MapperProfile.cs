@@ -32,12 +32,10 @@ public class MapperProfile : Profile
 		CreateMap<SubCategory, GetSubCategoriesResponse>();
 		CreateMap<SubCategory, GetSubCategoryResponse>();
 
-		CreateMap<Blog, BlogResponse>()
-				.ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.Id));
+		CreateMap<Blog, BlogResponse>();
 		CreateMap<Blog, GetBlogResponse>()
-				.ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.Id));
-		CreateMap<Blog, GetBlogsResponse>()
-				.ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.Id));
+		.ForMember(dest => dest.SubCategoryName, opt => opt.MapFrom(src => src.SubCategory.Name));
+		CreateMap<Blog, GetBlogsResponse>();
 
 		CreateMap<MenuItem, MenuItemResponse>();
 		CreateMap<MenuItem, GetMenuItemResponse>();
