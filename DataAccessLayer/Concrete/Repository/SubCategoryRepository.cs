@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using BusinessLayer.Middlewares;
@@ -27,7 +28,9 @@ public class SubCategoryRepository : ISubCategoryRepository
     #region CreateSubCategory
     public async Task<SubCategoryResponse> CreateSubCategory(Guid categoryId, CreateSubCategoryRequest createSubCategoryRequest)
     {
-        await IsExistSubCategory(categoryId, createSubCategoryRequest.Name, createSubCategoryRequest.OrderNumber);
+        await IsExistGeneric(x=> x.Name == createSubCategoryRequest.Name);
+
+        await IsExistOrderNumber(createSubCategoryRequest.OrderNumber);
 
         var subCategory = new SubCategory();
 
@@ -108,6 +111,8 @@ public class SubCategoryRepository : ISubCategoryRepository
         .FirstOrDefaultAsync()
         ?? throw new NotFoundException("SubCategory not found");
 
+        await IsExistOrderNumber(updateSubCategoryRequest.OrderNumber);
+
         subCategory.Name = updateSubCategoryRequest.Name;
         subCategory.Description = updateSubCategoryRequest.Description;
         subCategory.Icon = updateSubCategoryRequest.Icon;
@@ -125,25 +130,25 @@ public class SubCategoryRepository : ISubCategoryRepository
     #endregion
 
     #region IsExistSubCategory
-    private async Task IsExistSubCategory(Guid CategoryId, string SubCategoryName, int OrderNumber)
+    private async Task IsExistOrderNumber(int orderNumber)
     {
-        var isExistSubCategory = await _applicationDbContext.SubCategories
-        .Include(x => x.Category)
-        .AnyAsync(x => x.CategoryId == CategoryId && x.Name == SubCategoryName);
-
         var isExistOrderNumber = await _applicationDbContext.SubCategories
-        .Include(x => x.Category)
-        .AnyAsync(x => x.CategoryId == CategoryId && x.OrderNumber == OrderNumber);
+            .AnyAsync(x => x.OrderNumber == orderNumber);
 
-        if (isExistSubCategory)
+        if (isExistOrderNumber)
         {
-            throw new ConflictException("SubCategory already exist");
+            throw new ConflictException("Order number already exists");
         }
+    }
 
-        else if (isExistOrderNumber)
-        {
-            throw new ConflictException("Order number already exist");
-        }
+    private async Task<bool> IsExistGeneric(Expression<Func<SubCategory, bool>> filter)
+    {
+        var result = await _applicationDbContext.SubCategories.AnyAsync(filter);
+
+        if (result)
+            throw new ConflictException("Already exist");
+
+        return result;
     }
 
     #endregion

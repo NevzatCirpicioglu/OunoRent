@@ -27,7 +27,11 @@ public class BlogRepository : IBlogRepository
         var isExistSubCategory = await _applicationDbContext.SubCategories
         .AnyAsync(x => x.SubCategoryId == createBlogRequest.SubCategoryId);
         if (!isExistSubCategory)
-            throw new NotFoundException("Alt kategori bulunamadı");
+            throw new NotFoundException("SubCategory not found");
+        
+        await IsExistGeneric(x => x.OrderNumber == createBlogRequest.OrderNumber);
+
+        await IsExistOrderNumber(createBlogRequest.OrderNumber);
 
         var sanitizer = new HtmlSanitizer();
         var blog = new Blog
@@ -61,7 +65,7 @@ public class BlogRepository : IBlogRepository
         .Include(x => x.SubCategory)
         .AsNoTracking()
         .FirstOrDefaultAsync(b => b.BlogId == blogId)
-            ?? throw new NotFoundException("Blog bulunamadı");
+            ?? throw new NotFoundException("Blog not found");
 
         var blogResponse = _mapper.Map<GetBlogResponse>(result);
 
@@ -83,22 +87,13 @@ public class BlogRepository : IBlogRepository
     }
     #endregion
 
-    #region IsExist
-    private async Task<bool> IsExistAsync(Expression<Func<Blog, bool>> filter)
-    {
-        var result = await _applicationDbContext.Blogs.AnyAsync(filter);
-
-        return result;
-    }
-    #endregion
-
     #region DeleteBlog
     public async Task<Guid> DeleteBlog(Guid blogId)
     {
         var blog = await _applicationDbContext.Blogs
             .Where(x => x.BlogId == blogId)
             .FirstOrDefaultAsync()
-        ?? throw new NotFoundException("Blog bulunamadı");
+        ?? throw new NotFoundException("Blog not found");
 
         _applicationDbContext.Blogs.Remove(blog);
 
@@ -115,12 +110,14 @@ public class BlogRepository : IBlogRepository
         var blog = await _applicationDbContext.Blogs
             .Where(x => x.BlogId == updateBlogRequest.BlogId)
             .FirstOrDefaultAsync()
-        ?? throw new NotFoundException("Blog bulunamadı");
+        ?? throw new NotFoundException("Blog not found");
 
         var isExistSubCategory = await _applicationDbContext.SubCategories
          .AnyAsync(x => x.SubCategoryId == updateBlogRequest.SubCategoryId);
         if (!isExistSubCategory)
-            throw new NotFoundException("Alt kategori bulunamadı");
+            throw new NotFoundException("SubCategory not found");
+
+        await IsExistOrderNumber(updateBlogRequest.OrderNumber);
 
         blog.Title = updateBlogRequest.Title;
         blog.Tags = updateBlogRequest.Tags;
@@ -137,6 +134,30 @@ public class BlogRepository : IBlogRepository
         var blogResponse = _mapper.Map<BlogResponse>(blog);
 
         return blogResponse;
+    }
+
+    #endregion
+    
+    #region IsExist
+    private async Task IsExistOrderNumber(int orderNumber)
+    {
+        var isExistOrderNumber = await _applicationDbContext.Blogs
+            .AnyAsync(x => x.OrderNumber == orderNumber);
+
+        if (isExistOrderNumber)
+        {
+            throw new ConflictException("Order number already exists");
+        }
+    }
+
+    private async Task<bool> IsExistGeneric(Expression<Func<Blog, bool>> filter)
+    {
+        var result = await _applicationDbContext.Blogs.AnyAsync(filter);
+
+        if (result)
+            throw new ConflictException("Already exist");
+
+        return result;
     }
 
     #endregion
