@@ -6,6 +6,8 @@ public class GetCategoriesResponse
 
     public string Name { get; set; }
 
+    public int OrderNumber { get; set; }
+
     public List<SubCategory> SubCategories { get; set; }
     
     public class SubCategory

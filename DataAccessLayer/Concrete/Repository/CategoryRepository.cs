@@ -71,7 +71,7 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<CategoryResponse> CreateCategory(CreateCategoryRequest createCategoryRequest)
     {
-        await IsExitsCategory(createCategoryRequest.Name);
+        await IsExitsCategory(createCategoryRequest.Name, createCategoryRequest.OrderNumber);
 
         var category = new Category();
 
@@ -147,14 +147,22 @@ public class CategoryRepository : ICategoryRepository
     /// <param name="categoryName">Kontrol edilecek kategori adı.</param>
     /// <returns>Mevcut kategori olup olmadığını kontrol eder ve kategori mevcutsa istisna fırlatır.</returns>
     /// <exception cref="KeyNotFoundException">Kategori zaten mevcutsa fırlatılır.</exception>
-    private async Task IsExitsCategory(string categoryName)
+    private async Task IsExitsCategory(string categoryName, int orderNumber)
     {
         var isExist = await _applicationDbContext.Categories
             .AnyAsync(x => x.Name == categoryName);
-
+        
+        var isExistOrderNumber = await _applicationDbContext.Categories
+            .AnyAsync(x => x.OrderNumber == orderNumber);
+        
         if (isExist)
         {
             throw new ConflictException("Category already exist");
+        }
+        
+        if (isExistOrderNumber)
+        {
+            throw new ConflictException("Order number already exists");
         }
     }
 
