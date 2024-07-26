@@ -13,4 +13,5 @@ public class GetBlogsResponse : GenericResponse
     public string LargeImageUrl { get; set; }
     public string SmallImageUrl { get; set; }
     public bool IsActive { get; set; }
+
 }
