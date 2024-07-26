@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Routing;
+using Shared.DTO;
 
 namespace BusinessLayer.Middlewares;
 
@@ -34,11 +37,12 @@ public class ExceptionMiddleware
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static async Task<Task> HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
         int statusCode;
         string message;
+        var errors = new Dictionary<string, List<string>>();
 
         if (exception is CustomException customException)
         {
@@ -51,23 +55,13 @@ public class ExceptionMiddleware
             message = "Internal Server Error from the custom middleware.";
         }
 
+        errors.Add("messages", new List<string> {message});
         context.Response.StatusCode = statusCode;
-
-        return context.Response.WriteAsync(new ErrorDetails()
+        
+        return context.Response.WriteAsJsonAsync(new ErrorResponse()
         {
             StatusCode = statusCode,
-            Message = message
-        }.ToString());
-    }
-}
-
-public class ErrorDetails
-{
-    public int StatusCode { get; set; }
-    public string Message { get; set; }
-
-    public override string ToString()
-    {
-        return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+            Errors = errors
+        });
     }
 }

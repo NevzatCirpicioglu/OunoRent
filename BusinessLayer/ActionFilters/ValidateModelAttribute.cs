@@ -22,7 +22,7 @@ public class ValidateModelAttribute : ActionFilterAttribute
             var validationResult = validator.Validate(new ValidationContext<object>(argument));
             if (!validationResult.IsValid)
             {
-                var errorResponse = new ValidationErrorResponse
+                var errorResponse = new ErrorResponse
                 {
                     StatusCode = (int)StatusCodes.Status400BadRequest
                 };
