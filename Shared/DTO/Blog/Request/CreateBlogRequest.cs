@@ -9,4 +9,5 @@ public class CreateBlogRequest
     public string Tags { get; set; }
     public string Slug { get; set; }
     public int OrderNumber { get; set; }
+    public Guid SubCategoryId { get; set; }
 }

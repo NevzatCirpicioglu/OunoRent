@@ -4,7 +4,7 @@ namespace EntityLayer.Entities;
 
 public class Blog : AuditTrailer
 {
-    public Guid Id { get; set; }
+    public Guid BlogId { get; set; }
     public string Title { get; set; }
     public string Body { get; set; }
     public string LargeImageUrl { get; set; }
@@ -14,4 +14,9 @@ public class Blog : AuditTrailer
     public int OrderNumber { get; set; }
     public DateTime Date { get; set; }
     public bool IsActive { get; set; }
+
+    // Relationships
+    
+    public SubCategory? SubCategory { get; set; }
+    public Guid? SubCategoryId { get; set; }
 }

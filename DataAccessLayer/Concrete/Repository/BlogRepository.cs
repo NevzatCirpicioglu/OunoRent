@@ -24,6 +24,11 @@ public class BlogRepository : IBlogRepository
     #region CreateBlog
     public async Task<BlogResponse> CreateBlogAsync(CreateBlogRequest createBlogRequest)
     {
+        var isExistSubCategory = await _applicationDbContext.SubCategories
+        .AnyAsync(x => x.SubCategoryId == createBlogRequest.SubCategoryId);
+        if (!isExistSubCategory)
+            throw new NotFoundException("Alt kategori bulunamadı");
+
         var sanitizer = new HtmlSanitizer();
         var blog = new Blog
         {
@@ -33,6 +38,7 @@ public class BlogRepository : IBlogRepository
             SmallImageUrl = createBlogRequest.SmallImageUrl,
             IsActive = true,
             Date = DateTime.UtcNow,
+            SubCategoryId = createBlogRequest.SubCategoryId,
             Body = sanitizer.Sanitize(createBlogRequest.Body),
             Title = sanitizer.Sanitize(createBlogRequest.Title),
             Tags = sanitizer.Sanitize(createBlogRequest.Tags)
@@ -42,8 +48,6 @@ public class BlogRepository : IBlogRepository
 
         await _applicationDbContext.SaveChangesAsync();
 
-        blog.Id = result.Entity.Id;
-
         var blogResponse = _mapper.Map<BlogResponse>(blog);
 
         return blogResponse;
@@ -51,7 +55,7 @@ public class BlogRepository : IBlogRepository
     #endregion
 
     #region GetBlog
-    public async Task<GetBlogResponse> GetBlogAsync(Guid id)
+    public async Task<GetBlogResponse> GetBlogAsync(Guid blogId)
     {
         var result = await _applicationDbContext.Blogs
         .Include(x => x.SubCategory)
@@ -60,6 +64,7 @@ public class BlogRepository : IBlogRepository
             ?? throw new NotFoundException("Blog bulunamadı");
 
         var blogResponse = _mapper.Map<GetBlogResponse>(result);
+
         return blogResponse;
     }
     #endregion
@@ -72,7 +77,8 @@ public class BlogRepository : IBlogRepository
         .AsNoTracking()
         .ToListAsync();
 
-        var blogResponse = _mapper.Map<List<GetBlogsResponse>>(result);
+        var blogResponse = _mapper.Map<List<GetBlogsResponse>>(blogList);
+
         return blogResponse;
     }
     #endregion
@@ -82,9 +88,6 @@ public class BlogRepository : IBlogRepository
     {
         var result = await _applicationDbContext.Blogs.AnyAsync(filter);
 
-        if (result)
-            throw new ConflictException("Böyle bir başlık zaten var");
-
         return result;
     }
     #endregion
@@ -93,7 +96,7 @@ public class BlogRepository : IBlogRepository
     public async Task<Guid> DeleteBlog(Guid blogId)
     {
         var blog = await _applicationDbContext.Blogs
-            .Where(x => x.Id == blogId)
+            .Where(x => x.BlogId == blogId)
             .FirstOrDefaultAsync()
         ?? throw new NotFoundException("Blog bulunamadı");
 
@@ -101,7 +104,7 @@ public class BlogRepository : IBlogRepository
 
         await _applicationDbContext.SaveChangesAsync();
 
-        return blog.Id;
+        return blog.BlogId;
     }
 
     #endregion
@@ -110,17 +113,23 @@ public class BlogRepository : IBlogRepository
     public async Task<BlogResponse> UpdateBlog(UpdateBlogRequest updateBlogRequest)
     {
         var blog = await _applicationDbContext.Blogs
-            .Where(x => x.Id == updateBlogRequest.BlogId)
+            .Where(x => x.BlogId == updateBlogRequest.BlogId)
             .FirstOrDefaultAsync()
         ?? throw new NotFoundException("Blog bulunamadı");
 
+        var isExistSubCategory = await _applicationDbContext.SubCategories
+         .AnyAsync(x => x.SubCategoryId == updateBlogRequest.SubCategoryId);
+        if (!isExistSubCategory)
+            throw new NotFoundException("Alt kategori bulunamadı");
+
         blog.Title = updateBlogRequest.Title;
-        blog.LargeImageUrl = updateBlogRequest.LargeImgUrl;
-        blog.SmallImageUrl = updateBlogRequest.SmallImgUrl;
         blog.Tags = updateBlogRequest.Tags;
         blog.Slug = updateBlogRequest.Slug;
         blog.OrderNumber = updateBlogRequest.OrderNumber;
         blog.Date = updateBlogRequest.Date;
+        blog.SubCategoryId = updateBlogRequest.SubCategoryId;
+        blog.LargeImageUrl = updateBlogRequest.LargeImgUrl;
+        blog.SmallImageUrl = updateBlogRequest.SmallImgUrl;
         blog.IsActive = updateBlogRequest.IsActive;
 
         await _applicationDbContext.SaveChangesAsync();
