@@ -160,34 +160,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("MenuItems");
                 });
 
-            modelBuilder.Entity("EntityLayer.Entities.Product", b =>
-                {
-                    b.Property<Guid>("MenuItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Label")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("OnlyToMembers")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("OrderNumber")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("TargetUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("MenuItemId");
-
-                    b.ToTable("MenuItems");
-                });
-
             modelBuilder.Entity("EntityLayer.Entities.Slider", b =>
                 {
                     b.Property<Guid>("SliderId")

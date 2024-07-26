@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Shared.DTO.SubCategory.Response;
 
-public class GetSubCategoryResponse : GenericResponse
+public class GetSubCategoryResponse 
 {
     public Guid CategoryId { get; set; }    
 
