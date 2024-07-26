@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using BusinessLayer.Middlewares;
 using EntityLayer.Entities;
@@ -10,7 +11,6 @@ namespace DataAccessLayer.Concrete.Repository;
 
 public class SliderRepository : ISliderRepository
 {
-
     private readonly ApplicationDbContext _applicationDbContext;
     private readonly IMapper _mapper;
 
@@ -21,9 +21,12 @@ public class SliderRepository : ISliderRepository
     }
 
     #region CreateSlider
+
     public async Task<SliderResponse> CreateSlider(CreateSliderRequest createSliderRequest)
     {
-        await IsEsxitSlider(createSliderRequest.Title, createSliderRequest.OrderNumber);
+        await IsExistGeneric(x => x.Title == createSliderRequest.Title);
+
+        await IsExistOrderNumber(createSliderRequest.OrderNumber);
 
         var slider = new Slider
         {
@@ -45,17 +48,17 @@ public class SliderRepository : ISliderRepository
         var sliderResponse = _mapper.Map<SliderResponse>(slider);
 
         return sliderResponse;
-
     }
 
     #endregion
 
     #region DeleteSlider
+
     public async Task<Guid> DeleteSlider(Guid sliderId)
     {
         var slider = await _applicationDbContext.Sliders
-        .FirstOrDefaultAsync(x => x.SliderId == sliderId)
-        ?? throw new NotFoundException("Böyle bir öğe bulunamadı.");
+                         .FirstOrDefaultAsync(x => x.SliderId == sliderId)
+                     ?? throw new NotFoundException("Slider not found");
 
         _applicationDbContext.Sliders.Remove(slider);
 
@@ -67,11 +70,12 @@ public class SliderRepository : ISliderRepository
     #endregion
 
     #region GetSlider
+
     public async Task<GetSliderResponse> GetSlider(Guid sliderId)
     {
         var slider = await _applicationDbContext.Sliders
-        .AsNoTracking().FirstOrDefaultAsync(x => x.SliderId == sliderId)
-        ?? throw new NotFoundException("Slider Bulunamadı");
+                         .AsNoTracking().FirstOrDefaultAsync(x => x.SliderId == sliderId)
+                     ?? throw new NotFoundException("Slider not found");
 
         var getSliderResponse = _mapper.Map<GetSliderResponse>(slider);
 
@@ -81,6 +85,7 @@ public class SliderRepository : ISliderRepository
     #endregion
 
     #region GetSliders
+
     public async Task<List<GetSlidersResponse>> GetSliders()
     {
         var sliders = await _applicationDbContext.Sliders.AsNoTracking().ToListAsync();
@@ -93,13 +98,14 @@ public class SliderRepository : ISliderRepository
     #endregion
 
     #region UpdateSlider
+
     public async Task<SliderResponse> UpdateSlider(UpdateSliderRequest updateSliderRequest)
     {
         var slider = await _applicationDbContext.Sliders.FirstOrDefaultAsync(
-            x => x.SliderId == updateSliderRequest.SliderId)
-                ?? throw new NotFoundException("Slider Bulunamadı");
+                         x => x.SliderId == updateSliderRequest.SliderId)
+                     ?? throw new NotFoundException("Slider not found");
 
-        await IsEsxitSlider(updateSliderRequest.Title, updateSliderRequest.OrderNumber);
+        await IsExistOrderNumber(updateSliderRequest.OrderNumber);
 
         slider.Title = updateSliderRequest.Title;
         slider.MainImageUrl = updateSliderRequest.MainImageUrl;
@@ -120,27 +126,28 @@ public class SliderRepository : ISliderRepository
 
     #endregion
 
-    #region IsEsxitSlider
-    private async Task IsEsxitSlider(string title, int orderNumber)
+    #region IsExist
+
+    private async Task IsExistOrderNumber(int orderNumber)
     {
-        var isExistSlider = await _applicationDbContext.Sliders
-        .AnyAsync(x => x.Title == title);
-
         var isExistOrderNumber = await _applicationDbContext.Sliders
-        .AnyAsync(x => x.OrderNumber == orderNumber);
+            .AnyAsync(x => x.OrderNumber == orderNumber);
 
-        if (isExistSlider)
-        {
-            throw new ConflictException("Slider already exists");
-        }
-
-        else if (isExistOrderNumber)
+        if (isExistOrderNumber)
         {
             throw new ConflictException("Order number already exists");
         }
     }
+
+    private async Task<bool> IsExistGeneric(Expression<Func<Slider, bool>> filter)
+    {
+        var result = await _applicationDbContext.Sliders.AnyAsync(filter);
+
+        if (result)
+            throw new ConflictException("Already exist");
+
+        return result;
+    }
+
     #endregion
 }
-
-
-

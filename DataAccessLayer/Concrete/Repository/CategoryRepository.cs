@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Shared.DTO.Category.Response;
 using Shared.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -48,7 +49,9 @@ public class CategoryRepository : ICategoryRepository
     #region CreateCategory
     public async Task<CategoryResponse> CreateCategory(CreateCategoryRequest createCategoryRequest)
     {
-        await IsExitsCategory(createCategoryRequest.Name);
+        await IsExistGeneric(x => x.Name == createCategoryRequest.Name);
+
+        await IsExistOrderNumber(createCategoryRequest.OrderNumber);
 
         var category = new Category();
 
@@ -77,6 +80,8 @@ public class CategoryRepository : ICategoryRepository
         .Where(x => x.CategoryId == updateCategoryRequest.CategoryId)
         .FirstOrDefaultAsync()
         ?? throw new NotFoundException("Category not found");
+
+        await IsExistOrderNumber(updateCategoryRequest.OrderNumber);
 
         category.Name = updateCategoryRequest.Name;
         category.Description = updateCategoryRequest.Description;
@@ -112,22 +117,27 @@ public class CategoryRepository : ICategoryRepository
     #endregion
 
     #region IsExistCategory
-    /// <summary>
-    /// Verilen kategori adının mevcut olup olmadığını kontrol eder.
-    /// </summary>
-    /// <param name="categoryName">Kontrol edilecek kategori adı.</param>
-    /// <returns>Mevcut kategori olup olmadığını kontrol eder ve kategori mevcutsa istisna fırlatır.</returns>
-    /// <exception cref="KeyNotFoundException">Kategori zaten mevcutsa fırlatılır.</exception>
-    private async Task IsExitsCategory(string categoryName)
+    private async Task IsExistOrderNumber(int orderNumber)
     {
-        var isExist = await _applicationDbContext.Categories
-        .AnyAsync(x => x.Name == categoryName);
+        var isExistOrderNumber = await _applicationDbContext.Categories
+            .AnyAsync(x => x.OrderNumber == orderNumber);
 
-        if (isExist)
+        if (isExistOrderNumber)
         {
-            throw new ConflictException("Category already exist");
+            throw new ConflictException("Order number already exists");
         }
     }
+
+    private async Task<bool> IsExistGeneric(Expression<Func<Category, bool>> filter)
+    {
+        var result = await _applicationDbContext.Categories.AnyAsync(filter);
+
+        if (result)
+            throw new ConflictException("Already exist");
+
+        return result;
+    }
+
     #endregion
 
     #region IsUsedCategory
