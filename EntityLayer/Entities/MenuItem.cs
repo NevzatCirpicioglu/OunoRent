@@ -1,6 +1,6 @@
 namespace EntityLayer.Entities;
 
-public class MenuItem
+public class MenuItem : AuditTrailer
 {
     public Guid MenuItemId { get; set; }
     public string Label { get; set; }
