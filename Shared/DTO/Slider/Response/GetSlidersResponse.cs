@@ -1,6 +1,6 @@
 namespace Shared.DTO.Slider.Response;
 
-public class GetSlidersResponse : GenericResponse
+public class GetSlidersResponse
 {
     public Guid SliderId { get; set; }
 

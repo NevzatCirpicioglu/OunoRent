@@ -9,7 +9,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the cŞontainer.
+        // Add services to the container.
         builder.Services.AddControllers(options =>
         {
             options.Filters.Add(typeof(ValidateModelAttribute));
@@ -54,11 +54,11 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                c.RoutePrefix = string.Empty;
-            });
+             app.UseSwaggerUI(c =>
+             {
+                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                 c.RoutePrefix = string.Empty; 
+             });
         }
 
         app.UseCors("AllowAllOrigin");
