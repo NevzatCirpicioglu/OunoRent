@@ -24,10 +24,26 @@ public class CategoryRepository : ICategoryRepository
     public async Task<List<GetCategoriesResponse>> GetCategories()
     {
         var categories = await _applicationDbContext.Categories
-        .AsNoTracking()
-        .ToListAsync();
-
+            .AsNoTracking()
+            .Include(x => x.SubCategories)
+            .Select(x => new GetCategoriesResponse
+            {
+                CategoryId = x.CategoryId,
+                Name = x.Name,
+                OrderNumber = x.OrderNumber,
+                SubCategories = x.SubCategories.Select(y => new GetCategoriesResponse.SubCategory
+                {
+                    SubCategoryId = y.SubCategoryId,
+                    Name = y.Name,
+                    Description = y.Description,
+                    Icon = y.Icon,
+                    OrderNumber = y.OrderNumber,
+                    IsActive = y.IsActive
+                }).ToList()
+            }).ToListAsync();
+        
         var categoriesResponse = _mapper.Map<List<GetCategoriesResponse>>(categories);
+        
         return categoriesResponse;
     }
     #endregion
