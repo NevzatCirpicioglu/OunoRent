@@ -81,7 +81,7 @@ public class CategoryController : ControllerBase
         return Ok(category);
     }
 
-    [HttpPut("{categoryId:guid}/subcategory{subCategoryId:guid}")]
+    [HttpPut("{categoryId:guid}/subcategory/{subCategoryId:guid}")]
     public async Task<IActionResult> UpdateSubCategory(Guid categoryId, UpdateSubCategoryRequest updateSubCategoryRequest)
     {
         var category = await _mediator.Send(new UpdateSubCategoryCommand(
@@ -90,7 +90,7 @@ public class CategoryController : ControllerBase
         return Ok(category);
     }
 
-    [HttpDelete("subcategory{subCategoryId:guid}")]
+    [HttpDelete("subcategory/{subCategoryId:guid}")]
     public async Task<IActionResult> DeleteSubCategory(Guid subCategoryId)
     {
         var category = await _mediator.Send(new DeleteSubCategoryCommand(subCategoryId));
