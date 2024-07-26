@@ -1,6 +1,6 @@
 namespace Shared.DTO.Blog.Response;
 
-public class GetBlogResponse : GenericResponse
+public class GetBlogResponse
 {
     public Guid BlogId { get; set; }
     public Guid SubCategoryId { get; set; }
