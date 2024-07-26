@@ -5,6 +5,7 @@ using EntityLayer.Entities;
 using Shared.DTO.Category.Request;
 using BusinessLayer.Middlewares;
 using AutoMapper;
+using System.Security.Cryptography.X509Certificates;
 
 namespace DataAccessLayer.Concrete.Repository;
 
@@ -20,32 +21,54 @@ public class CategoryRepository : ICategoryRepository
     }
 
     #region GetCategories
+
     public async Task<List<GetCategoriesResponse>> GetCategories()
     {
         var categories = await _applicationDbContext.Categories
-        .AsNoTracking()
-        .ToListAsync();
+            .Include(x => x.SubCategories)
+            .AsNoTracking()
+            .Select(x => new GetCategoriesResponse
+            {
+                CategoryId = x.CategoryId,
+                Name = x.Name,
+                SubCategories = x.SubCategories.Select(y => new GetCategoriesResponse.SubCategory
+                {
+                    SubCategoryId = y.SubCategoryId,
+                    Name = y.Name,
+                    Description = y.Description,
+                    Icon = y.Icon,
+                    OrderNumber = y.OrderNumber,
+                    IsActive = y.IsActive
+                }).ToList()
+            })
+            .ToListAsync();
 
-        var categoriesResponse = _mapper.Map<List<GetCategoriesResponse>>(categories);
-        return categoriesResponse;
+        var categoryResponse = _mapper.Map<List<GetCategoriesResponse>>(categories);
+
+        return categoryResponse;
     }
+
     #endregion
 
     #region GetCategory
+
     public async Task<GetCategoryResponse> GetCategory(Guid categoryId)
     {
         var category = await _applicationDbContext.Categories
-        .AsNoTracking()
-        .Where(x => x.CategoryId == categoryId)
-        .FirstOrDefaultAsync()
-        ?? throw new NotFoundException("Category not found");
+                           .AsNoTracking()
+                           .Where(x => x.CategoryId == categoryId)
+                           .FirstOrDefaultAsync()
+                       ?? throw new NotFoundException("Category not found");
 
         var categoryResponse = _mapper.Map<GetCategoryResponse>(category);
+
         return categoryResponse;
     }
+
     #endregion
 
     #region CreateCategory
+
     public async Task<CategoryResponse> CreateCategory(CreateCategoryRequest createCategoryRequest)
     {
         await IsExitsCategory(createCategoryRequest.Name);
@@ -68,15 +91,17 @@ public class CategoryRepository : ICategoryRepository
 
         return categoryResponse;
     }
+
     #endregion
 
     #region UpdateCategory
+
     public async Task<CategoryResponse> UpdateCategory(UpdateCategoryRequest updateCategoryRequest)
     {
         var category = await _applicationDbContext.Categories
-        .Where(x => x.CategoryId == updateCategoryRequest.CategoryId)
-        .FirstOrDefaultAsync()
-        ?? throw new NotFoundException("Category not found");
+                           .Where(x => x.CategoryId == updateCategoryRequest.CategoryId)
+                           .FirstOrDefaultAsync()
+                       ?? throw new NotFoundException("Category not found");
 
         category.Name = updateCategoryRequest.Name;
         category.Description = updateCategoryRequest.Description;
@@ -84,22 +109,24 @@ public class CategoryRepository : ICategoryRepository
         category.OrderNumber = updateCategoryRequest.OrderNumber;
         category.ImageHorizontalUrl = updateCategoryRequest.ImageHorizontalUrl;
         category.ImageSquareUrl = updateCategoryRequest.ImageSquareUrl;
-        category.IsActive =  true;
+        category.IsActive = true;
 
         await _applicationDbContext.SaveChangesAsync();
 
         var categoryResponse = _mapper.Map<CategoryResponse>(category);
         return categoryResponse;
     }
+
     #endregion
 
     #region DeleteCategory
+
     public async Task<Guid> DeleteCategory(Guid categoryId)
     {
         var category = await _applicationDbContext.Categories
-        .Where(x => x.CategoryId == categoryId)
-        .FirstOrDefaultAsync()
-        ?? throw new NotFoundException("Category not found");
+                           .Where(x => x.CategoryId == categoryId)
+                           .FirstOrDefaultAsync()
+                       ?? throw new NotFoundException("Category not found");
 
         await IsUsedCategory(categoryId);
 
@@ -109,9 +136,11 @@ public class CategoryRepository : ICategoryRepository
 
         return category.CategoryId;
     }
+
     #endregion
 
     #region IsExistCategory
+
     /// <summary>
     /// Verilen kategori adının mevcut olup olmadığını kontrol eder.
     /// </summary>
@@ -121,25 +150,28 @@ public class CategoryRepository : ICategoryRepository
     private async Task IsExitsCategory(string categoryName)
     {
         var isExist = await _applicationDbContext.Categories
-        .AnyAsync(x => x.Name == categoryName);
+            .AnyAsync(x => x.Name == categoryName);
 
         if (isExist)
         {
             throw new ConflictException("Category already exist");
         }
     }
+
     #endregion
 
     #region IsUsedCategory
+
     private async Task IsUsedCategory(Guid categoryId)
     {
         var isUsed = await _applicationDbContext.SubCategories
-        .AnyAsync(x => x.CategoryId == categoryId);
+            .AnyAsync(x => x.CategoryId == categoryId);
 
         if (isUsed)
         {
             throw new IsUsedException("Category is used");
         }
     }
+
     #endregion
 }

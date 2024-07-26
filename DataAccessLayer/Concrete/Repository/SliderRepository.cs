@@ -83,7 +83,9 @@ public class SliderRepository : ISliderRepository
     #region GetSliders
     public async Task<List<GetSlidersResponse>> GetSliders()
     {
-        var sliders = await _applicationDbContext.Sliders.AsNoTracking().ToListAsync();
+        var sliders = await _applicationDbContext.Sliders
+            .AsNoTracking()
+            .ToListAsync();
 
         var getSlidersResponse = _mapper.Map<List<GetSlidersResponse>>(sliders);
 
